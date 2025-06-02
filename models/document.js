@@ -21,8 +21,15 @@ module.exports = class Document {
       `INSERT INTO document 
         (id_document, name, description, url, id_document_category) 
         VALUES (?, ?, ?, ?, ?)`, 
-        [this.idDocument, this.name, this.description, this.url, this.idDocumentCategory]);
-    return result;
+        [this.idDocument, this.name, this.description, this.url, this.idDocumentCategory]
+      );
+    
+    if (result.affectedRows === 0) {
+      const error = new Error('Insert failed: no rows affected.');
+      error.statusCode = 500;
+      throw error;
+    }
+    return { message: 'Document created successfully' };
   }
 
   async update() {
