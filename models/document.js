@@ -3,16 +3,16 @@ const { isValidUUIDv4, isValidURL } = require('../util/validation');
 
 
 module.exports = class Document {
-  constructor({idDocument, name, description, url, idDocumentCategory, createdAt=null, updatedAt=null}) {
+  constructor({idDocument, name, url, idDocumentCategory, description = null, createdAt = null, updatedAt = null}) {
     this.idDocument = idDocument;
     this.name = name;
-    this.description = description;
     this.url = url;
     this.idDocumentCategory = idDocumentCategory;
+    this.description = description;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
-
+  
   /*getters and setters for data validation*/
 
   get idDocument() {
@@ -41,19 +41,6 @@ module.exports = class Document {
     this._name = value;
   }
 
-  get description() {
-    return this._description;
-  }
-
-  set description(value) {
-    if (typeof value !== 'string') {
-      const error = new Error('Invalid description: must be a string.');
-      error.statusCode = 400;
-      throw error;
-    }
-    this._description = value;
-  }
-  
   get url() {
     return this._url;
   }
@@ -80,6 +67,19 @@ module.exports = class Document {
     this._idDocumentCategory = value;
   }
 
+  get description() {
+    return this._description;
+  }
+
+  set description(value) {
+    if (typeof value !== 'string') {
+      const error = new Error('Invalid description: must be a string.');
+      error.statusCode = 400;
+      throw error;
+    }
+    this._description = value;
+  }
+  
 
   /*CRUD operations*/
 
@@ -104,6 +104,11 @@ module.exports = class Document {
     return { message: 'Document created successfully' };
   }
 
+  static async get(id) {
+    const [document] = await db.execute('SELECT * FROM document WHERE id_document = ?', [id]);
+    return document[0];
+  }
+  
   async update() {
     const [result] = await db.execute(
       `UPDATE document

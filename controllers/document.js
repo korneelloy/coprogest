@@ -41,6 +41,18 @@ exports.postDocument = async (req, res, next) => {
   } 
 };
 
+exports.getDocument = async (req, res, next) => {
+  try {
+    const idDocument = req.params.id;
+    const getResponse = await Document.get(idDocument);
+    res.status(200).json(getResponse);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
 
 exports.updateDocument = async (req, res, next) => {
   try {
