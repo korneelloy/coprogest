@@ -3,8 +3,21 @@ const { v4: uuidv4 } = require('uuid');
 
 exports.getAllDocuments = async (req, res, next) => {
   try {
-    const [allDocuments] = await Document.fetchAll();
+    const allDocuments = await Document.fetchAll();
     res.status(200).json(allDocuments);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.getDocument = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const document = await Document.get(id);
+    res.status(200).json(document);
   } catch(err) {
     if(!err.statusCode) {
       err.statusCode = 500;
@@ -15,18 +28,18 @@ exports.getAllDocuments = async (req, res, next) => {
 
 exports.postDocument = async (req, res, next) => {
   try {
-    const idDocument = uuidv4();
+    const id = uuidv4();
     const name = req.body.name;
     const description = req.body.description;
     const url = req.body.url;
     const idDocumentCategory = req.body.id_document_category;    
 
     const document = new Document({
-      idDocument,
+      id,
       name,
-      description,
       url,
-      idDocumentCategory
+      idDocumentCategory,
+      description
     });
     
     const postResponse = await document.post();
@@ -41,33 +54,20 @@ exports.postDocument = async (req, res, next) => {
   } 
 };
 
-exports.getDocument = async (req, res, next) => {
-  try {
-    const idDocument = req.params.id;
-    const getResponse = await Document.get(idDocument);
-    res.status(200).json(getResponse);
-  } catch(err) {
-    if(!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  } 
-};
-
 exports.updateDocument = async (req, res, next) => {
   try {
-    const idDocument = req.params.id;
+    const id = req.params.id;
     const name = req.body.name;
     const description = req.body.description;
     const url = req.body.url;
     const idDocumentCategory = req.body.id_document_category;    
 
     const document = new Document({
-      idDocument,
+      id,
       name,
-      description,
       url,
-      idDocumentCategory
+      idDocumentCategory,
+      description
     });
     
     const updateResponse = await document.update();
@@ -84,8 +84,8 @@ exports.updateDocument = async (req, res, next) => {
 
 exports.deleteDocument = async (req, res, next) => {
   try {
-    const idDocument = req.params.id;
-    const deleteResponse = await Document.delete(idDocument);
+    const id = req.params.id;
+    const deleteResponse = await Document.delete(id);
     res.status(200).json(deleteResponse);
   } catch(err) {
     if(!err.statusCode) {

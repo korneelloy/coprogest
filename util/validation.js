@@ -12,5 +12,14 @@ module.exports = {
   isValidURL(value) {
     const urlRegex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?$/i;
     return typeof value === 'string' && urlRegex.test(value);
-  }
+  },
+
+  isStringMin2Max50(value) {
+    return typeof value === 'string' && value.length >= 2 && value.length <= 50;
+  },
+
+  isNullOrString(value) {
+    return value === null || typeof value === 'string';
+  },
+
 }
