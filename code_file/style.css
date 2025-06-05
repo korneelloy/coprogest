@@ -1,0 +1,263 @@
+.frame {
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+.frame .div {
+  background-color: #FFFFFF;
+  overflow: hidden;
+  width: 1440px;
+  height: 1024px;
+  position: relative;
+}
+.frame .div-2 {
+  position: absolute;
+  width: 1441px;
+  height: 322px;
+  top: 0;
+  left: 0;
+}
+.frame .overlap {
+  position: relative;
+  width: 1440px;
+  height: 322px;
+  background-image: url(./img/paysage-analogique-de-la-ville-avec-des-batiments-1.png);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+.frame .group {
+  position: absolute;
+  width: 197px;
+  height: 56px;
+  top: 215px;
+  left: 1209px;
+  background-color: #E3DCD2;
+}
+.frame .div-wrapper {
+  width: 51px;
+  height: 43px;
+  position: relative;
+  top: 7px;
+  left: 73px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+}
+.frame .text-wrapper {
+  position: relative;
+  width: fit-content;
+  margin-left: -4.88px;
+  margin-right: -4.88px;
+  font-family: "Oswald-Regular", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 12px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+.frame .frame-wrapper {
+  position: absolute;
+  width: 197px;
+  height: 56px;
+  top: 215px;
+  left: 53px;
+  background-color: #E3DCD2;
+}
+.frame .div-wrapper-2 {
+  width: 51px;
+  position: relative;
+  top: 7px;
+  left: 73px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+}
+.frame .text-wrapper-2 {
+  position: relative;
+  width: fit-content;
+  margin-top: -1.00px;
+  margin-left: -3.38px;
+  margin-right: -3.38px;
+  font-family: "Oswald-Regular", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 12px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+.frame .group-2 {
+  position: absolute;
+  width: 197px;
+  height: 56px;
+  top: 215px;
+  left: 631px;
+  background-color: #E3DCD2;
+}
+.frame .text-wrapper-3 {
+  position: relative;
+  width: fit-content;
+  margin-top: -1.00px;
+  margin-left: -24.38px;
+  margin-right: -24.38px;
+  font-family: "Oswald-Bold", Helvetica;
+  font-weight: 700;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+.frame .overlap-group-wrapper {
+  position: absolute;
+  width: 199px;
+  height: 56px;
+  top: 215px;
+  left: 920px;
+}
+.frame .overlap-group {
+  position: relative;
+  width: 197px;
+  height: 56px;
+  background-color: #E3DCD2;
+}
+.frame .text-wrapper-4 {
+  position: absolute;
+  width: 110px;
+  top: 18px;
+  left: 44px;
+  font-family: "Oswald-Regular", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 12px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+.frame .group-3 {
+  position: absolute;
+  width: 197px;
+  height: 56px;
+  top: 215px;
+  left: 342px;
+  background-color: #E3DCD2;
+}
+.frame .text-wrapper-5 {
+  position: relative;
+  width: fit-content;
+  margin-top: -1.00px;
+  margin-left: -5.88px;
+  margin-right: -5.88px;
+  font-family: "Oswald-Regular", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 12px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+.frame .logo-coprogest {
+  position: absolute;
+  width: 84px;
+  height: 84px;
+  top: 29px;
+  left: 53px;
+  object-fit: cover;
+}
+.frame .img {
+  position: absolute;
+  width: 259px;
+  height: 56px;
+  top: 43px;
+  left: 1108px;
+}
+.frame .chevron-down {
+  position: absolute;
+  width: 55px;
+  height: 54px;
+  top: 45px;
+  left: 1312px;
+}
+.frame .overlap-2 {
+  position: absolute;
+  width: 1353px;
+  height: 458px;
+  top: 369px;
+  left: 40px;
+  background-color: #D9D9D9;
+}
+.frame .div-wrapper-3 {
+  width: 200px;
+  height: 60px;
+  position: absolute;
+  top: 199px;
+  left: 434px;
+  background-color: #CC8B65;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+}
+.frame .text-wrapper-6 {
+  position: relative;
+  width: fit-content;
+  font-family: "Oswald-Regular", Helvetica;
+  font-weight: 400;
+  color: #FFFFFF;
+  font-size: 20px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+.frame .div-wrapper-4 {
+  width: 200px;
+  height: 60px;
+  position: absolute;
+  top: 199px;
+  left: 723px;
+  background-color: #CC8B65;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+}
+.frame .div-wrapper-5 {
+  width: 200px;
+  height: 60px;
+  position: absolute;
+  top: 199px;
+  left: 1009px;
+  background-color: #CC8B65;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+}
+.frame .overlap-wrapper {
+  position: absolute;
+  width: 202px;
+  height: 60px;
+  top: 199px;
+  left: 145px;
+}
+.frame .overlap-3 {
+  position: relative;
+  width: 200px;
+  height: 60px;
+  background-color: #CC8B65;
+}
+.frame .text-wrapper-7 {
+  position: absolute;
+  top: 15px;
+  left: 27px;
+  font-family: "Oswald-Regular", Helvetica;
+  font-weight: 400;
+  color: #FFFFFF;
+  font-size: 20px;
+  letter-spacing: 0;
+  line-height: normal;
+}
