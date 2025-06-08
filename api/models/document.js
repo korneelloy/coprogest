@@ -18,13 +18,15 @@ module.exports = class Document extends BaseClass {
    * @param {string|null} description - Optional description
    * @param {Date|null} createdAt - creation date - set in MSQL code
    * @param {Date|null} updatedAt - last update - set in MSQ code
+   * @param {string|null} category_name - Optional, loaded via JOIN
    */
-  constructor({id, name, url, idDocumentCategory, description = null, createdAt = null, updatedAt = null}) {
+  constructor({id, name, url, idDocumentCategory, description = null, createdAt = null, updatedAt = null, category_name = null }) {
     super({ id, createdAt, updatedAt });
     this.name = name;
     this.url = url;
     this.idDocumentCategory = idDocumentCategory;
     this.description = description;
+    this.category_name = category_name;
   }
   
   /****************************getters and setters for data validation***********************************/
@@ -98,7 +100,22 @@ module.exports = class Document extends BaseClass {
    * @returns {Promise<Object[]>}
    */
   static async fetchAll() {
-    const [allDocuments] = await db.execute('SELECT * FROM document');
+    const [allDocuments] = await db.execute(`SELECT 
+      document.id,
+      document.name,
+      document.description,
+      document.url,
+      document.created_at,
+      document.updated_at,
+      document.id_document_category,
+      document_category.name as category_name
+      FROM document 
+      JOIN document_category ON document.id_document_category = document_category.id
+      ORDER BY GREATEST(
+        IFNULL(document.updated_at, '1970-01-01 00:00:00'),
+        document.created_at
+      ) DESC;`
+    );
     return allDocuments;
   }
 
@@ -108,7 +125,20 @@ module.exports = class Document extends BaseClass {
    * @returns {Promise<Object>}
    */
   static async get(id) {
-    const [rows] = await db.execute('SELECT * FROM document WHERE id = ?', [id]);
+    const [rows] = await db.execute(`SELECT 
+      document.id,
+      document.name,
+      document.description,
+      document.url,
+      document.created_at,
+      document.updated_at,
+      document.id_document_category,
+      document_category.name as category_name
+      FROM document
+      JOIN document_category ON document.id_document_category = document_category.id
+      WHERE document.id = ?`, [id]
+    );
+   
     if (rows.length === 0) {
       const error = new Error('Document not found');
       error.statusCode = 404;

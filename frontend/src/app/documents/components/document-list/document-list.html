@@ -1,0 +1,38 @@
+<h2><strong>Liste de documents</strong></h2>
+<hr>
+
+<div *ngIf="createdMessage" class="success-message">
+  {{ createdMessage }}
+</div>
+
+<div *ngIf="deletedMessage" class="success-message">
+  {{ deletedMessage }}
+</div>
+
+
+<ul *ngIf="documents$ | async as documents; else loading">
+  <li *ngFor="let document of documents" >
+    <strong>{{ document.name }}</strong><br>
+    URL: <a [href]="document.url" target="_blank">{{ document.url }}</a><br>
+    Category name: {{ document.category_name }}<br>
+    Description: {{ document.description }}<br>
+
+    <button (click)="seeDetails(document.id)">
+      Voir les details
+    </button><br>
+
+    <button (click)="change(document.id)">
+      Changer ce document
+    </button><br>
+    
+    <button (click)="deletion(document.id)">
+      Supprimer ce document
+    </button><br>
+    
+    <hr>
+  </li>
+</ul>
+
+<ng-template #loading>
+  <p>Loading documents...</p>
+</ng-template>

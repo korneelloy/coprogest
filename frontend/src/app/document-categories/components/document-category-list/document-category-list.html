@@ -1,0 +1,35 @@
+<h2><strong>Liste des catégories de document</strong></h2>
+<hr>
+
+<div *ngIf="createdMessage" class="success-message">
+  {{ createdMessage }}
+</div>
+
+<div *ngIf="deletedMessage" class="success-message">
+  {{ deletedMessage }}
+</div>
+
+
+<ul *ngIf="documentCategories$ | async as documentCategories; else loading">
+  <li *ngFor="let documentCategory of documentCategories" >
+    <strong>{{ documentCategory.name }}</strong><br>
+
+    <button (click)="seeDetails(documentCategory.id)">
+      Voir les details
+    </button><br>
+
+    <button (click)="change(documentCategory.id)">
+      Changer cette catégorie
+    </button><br>
+    
+    <button (click)="deletion(documentCategory.id)">
+      Supprimer cette catégorie
+    </button><br>
+    
+    <hr>
+  </li>
+</ul>
+
+<ng-template #loading>
+  <p>Loading categories...</p>
+</ng-template>

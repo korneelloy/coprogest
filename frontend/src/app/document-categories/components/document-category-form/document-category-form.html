@@ -1,0 +1,18 @@
+<h2><strong>Formulaire pour une catégorie de document</strong></h2>
+<hr>
+
+<form [formGroup]="documentForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label>Nom: </label>
+    <input formControlName="name" placeholder="Nom de la catégorie" />
+    <div *ngIf="documentForm.get('name')?.invalid && documentForm.get('name')?.touched">
+      <small *ngIf="documentForm.get('name')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+      <small *ngIf="documentForm.get('name')?.errors?.['minlength']">* Ce champ doit contenir au moins 2 caractères.</small>
+      <small *ngIf="documentForm.get('name')?.errors?.['maxlength']">* Ce champ ne peut contenir plus que 50 caractères.</small>
+    </div>
+  </div>
+  <button type="submit" [disabled]="documentForm.invalid">
+    {{ isEditMode ? 'Update' : 'Create' }} catégorie
+  </button>
+</form>
+
