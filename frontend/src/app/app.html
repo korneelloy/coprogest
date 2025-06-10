@@ -127,20 +127,23 @@
 
 <!-- Page content -->
 <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 overflow-hidden">
-  <div class="px-4 py-6 sm:px-0 space-x-4">
+  <div class="px-4 py-6 sm:px-0">
 
     <router-outlet></router-outlet>
-    <a routerLink="/documents/new" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-      Upload a document
+    <div class="m-4">
+
+    <a routerLink="/documents/new" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+      Enregistrer un nouveau document
     </a>
 
     <a routerLink="/documentcategories" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-      Document categories
+      Catégories
     </a>
 
-    <a routerLink="/documentcategories/new" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-      Create a new category
+    <a routerLink="/documentcategories/new" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+      Créer une nouvelle catégorie
     </a>
+  </div>
 
 
 
