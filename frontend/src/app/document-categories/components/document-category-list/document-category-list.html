@@ -11,18 +11,18 @@
 
 
 <ul *ngIf="documentCategories$ | async as documentCategories; else loading">
-  <li *ngFor="let documentCategory of documentCategories" >
+  <li *ngFor="let documentCategory of documentCategories" class="space-y-4">
     <strong>{{ documentCategory.name }}</strong><br>
 
-    <button (click)="seeDetails(documentCategory.id)">
+    <button (click)="seeDetails(documentCategory.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
       Voir les details
     </button><br>
 
-    <button (click)="change(documentCategory.id)">
+    <button (click)="change(documentCategory.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
       Changer cette catégorie
     </button><br>
     
-    <button (click)="deletion(documentCategory.id)">
+    <button (click)="deletion(documentCategory.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
       Supprimer cette catégorie
     </button><br>
     
