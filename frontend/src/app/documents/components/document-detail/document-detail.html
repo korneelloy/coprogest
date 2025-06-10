@@ -1,0 +1,20 @@
+<h2><strong>Détails d'un document</strong></h2>
+<hr>
+
+<div *ngIf="updatedMessage" class="success-message">
+  {{ updatedMessage }}
+</div>
+
+<ul *ngIf="document$ | async as document; else loading">
+  <li>
+    <strong>{{ document.name }}</strong><br>
+    URL: <a [href]="document.url" target="_blank">{{ document.url }}</a><br>
+    Category name: {{ document.category_name }}<br>
+    Description: {{ document.description }}<br>
+    <hr>
+  </li>
+</ul>
+
+<ng-template #loading>
+  <p>Loading document...</p>
+</ng-template>

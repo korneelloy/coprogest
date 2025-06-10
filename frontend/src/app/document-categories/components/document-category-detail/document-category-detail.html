@@ -1,0 +1,18 @@
+<h2><strong>Détails d'une catégorie</strong></h2>
+<hr>
+
+<div *ngIf="updatedMessage" class="success-message">
+  {{ updatedMessage }}
+</div>
+
+<ul *ngIf="documentCategory$ | async as documentCategory; else loading">
+  <li>
+    <strong>{{ documentCategory.name }}</strong><br>
+    <hr>
+  </li>
+</ul>
+
+<ng-template #loading>
+  <p>Loading document...</p>
+</ng-template>
+

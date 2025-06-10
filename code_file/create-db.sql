@@ -25,6 +25,8 @@ chat: Indexes
 You define UNIQUE constraints, which is good. Consider adding indexes on frequently queried foreign keys for performance.
 
 
+voir si on cree tableau associtaif person - role ou si on rajoute le role sur la person, qui semble plus perttinent
+
 */
 
 CREATE TABLE person(
