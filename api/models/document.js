@@ -110,7 +110,7 @@ module.exports = class Document extends BaseClass {
       document.id_document_category,
       document_category.name as category_name
       FROM document 
-      JOIN document_category ON document.id_document_category = document_category.id
+      LEFT JOIN document_category ON document.id_document_category = document_category.id
       ORDER BY GREATEST(
         IFNULL(document.updated_at, '1970-01-01 00:00:00'),
         document.created_at
@@ -135,7 +135,7 @@ module.exports = class Document extends BaseClass {
       document.id_document_category,
       document_category.name as category_name
       FROM document
-      JOIN document_category ON document.id_document_category = document_category.id
+      LEFT JOIN document_category ON document.id_document_category = document_category.id
       WHERE document.id = ?`, [id]
     );
    

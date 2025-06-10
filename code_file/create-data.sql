@@ -59,3 +59,5 @@ INSERT INTO ag_resolution (id, title, description, required_majority, budget, cr
 
 INSERT INTO ag_resolution_budget (id, budget_amount, budget_type, operating_budget_start, operating_budget_end, nb_of_instalments, budget_recup_tenant, actif, created_at, updated_at, id_budget_category, id_ag_resolution) VALUES
 ('00e61fe4-97ae-4d93-bce1-b43548a76dd0', 3673.71, 'operating', '2025-04-20', '2025-02-09', 3, true, true, '2025-05-30 00:00:00', NULL, '41730a00-f81e-48d8-9b3a-4ae9fcb187eb', '5d088a30-d1f4-4f8f-81e5-15cb4531ddc3');
+
+

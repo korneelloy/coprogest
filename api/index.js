@@ -6,6 +6,8 @@
 const express = require('express');
 const documentRoutes = require('./routes/document');
 const documentCategoryRoutes = require('./routes/documentCategory');
+const personRoutes = require('./routes/person');
+
 const errorController = require('./controllers/error');
 
 const app = express();
@@ -46,6 +48,7 @@ app.use((req, res, next) => {
 // Route group for document operations
 app.use('/api/v1/documents', documentRoutes);
 app.use('/api/v1/documentcategories', documentCategoryRoutes);
+app.use('/api/v1/persons', personRoutes);
 
 // Error handlers
 app.use(errorController.get404);

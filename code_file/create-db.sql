@@ -27,6 +27,21 @@ You define UNIQUE constraints, which is good. Consider adding indexes on frequen
 
 voir si on cree tableau associtaif person - role ou si on rajoute le role sur la person, qui semble plus perttinent
 
+creer n° pour role?
+
+creer hashed_password?
+
+enlever: 
+CREATE TABLE person_role(
+   id_person VARCHAR(40),
+   id_role VARCHAR(40),
+   PRIMARY KEY(id_person, id_role),
+   FOREIGN KEY(id_person) REFERENCES person(id),
+   FOREIGN KEY(id_role) REFERENCES role(id)
+);
+
+hashed_password
+
 */
 
 CREATE TABLE person(
@@ -42,7 +57,9 @@ CREATE TABLE person(
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY(id),
-   UNIQUE(email)
+   UNIQUE(email),
+   id_role VARCHAR(40),
+   FOREIGN KEY (id_role) REFERENCES role(id_role) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE role(
@@ -233,13 +250,6 @@ CREATE TABLE charge_line(
    FOREIGN KEY(id_ag_resolution_budget) REFERENCES ag_resolution_budget(id)
 );
 
-CREATE TABLE person_role(
-   id_person VARCHAR(40),
-   id_role VARCHAR(40),
-   PRIMARY KEY(id_person, id_role),
-   FOREIGN KEY(id_person) REFERENCES person(id),
-   FOREIGN KEY(id_role) REFERENCES role(id)
-);
 
 CREATE TABLE unit_unit_group(
    id_unit VARCHAR(40),
