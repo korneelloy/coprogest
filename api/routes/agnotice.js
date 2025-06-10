@@ -1,0 +1,25 @@
+/**
+ * Express router for ag notice-related routes.
+ * Maps HTTP methods and paths to controller functions.
+ */
+
+const express = require('express');
+const agNoticeController = require('../controllers/agnotice');
+const router = express.Router();
+
+// Get all ag notices
+router.get('/', agNoticeController.getAll);
+
+// Get a single ag notice by ID
+router.get('/:id', agNoticeController.getOne);
+
+// Create a new ag notice
+router.post('/', agNoticeController.postOne);
+
+// Update a ag notice by ID
+router.put('/:id', agNoticeController.updateOne);
+
+// Delete a ag notice by ID
+router.delete('/:id', agNoticeController.deleteOne);
+
+module.exports = router;

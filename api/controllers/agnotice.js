@@ -1,13 +1,13 @@
-const Document = require('../models/document');
+const AgNotice = require('../models/agnotice');
 const { v4: uuidv4 } = require('uuid');
 
 /**
- * Retrieve and return all documents.
+ * Retrieve and return all ag notices.
  */
 exports.getAll = async (req, res, next) => {
   try {
-    const allDocuments = await Document.fetchAll();
-    res.status(200).json(allDocuments);
+    const allAgNotices = await AgNotice.fetchAll();
+    res.status(200).json(allAgNotices);
   } catch(err) {
     if(!err.statusCode) {
       err.statusCode = 500;
@@ -17,13 +17,13 @@ exports.getAll = async (req, res, next) => {
 };
 
 /**
- * Retrieve and return a document by its ID.
+ * Retrieve and return an ag notice by its ID.
  */
 exports.getOne = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const document = await Document.get(id);
-    res.status(200).json(document);
+    const agNotice = await AgNotice.get(id);
+    res.status(200).json(agNotice);
   } catch(err) {
     if(!err.statusCode) {
       err.statusCode = 500;
@@ -33,25 +33,23 @@ exports.getOne = async (req, res, next) => {
 };
 
 /**
- * Create a new document with the provided data.
+ * Create a new ag notice with the provided data.
  */
 exports.postOne = async (req, res, next) => {
   try {
     const id = uuidv4();
-    const name = req.body.name;
-    const description = req.body.description;
-    const url = req.body.url;
-    const idDocumentCategory = req.body.idDocumentCategory;    
+    const title = req.body.title;
+    const place = req.body.place;
+    const agDate = req.body.agDate;
 
-    const document = new Document({
+    const agNotice = new AgNotice({
       id,
-      name,
-      url,
-      idDocumentCategory,
-      description
+      title,
+      place,
+      agDate
     });
     
-    const postResponse = await document.post();
+    const postResponse = await agNotice.post();
 
     res.status(201).json(postResponse);
 
@@ -65,25 +63,23 @@ exports.postOne = async (req, res, next) => {
 
 
 /**
- * Update an existing document identified by its ID.
+ * Update an existing ag notice identified by its ID.
  */
 exports.updateOne = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const name = req.body.name;
-    const description = req.body.description;
-    const url = req.body.url;
-    const idDocumentCategory = req.body.idDocumentCategory;    
+    const title = req.body.title;
+    const place = req.body.place;
+    const agDate = req.body.agDate; 
 
-    const document = new Document({
+    const agNotice = new AgNotice({
       id,
-      name,
-      url,
-      idDocumentCategory,
-      description
+      title,
+      place,
+      agDate
     });
     
-    const updateResponse = await document.update();
+    const updateResponse = await agNotice.update();
 
     res.status(200).json(updateResponse);
 
@@ -96,12 +92,12 @@ exports.updateOne = async (req, res, next) => {
 };
 
 /**
- * Delete a document by its ID.
+ * Delete a ag notice by its ID.
  */
 exports.deleteOne = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const deleteResponse = await Document.delete(id);
+    const deleteResponse = await AgNotice.delete(id);
     res.status(200).json(deleteResponse);
   } catch(err) {
     if(!err.statusCode) {

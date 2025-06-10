@@ -1,4 +1,4 @@
-const DocumentCategory = require('../models/documentCategory');
+const DocumentCategory = require('../models/documentcategory');
 const { v4: uuidv4 } = require('uuid');
 
 /**

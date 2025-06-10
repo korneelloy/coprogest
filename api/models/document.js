@@ -5,7 +5,7 @@
 
 const db = require('../util/database');
 const { isValidUUIDv4, isValidURL, isStringMin2Max50, isNullOrString } = require('../util/validation');
-const BaseClass = require('./baseClass');
+const BaseClass = require('./baseclass');
 
 
 module.exports = class Document extends BaseClass {
@@ -18,15 +18,15 @@ module.exports = class Document extends BaseClass {
    * @param {string|null} description - Optional description
    * @param {Date|null} createdAt - creation date - set in MSQL code
    * @param {Date|null} updatedAt - last update - set in MSQ code
-   * @param {string|null} category_name - Optional, loaded via JOIN
+   * @param {string|null} categoryName - Optional, loaded via JOIN
    */
-  constructor({id, name, url, idDocumentCategory, description = null, createdAt = null, updatedAt = null, category_name = null }) {
+  constructor({id, name, url, idDocumentCategory, description = null, createdAt = null, updatedAt = null, categoryName = null }) {
     super({ id, createdAt, updatedAt });
     this.name = name;
     this.url = url;
     this.idDocumentCategory = idDocumentCategory;
     this.description = description;
-    this.category_name = category_name;
+    this.categoryName = categoryName;
   }
   
   /****************************getters and setters for data validation***********************************/
