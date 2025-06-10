@@ -4,7 +4,7 @@
  */
 
 const express = require('express');
-const documentCategoryController = require('../controllers/documentCategory');
+const documentCategoryController = require('../controllers/documentcategory');
 const router = express.Router();
 
 // Get all document categories

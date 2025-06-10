@@ -5,8 +5,14 @@
 
 const express = require('express');
 const documentRoutes = require('./routes/document');
-const documentCategoryRoutes = require('./routes/documentCategory');
+const documentCategoryRoutes = require('./routes/documentcategory');
 const personRoutes = require('./routes/person');
+const unitgroupRoutes = require('./routes/unitgroup');
+const unitRoutes = require('./routes/unit');
+const agNoticeRoutes = require('./routes/agnotice');
+const agResolutionsRoutes = require('./routes/agresolution');
+const agResolutionBudgetRoutes = require('./routes/agresolutionbudget');
+
 
 const errorController = require('./controllers/error');
 
@@ -46,9 +52,15 @@ app.use((req, res, next) => {
 });
 
 // Route group for document operations
-app.use('/api/v1/documents', documentRoutes);
 app.use('/api/v1/documentcategories', documentCategoryRoutes);
+app.use('/api/v1/documents', documentRoutes);
 app.use('/api/v1/persons', personRoutes);
+app.use('/api/v1/unitgroups', unitgroupRoutes);
+app.use('/api/v1/units', unitRoutes);
+app.use('/api/v1/agnotices', agNoticeRoutes);
+app.use('/api/v1/agresolutions', agResolutionsRoutes);
+app.use('/api/v1/agresolutionbudgets', agResolutionBudgetRoutes);
+
 
 // Error handlers
 app.use(errorController.get404);

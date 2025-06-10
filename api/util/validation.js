@@ -43,6 +43,16 @@ module.exports = {
     return value === null || (typeof value === 'string' && phoneRegex.test(value));
   },
 
+  isStringMin2Max20(value) {
+    /**
+     * Validate a string with some conditions: min 2 char and max 20
+     * @param {string} value - supposed string
+     * @returns {boolean} - true if conditions are met / false if not
+     */
+      return typeof value === 'string' && value.length >= 2 && value.length <= 20;
+    },
+  
+
   isStringMin2Max50(value) {
   /**
    * Validate a string with some conditions: min 2 char and max 50
@@ -50,6 +60,15 @@ module.exports = {
    * @returns {boolean} - true if conditions are met / false if not
    */
     return typeof value === 'string' && value.length >= 2 && value.length <= 50;
+  },
+
+  isStringMin2Max255(value) {
+    /**
+     * Validate a string with some conditions: min 2 char and max 255
+     * @param {string} value - supposed string
+     * @returns {boolean} - true if conditions are met / false if not
+     */
+      return typeof value === 'string' && value.length >= 2 && value.length <= 255;
   },
 
   isNullOrString(value) {

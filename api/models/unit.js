@@ -1,5 +1,5 @@
 /**
- * Unitgroup model class.
+ * Unit model class.
  * Provides data validation and database operations.
  */
 
@@ -8,21 +8,21 @@ const { isStringMin2Max50, isNullOrString } = require('../util/validation');
 const BaseClass = require('./baseclass');
 
 
-module.exports = class Unitgroup extends BaseClass {
+module.exports = class Unit extends BaseClass {
   /**
-   * Create a new unitgroup instance.
-   * @param {string} id - UUID of the unit group
-   * @param {string} name - Name of the unit group
+   * Create a new unit instance.
+   * @param {string} id - UUID of the unit
+   * @param {string} name - Name of the unit
+   * @param {number} shares- Shares 
    * @param {string|null} description - Optional description
-   * @param {boolean} specialShares- Special shares involved in this group?, false by default
    * @param {Date|null} createdAt - creation date - set in MSQL code
    * @param {Date|null} updatedAt - last update - set in MSQ code
    */
-  constructor({id, name, description = null, specialShares = false, createdAt = null, updatedAt = null }) {
+  constructor({id, name, shares= null, description = null, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
     this.name = name;
+    this.shares = shares;
     this.description = description;
-    this.specialShares = specialShares;
   }
   
   /****************************getters and setters for data validation***********************************/
@@ -47,6 +47,25 @@ module.exports = class Unitgroup extends BaseClass {
     this._name = value;
   }
 
+  get shares() {
+    return this._shares;
+  }
+ 
+  set shares(value) {
+    if (typeof value !== 'number' || isNaN(value)) {
+      throw new TypeError('Shares must be a valid number');
+    }
+
+    if (value < 0 || value > 9999) {
+      throw new RangeError('Shares must be between 0 and 9999');
+    }
+
+    if (!Number.isInteger(value * 100)) {
+      throw new RangeError('Shares must have at most 2 decimal places');
+    }
+    this._shares = value;
+  }
+
   get description() {
     return this._description;
   }
@@ -60,40 +79,28 @@ module.exports = class Unitgroup extends BaseClass {
     this._description = value;
   }
 
-  get specialShares() {
-    return this._specialShares;
-  }
-
-  set specialShares(value) {
-    if (typeof value !== "boolean") {
-      const error = new Error('Special shares should be a boolean value');
-      error.statusCode = 400;
-      throw error;
-    }
-    this._specialShares = value;
-  }
-
+  
   /**********************************CRUD operations************************************/
 
   /**
-   * Fetch all unitgroups from the database.
+   * Fetch all units from the database.
    * @returns {Promise<Object[]>}
    */
   static async fetchAll() {
-    const [allUnitGroups] = await db.execute(`SELECT * FROM unit_group;`);
-    return allUnitGroups;
+    const [allUnits] = await db.execute(`SELECT * FROM unit;`);
+    return allUnits;
   }
 
   /**
-   * Fetch a unitgroups by ID.
+   * Fetch a unit by ID.
    * @param {string} id
    * @returns {Promise<Object>}
    */
   static async get(id) {
-    const [rows] = await db.execute(`SELECT * FROM unit_group WHERE id = ?`, [id]);
+    const [rows] = await db.execute(`SELECT * FROM unit WHERE id = ?`, [id]);
    
     if (rows.length === 0) {
-      const error = new Error('Unitgroup group not found');
+      const error = new Error('Unit not found');
       error.statusCode = 404;
       throw error;
     }
@@ -101,15 +108,15 @@ module.exports = class Unitgroup extends BaseClass {
   }
   
   /**
-   * Insert the current unitgroup into the database.
+   * Insert the current unit into the database.
    * @returns {Promise<Object>}
    */
   async post() {
     const [result] = await db.execute(
-      `INSERT INTO unit_group 
-        (id, name, description, special_shares) 
+      `INSERT INTO unit 
+        (id, name, shares, description) 
         VALUES (?, ?, ?, ?)`, 
-        [this.id, this.name, this.description, this.specialShares]
+        [this.id, this.name, this.shares, this.description]
       );
     
     if (result.affectedRows === 0) {
@@ -117,41 +124,26 @@ module.exports = class Unitgroup extends BaseClass {
       error.statusCode = 500;
       throw error;
     }
-    return { message: 'Unitgroup created successfully' };
+    return { message: 'Unit created successfully' };
   }
   
   /**
-   * Update the current unitgroup in the database.
+   * Update the current unit in the database.
    * @returns {Promise<Object>}
    */
   async update() {
     const [result] = await db.execute(
-      `UPDATE unit_group
-        SET name = ?, description = ?, special_shares = ?
+      `UPDATE unit
+        SET name = ?, shares = ?, description = ?
         WHERE id = ?`,
-        [this.name, this.description, this.specialShares, this.id]
+        [this.name, this.shares, this.description, this.id]
       );
 
     if (result.affectedRows === 0) {
-      const error = new Error('Unitgroup not found');
+      const error = new Error('Unit not found');
       error.statusCode = 404;
       throw error;
     }
-    return { message: 'Unitgroup updated successfully' };
-  }
-
-  /**
-   * Delete a unitgroup by ID.
-   * @param {string} id
-   * @returns {Promise<Object>}
-   */
-  static async delete(id) {
-    const [result] = await db.execute('DELETE FROM unit_group WHERE id = ?', [id]);
-    if (result.affectedRows === 0) {
-      const error = new Error('Unitgroup not found');
-      error.statusCode = 404;
-      throw error;
-    }
-    return { message: 'Unitgroup deleted successfully' };
+    return { message: 'Unit updated successfully' };
   }
 }

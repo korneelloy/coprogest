@@ -5,7 +5,7 @@
 
 const db = require('../util/database');
 const { isValidUUIDv4, isValidEmail, isValidPassword, isNullOrStringMin2Max100, isNullOrStringMin2Max255, isNullOrStringMin2Max20, isNullOrStringMin2Max50, isValidTelephone } = require('../util/validation');
-const BaseClass = require('./baseClass');
+const BaseClass = require('./baseclass');
 const bcrypt = require('bcrypt');
 
 module.exports = class Person extends BaseClass {
@@ -14,29 +14,29 @@ module.exports = class Person extends BaseClass {
    * @param {string} id - UUID of the person
    * @param {string} email - email of the person
    * @param {string|null} password - password - null at creation - needs to be set by person
-   * @param {string|null} first_name - first name - null at creation - needs to be set by person
-   * @param {string|null} last_name - last name - null at creation - needs to be set by person
+   * @param {string|null} firstName - first name - null at creation - needs to be set by person
+   * @param {string|null} lastName - last name - null at creation - needs to be set by person
    * @param {string|null} street - address - null at creation - needs to be set by person
-   * @param {string|null} postal_code - address - null at creation - needs to be set by person
+   * @param {string|null} postalCode - address - null at creation - needs to be set by person
    * @param {string|null} city - address - null at creation - needs to be set by person
      * @param {string|null} telephone - optional telephone 
   * @param {Date|null} createdAt - creation date - set in SQL code
    * @param {Date|null} updatedAt - last update - set in SQL code
-   * @param {string} role_id - UUID of the role
-   * @param {string|null} role_name - Optional, loaded via JOIN
+   * @param {string} idRole - UUID of the role
+   * @param {string|null} roleName - Optional, loaded via JOIN
    */
-  constructor({id, email, role_id = null, password = null, first_name = null, last_name = null, street = null, postal_code = null, city = null, telephone = null, createdAt = null, updatedAt = null, role_name = null}) {
+  constructor({id, email, idRole = null, password = null, firstName = null, lastName = null, street = null, postalCode = null, city = null, telephone = null, createdAt = null, updatedAt = null, roleName = null}) {
     super({ id, createdAt, updatedAt });
     this.email = email;
-    this.role_id = role_id;
+    this.idRole = idRole;
     this._password = password;
-    this.first_name = first_name;
-    this.last_name = last_name;
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.street = street;
-    this.postal_code = postal_code;
+    this.postalCode = postalCode;
     this.city = city;
     this.telephone = telephone;
-    this.role_name = role_name;
+    this.roleName = roleName;
   }
   
   /****************************getters and setters for data validation***********************************/
@@ -61,20 +61,20 @@ module.exports = class Person extends BaseClass {
     this._email = value;
   }
 
-  get role_id() {
-    return this._role_id;
+  get idRole() {
+    return this._idRole;
   }
 
     /**TO DO VALIDATION OF CROSS REF  */
 
-  set role_id(value) {
+  set idRole(value) {
     const trimmedValue = value.trim();
     if (!isValidUUIDv4(trimmedValue)) {
       const error = new Error('Invalid UUID');
       error.statusCode = 400;
       throw error;
     }
-    this._role_id = trimmedValue;
+    this._idRole = trimmedValue;
   }
 
   get password() {
@@ -92,30 +92,30 @@ module.exports = class Person extends BaseClass {
     return await bcrypt.compare(inputPassword, this._password);
   }
 
-  get first_name() {
-    return this._first_name;
+  get firstName() {
+    return this._firstName;
   }
 
-  set first_name(value) {
+  set firstName(value) {
     if (!isNullOrStringMin2Max100(value)) {
       const error = new Error('Invalid name: must be a string of minimum 2 characters and maximum 100.');
       error.statusCode = 400;
       throw error;
     }
-    this._first_name = value;
+    this._firstName = value;
   }
 
-  get last_name() {
-    return this._last_name;
+  get lastName() {
+    return this._lastName;
   }
 
-  set last_name(value) {
+  set lastName(value) {
     if (!isNullOrStringMin2Max100(value)) {
       const error = new Error('Invalid name: must be a string of minimum 2 characters and maximum 100.');
       error.statusCode = 400;
       throw error;
     }
-    this._last_name = value;
+    this._lastName = value;
   }
 
   get street() {
@@ -131,17 +131,17 @@ module.exports = class Person extends BaseClass {
     this._street = value;
   }
 
-  get postal_code() {
-    return this._postal_code;
+  get postalCode() {
+    return this._postalCode;
   }
 
-  set postal_code(value) {
+  set postalCode(value) {
      if (!isNullOrStringMin2Max20(value)) {
       const error = new Error('Invalid postal code: must be a string of minimum 2 characters and maximum 20.');
       error.statusCode = 400;
       throw error;
     }
-    this._postal_code = value;
+    this._postalCode = value;
   }
 
   get city() {
@@ -170,17 +170,17 @@ module.exports = class Person extends BaseClass {
     this._telephone = value;
   }
 
-  get role_name() {
-    return this._role_name;
+  get roleName() {
+    return this._roleName;
   }
 
-  set role_name(value) {
+  set roleName(value) {
      if (!isNullOrStringMin2Max50(value)) {
       const error = new Error('Invalid role name: must be a string of minimum 2 characters and maximum 50.');
       error.statusCode = 400;
       throw error;
     }
-    this._role_name = value;
+    this._roleName = value;
   }
 
   /**********************************CRUD operations************************************/
@@ -201,10 +201,10 @@ module.exports = class Person extends BaseClass {
       person.telephone,
       person.created_at,
       person.updated_at,
-      person.role_id,
+      person.id_role,
       role.name as role_name
       FROM person
-      LEFT JOIN role ON person.role_id = role.id;`
+      LEFT JOIN role ON person.id_role = role.id;`
     );
     return allPersons;
   }
@@ -226,10 +226,10 @@ module.exports = class Person extends BaseClass {
       person.telephone,
       person.created_at,
       person.updated_at,
-      person.role_id,
+      person.id_role,
       role.name as role_name
       FROM person
-      LEFT JOIN role ON person.role_id = role.id
+      LEFT JOIN role ON person.id_role = role.id
       WHERE person.id = ?`, [id]
     );
    
@@ -248,9 +248,9 @@ module.exports = class Person extends BaseClass {
   async post() {
     const [result] = await db.execute(
       `INSERT INTO person 
-        (id, email, role_id) 
+        (id, email, id_role) 
         VALUES (?, ?, ?)`, 
-        [this.id, this.email, this.role_id]
+        [this.id, this.email, this.idRole]
       );
     
     if (result.affectedRows === 0) {
@@ -268,9 +268,9 @@ module.exports = class Person extends BaseClass {
   async update() {
     const [result] = await db.execute(
       `UPDATE person
-        SET email = ?, password = ?, first_name = ?, last_name = ?, street = ?, postal_code = ?, city = ?, telephone = ?, role_id = ?
+        SET email = ?, password = ?, first_name = ?, last_name = ?, street = ?, postal_code = ?, city = ?, telephone = ?, id_role = ?
         WHERE id = ?`,
-        [this.email, this.password, this.first_name, this.last_name, this.street, this.postal_code, this.city, this.telephone, this.role_id, this.id]
+        [this.email, this.password, this.firstName, this.lastName, this.street, this.postalCode, this.city, this.telephone, this.idRole, this.id]
       );
 
     if (result.affectedRows === 0) {
