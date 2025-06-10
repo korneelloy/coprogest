@@ -276,3 +276,11 @@
   letter-spacing: 0;
   line-height: normal;
 }
+
+.background-image {
+  background-image: url('/assets/images/backgroundImage.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 200px;
+}
