@@ -14,15 +14,15 @@ module.exports = class AgNotice extends BaseClass {
    * @param {string} id - UUID of the agNotice
    * @param {string} title - title of the agNotice
    * @param {string} place - place of the agNotice
-   * @param {date} agDate - place of the agNotice
+   * @param {date} ag_date - place of the agNotice
    * @param {Date|null} createdAt - creation date - set in MSQL code
    * @param {Date|null} updatedAt - last update - set in MSQ code
    */
-  constructor({id, title, place, agDate, createdAt = null, updatedAt = null }) {
+  constructor({id, title, place, ag_date, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
     this.title = title;
     this.place = place;
-    this.agDate = agDate;
+    this.ag_date = ag_date;
   }
   
   /****************************getters and setters for data validation***********************************/
@@ -68,17 +68,18 @@ module.exports = class AgNotice extends BaseClass {
   }
 
     
-  get agDate() {
-    return this._agDate;
+  get ag_date() {
+    return this._ag_date;
   }
   
-  set agDate(value) {
-    if (!(value instanceof Date)) {
+  set ag_date(value) {
+    const agDate = new Date(value)
+    if (!(agDate instanceof Date)) {
       const error = new Error('Invalid date');
       error.statusCode = 400;
       throw error;
     }
-    this._agDate = value;
+    this._ag_date = agDate;
   }
 
   /**********************************CRUD operations************************************/
@@ -117,7 +118,7 @@ module.exports = class AgNotice extends BaseClass {
       `INSERT INTO ag_notice 
         (id, title, place, ag_date) 
         VALUES (?, ?, ?, ?)`, 
-        [this.id, this.title, this.place, this.agDate]
+        [this.id, this.title, this.place, this.ag_date]
       );
     
     if (result.affectedRows === 0) {
@@ -137,7 +138,7 @@ module.exports = class AgNotice extends BaseClass {
       `UPDATE ag_notice
         SET title = ?, place = ?, ag_date = ?
         WHERE id = ?`,
-        [this.title, this.place, this.agDate, this.id]
+        [this.title, this.place, this.ag_date, this.id]
       );
 
     if (result.affectedRows === 0) {

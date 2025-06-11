@@ -14,19 +14,19 @@ module.exports = class Document extends BaseClass {
    * @param {string} id - UUID of the document
    * @param {string} name - Name of the document
    * @param {string} url - URL of the document
-   * @param {string} idDocumentCategory - UUID of the category
+   * @param {string} id_document_category - UUID of the category
    * @param {string|null} description - Optional description
    * @param {Date|null} createdAt - creation date - set in MSQL code
    * @param {Date|null} updatedAt - last update - set in MSQ code
-   * @param {string|null} categoryName - Optional, loaded via JOIN
+   * @param {string|null} category_name - Optional, loaded via JOIN
    */
-  constructor({id, name, url, idDocumentCategory, description = null, createdAt = null, updatedAt = null, categoryName = null }) {
+  constructor({id, name, url, id_document_category, description = null, createdAt = null, updatedAt = null, category_name = null }) {
     super({ id, createdAt, updatedAt });
     this.name = name;
     this.url = url;
-    this.idDocumentCategory = idDocumentCategory;
+    this.id_document_category = id_document_category;
     this.description = description;
-    this.categoryName = categoryName;
+    this.category_name = category_name;
   }
   
   /****************************getters and setters for data validation***********************************/
@@ -65,19 +65,19 @@ module.exports = class Document extends BaseClass {
     this._url = trimmedValue;
   }
     
-  get idDocumentCategory() {
-    return this._idDocumentCategory;
+  get id_document_category() {
+    return this._id_document_category;
   }
 
   /**TO DO VALIDATION OF CROSS REF  */
   
-  set idDocumentCategory(value) {
+  set id_document_category(value) {
     if (!isValidUUIDv4(value)) {
-      const error = new Error('Invalid id');
+      const error = new Error('Invalid id_document_category');
       error.statusCode = 400;
       throw error;
     }
-    this._idDocumentCategory = value;
+    this._id_document_category = value;
   }
 
   get description() {
@@ -156,7 +156,7 @@ module.exports = class Document extends BaseClass {
       `INSERT INTO document 
         (id, name, description, url, id_document_category) 
         VALUES (?, ?, ?, ?, ?)`, 
-        [this.id, this.name, this.description, this.url, this.idDocumentCategory]
+        [this.id, this.name, this.description, this.url, this.id_document_category]
       );
     
     if (result.affectedRows === 0) {
@@ -176,7 +176,7 @@ module.exports = class Document extends BaseClass {
       `UPDATE document
         SET name = ?, description = ?, url = ?, id_document_category = ?
         WHERE id = ?`,
-        [this.name, this.description, this.url, this.idDocumentCategory, this.id]
+        [this.name, this.description, this.url, this.id_document_category, this.id]
       );
 
     if (result.affectedRows === 0) {

@@ -41,13 +41,13 @@ exports.postOne = async (req, res, next) => {
     const name = req.body.name;
     const description = req.body.description;
     const url = req.body.url;
-    const idDocumentCategory = req.body.idDocumentCategory;    
+    const id_document_category = req.body.id_document_category;    
 
     const document = new Document({
       id,
       name,
       url,
-      idDocumentCategory,
+      id_document_category,
       description
     });
     
@@ -73,13 +73,13 @@ exports.updateOne = async (req, res, next) => {
     const name = req.body.name;
     const description = req.body.description;
     const url = req.body.url;
-    const idDocumentCategory = req.body.idDocumentCategory;    
+    const id_document_category = req.body.id_document_category;    
 
     const document = new Document({
       id,
       name,
       url,
-      idDocumentCategory,
+      id_document_category,
       description
     });
     

@@ -14,24 +14,24 @@ module.exports = class AgResolution extends BaseClass {
    * @param {string} id - UUID of the ag resolution
    * @param {string} title - Title of the ag resolution
    * @param {string} description - Description
-   * @param {string} requiredMajority - majority needes to vote
+   * @param {string} required_majority - majority needes to vote
    * @param {boolean} budget - budget related to this vote? 
    * @param {Date|null} createdAt - creation date - set in MSQL code
    * @param {Date|null} updatedAt - last update - set in MSQ code
-   * @param {string} idAgMinutes - Link to ag minutes
-   * @param {string} idUnitGroup - Link to ag unit group
-   * @param {string} idAgNotice - Link to ag notice
+   * @param {string} id_ag_minutes - Link to ag minutes
+   * @param {string} id_unit_group - Link to ag unit group
+   * @param {string} id_ag_notice - Link to ag notice
 
    */
-  constructor({id, title, description, requiredMajority, budget, idAgMinutes, idUnitGroup, idAgNotice, createdAt = null, updatedAt = null }) {
+  constructor({id, title, description, required_majority, budget, id_ag_minutes, id_unit_group, id_ag_notice, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
     this.title = title;
     this.description = description;
-    this.requiredMajority = requiredMajority;
+    this.required_majority = required_majority;
     this.budget = budget;
-    this.idAgMinutes = idAgMinutes;
-    this.idUnitGroup = idUnitGroup;
-    this.idAgNotice = idAgNotice;
+    this.id_ag_minutes = id_ag_minutes;
+    this.id_unit_group = id_unit_group;
+    this.id_ag_notice = id_ag_notice;
   }
   
   /****************************getters and setters for data validation***********************************/
@@ -61,7 +61,7 @@ module.exports = class AgResolution extends BaseClass {
   }
 
   set description(value) {
-    if (!(value instanceof String)) {
+    if (typeof value !== 'string') {
       const error = new Error('Invalid description: must be a string.');
       error.statusCode = 400;
       throw error;
@@ -69,17 +69,17 @@ module.exports = class AgResolution extends BaseClass {
     this._description = value;
   }
 
-  get requiredMajority() {
-    return this._requiredMajority;
+  get required_majority() {
+    return this._required_majority;
   }
 
-  set requiredMajority(value) {
+  set required_majority(value) {
     if (!isStringMin2Max20(value)) {
       const error = new Error('Invalid majority');
       error.statusCode = 400;
       throw error;
     }
-    this._requiredMajority = value;
+    this._required_majority = value;
   }
     
   get budget() {
@@ -87,7 +87,7 @@ module.exports = class AgResolution extends BaseClass {
   }
   
   set budget(value) {
-    if (!(value instanceof Boolean)) {
+    if (typeof value !== 'boolean') {
       const error = new Error('Invalid budget');
       error.statusCode = 400;
       throw error;
@@ -95,44 +95,44 @@ module.exports = class AgResolution extends BaseClass {
     this._budget = value;
   }
 
-  get idAgMinutes() {
-    return this._idAgMinutes;
+  get id_ag_minutes() {
+    return this._id_ag_minutes;
   }
   
-  set idAgMinutes(value) {
+  set id_ag_minutes(value) {
     if (!isValidUUIDv4(value)) {
       const error = new Error('Invalid id ag minutes');
       error.statusCode = 400;
       throw error;
     }
-    this._idAgMinutes = value;
+    this._id_ag_minutes = value;
   }
 
 
-  get idUnitGroup() {
-    return this._idUnitGroup;
+  get id_unit_group() {
+    return this._id_unit_group;
   }
   
-  set idUnitGroup(value) {
+  set id_unit_group(value) {
     if (!isValidUUIDv4(value)) {
       const error = new Error('Invalid id unit group');
       error.statusCode = 400;
       throw error;
     }
-    this._idUnitGroup = value;
+    this._id_unit_group = value;
   }
 
-  get idAgNotice() {
-    return this._idAgNotice;
+  get id_ag_notice() {
+    return this._id_ag_notice;
   }
   
-  set idAgNotice(value) {
+  set id_ag_notice(value) {
     if (!isValidUUIDv4(value)) {
       const error = new Error('Invalid id ag notice');
       error.statusCode = 400;
       throw error;
     }
-    this._idAgNotice = value;
+    this._id_ag_notice = value;
   }
   /**********************************CRUD operations************************************/
 
@@ -171,7 +171,7 @@ module.exports = class AgResolution extends BaseClass {
       `INSERT INTO ag_resolution 
         (id, title, description, required_majority, budget, id_ag_minutes, id_unit_group, id_ag_notice) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
-        [this.id, this.title, this.description, this.requiredMajority, this.budget, this.idAgMinutes, this.idUnitGroup, this.idAgNotice]
+        [this.id, this.title, this.description, this.required_majority, this.budget, this.id_ag_minutes, this.id_unit_group, this.id_ag_notice]
       );
     
     if (result.affectedRows === 0) {
@@ -191,7 +191,7 @@ module.exports = class AgResolution extends BaseClass {
       `UPDATE ag_resolution
         SET title = ?, description = ?, required_majority = ?, budget = ?, id_ag_minutes = ?, id_unit_group = ?, id_ag_notice = ?
         WHERE id = ?`,
-        [this.title, this.description, this.requiredMajority, this.budget, this.idAgMinutes, this.idUnitGroup, this.idAgNotice, this.id]
+        [this.title, this.description, this.required_majority, this.budget, this.id_ag_minutes, this.id_unit_group, this.id_ag_notice, this.id]
       );
 
     if (result.affectedRows === 0) {

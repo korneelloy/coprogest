@@ -40,13 +40,13 @@ exports.postOne = async (req, res, next) => {
     const id = uuidv4();
     const title = req.body.title;
     const place = req.body.place;
-    const agDate = req.body.agDate;
+    const ag_date = req.body.ag_date;
 
     const agNotice = new AgNotice({
       id,
       title,
       place,
-      agDate
+      ag_date
     });
     
     const postResponse = await agNotice.post();
@@ -70,13 +70,13 @@ exports.updateOne = async (req, res, next) => {
     const id = req.params.id;
     const title = req.body.title;
     const place = req.body.place;
-    const agDate = req.body.agDate; 
+    const ag_date = req.body.ag_date; 
 
     const agNotice = new AgNotice({
       id,
       title,
       place,
-      agDate
+      ag_date
     });
     
     const updateResponse = await agNotice.update();

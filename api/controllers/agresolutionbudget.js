@@ -38,27 +38,27 @@ exports.getOne = async (req, res, next) => {
 exports.postOne = async (req, res, next) => {
   try {
     const id = uuidv4();
-    const budgetAmount = req.body.budgetAmount;
-    const budgetType = req.body.budgetType;
-    const operationBudgetStart = req.body.operationBudgetStart;
-    const operationBudgetEnd = req.body.operationBudgetEnd;
-    const nbOfInstalments = req.body.nbOfInstalments;
-    const budgetRecupTenant = req.body.budgetRecupTenant;
+    const budget_amount = req.body.budget_amount;
+    const budget_type = req.body.budget_type;
+    const operating_budget_start = req.body.operating_budget_start;
+    const operating_budget_end = req.body.operating_budget_end;
+    const nb_of_instalments = req.body.nb_of_instalments;
+    const budget_recup_tenant = req.body.budget_recup_tenant;
     const actif = req.body.actif;
-    const idBudgetCategory = req.body.idBudgetCategory;
-    const idAgResolution = req.body.idAgResolution;
+    const id_budget_category = req.body.id_budget_category;
+    const id_ag_resolution = req.body.id_ag_resolution;
 
     const agResolutionBudget = new AgResolutionBudget({
       id,
-      budgetAmount,
-      budgetType,
-      operationBudgetStart,
-      operationBudgetEnd,
-      nbOfInstalments,
-      budgetRecupTenant,
+      budget_amount,
+      budget_type,
+      operating_budget_start,
+      operating_budget_end,
+      nb_of_instalments,
+      budget_recup_tenant,
       actif,
-      idBudgetCategory,
-      idAgResolution
+      id_budget_category,
+      id_ag_resolution
     });
     
     const postResponse = await agResolutionBudget.post();
@@ -80,27 +80,27 @@ exports.postOne = async (req, res, next) => {
 exports.updateOne = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const budgetAmount = req.body.budgetAmount;
-    const budgetType = req.body.budgetType;
-    const operationBudgetStart = req.body.operationBudgetStart;
-    const operationBudgetEnd = req.body.operationBudgetEnd;
-    const nbOfInstalments = req.body.nbOfInstalments;
-    const budgetRecupTenant = req.body.budgetRecupTenant;
+    const budget_amount = req.body.budget_amount;
+    const budget_type = req.body.budget_type;
+    const operating_budget_start = req.body.operating_budget_start;
+    const operating_budget_end = req.body.operating_budget_end;
+    const nb_of_instalments = req.body.nb_of_instalments;
+    const budget_recup_tenant = req.body.budget_recup_tenant;
     const actif = req.body.actif;
-    const idBudgetCategory = req.body.idBudgetCategory;
-    const idAgResolution = req.body.idAgResolution;
+    const id_budget_category = req.body.id_budget_category;
+    const id_ag_resolution = req.body.id_ag_resolution;
 
     const agResolutionBudget = new AgResolutionBudget({
       id,
-      budgetAmount,
-      budgetType,
-      operationBudgetStart,
-      operationBudgetEnd,
-      nbOfInstalments,
-      budgetRecupTenant,
+      budget_amount,
+      budget_type,
+      operating_budget_start,
+      operating_budget_end,
+      nb_of_instalments,
+      budget_recup_tenant,
       actif,
-      idBudgetCategory,
-      idAgResolution
+      id_budget_category,
+      id_ag_resolution
     });
 
     const updateResponse = await agResolutionBudget.update();

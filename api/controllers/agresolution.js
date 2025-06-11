@@ -40,21 +40,21 @@ exports.postOne = async (req, res, next) => {
     const id = uuidv4();
     const title = req.body.title;
     const description = req.body.description;
-    const requiredMajority = req.body.requiredMajority;
+    const required_majority = req.body.required_majority;
     const budget = req.body.budget;
-    const idAgMinutes = req.body.idAgMinutes;
-    const idUnitGroup = req.body.idUnitGroup;
-    const idAgNotice = req.body.idAgNotice;
+    const id_ag_minutes = req.body.id_ag_minutes;
+    const id_unit_group = req.body.id_unit_group;
+    const id_ag_notice = req.body.id_ag_notice;
 
     const agResolution = new AgResolution({
       id,
       title,
       description,
-      requiredMajority,
+      required_majority,
       budget,
-      idAgMinutes,
-      idUnitGroup,
-      idAgNotice
+      id_ag_minutes,
+      id_unit_group,
+      id_ag_notice
     });
     
     const postResponse = await agResolution.post();
@@ -78,21 +78,21 @@ exports.updateOne = async (req, res, next) => {
     const id = req.params.id;
     const title = req.body.title;
     const description = req.body.description;
-    const requiredMajority = req.body.requiredMajority;
+    const required_majority = req.body.required_majority;
     const budget = req.body.budget;
-    const idAgMinutes = req.body.idAgMinutes;
-    const idUnitGroup = req.body.idUnitGroup;
-    const idAgNotice = req.body.idAgNotice;
+    const id_ag_minutes = req.body.id_ag_minutes;
+    const id_unit_group = req.body.id_unit_group;
+    const id_ag_notice = req.body.id_ag_notice;
 
     const agResolution = new AgResolution({
       id,
       title,
       description,
-      requiredMajority,
+      required_majority,
       budget,
-      idAgMinutes,
-      idUnitGroup,
-      idAgNotice
+      id_ag_minutes,
+      id_unit_group,
+      id_ag_notice
     });
     
     const updateResponse = await agResolution.update();
