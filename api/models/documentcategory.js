@@ -13,8 +13,8 @@ module.exports = class DocumentCategory extends BaseClass {
    * Create a new Document category instance.
    * @param {string} id - UUID of the document category
    * @param {string} name - Name of the document category
-   * @param {Date|null} createdAt - creation date - set in MSQL code
-   * @param {Date|null} updatedAt - last update - set in MSQ code
+   * @param {Date|null} createdAt - creation date - set in SQL code
+   * @param {Date|null} updatedAt - last update - set in SQL code
    */
   constructor({id, name, createdAt = null, updatedAt = null}) {
     super({ id, createdAt, updatedAt });
@@ -40,7 +40,7 @@ module.exports = class DocumentCategory extends BaseClass {
       error.statusCode = 400;
       throw error;
     }
-    this._name = value;
+    this._name = trimmedValue;
   }
 
 
@@ -116,12 +116,21 @@ module.exports = class DocumentCategory extends BaseClass {
    * @returns {Promise<Object>}
    */
   static async delete(id) {
-    const [result] = await db.execute('DELETE FROM document_category WHERE id = ?', [id]);
-    if (result.affectedRows === 0) {
-      const error = new Error('Document category not found');
-      error.statusCode = 404;
-      throw error;
+    try {
+      const [result] = await db.execute('DELETE FROM document_category WHERE id = ?', [id]);
+      if (result.affectedRows === 0) {
+        const error = new Error('Document category not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      return { message: 'Document category deleted successfully' };
+    } catch (err) {
+      if (err.code === 'ER_ROW_IS_REFERENCED_2') {
+        const error = new Error('Cannot delete: this category is still referenced by one or more documents.');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
     }
-    return { message: 'Document category deleted successfully' };
   }
 }

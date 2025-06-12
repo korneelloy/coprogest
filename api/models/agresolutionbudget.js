@@ -1,6 +1,6 @@
 /**
  * AgResolutionBudget model class.
- * Provides data validation and database operations.
+ * Provides data validation and database operatings.
  */
 
 const db = require('../util/database');
@@ -12,42 +12,42 @@ module.exports = class AgResolutionBudget extends BaseClass {
   /**
    * Create a new AgResolutionBudget instance.
    * @param {string} id - UUID of the ag resolution budget
-   * @param {Number} budgetAmount - Amount
-   * @param {string} budgetType - enum: operating or exceptional
-   * @param {Date|null} operationBudgetStart - start date of operating budget 
-   * @param {Date|null} operationBudgetEnd - end date of operating budget
-   * @param {Number} nbOfInstalments - in how many times the budget will be called?
-   * @param {boolean} budgetRecupTenant - able to ask tenant to pay back
+   * @param {Number} budget_amount - Amount - can be null (if related to ag-resolution with budget=false)
+   * @param {string} budget_type - enum {operating or exceptional} - not null
+   * @param {Date|null} operating_budget_start - start date of operating budget - null if budget-type = exceptional
+   * @param {Date|null} operating_budget_end - end date of operating budget - null if budget-type = exceptional
+   * @param {Number} nb_of_instalments - in how many times the budget will be called?: 0 if we wait for the invoice / 1 : in one time: 2 in two times etc
+   * @param {boolean} budget_recup_tenant - able to ask tenant to pay back?
    * @param {boolean} actif - actif or closed / closed by default 
-   * @param {Date|null} createdAt - creation date - set in MSQL code
-   * @param {Date|null} updatedAt - last update - set in MSQ code
-   * @param {string} idBudgetCategory - Link to budget category
-   * @param {string} idAgResolution - Link to ag resolution
+   * @param {Date|null} createdAt - creation date - set in SQL code
+   * @param {Date|null} updatedAt - last update - set in SQL code
+   * @param {string} id_budget_category - Link to budget category - Foreign key - verification foreign key constraint handled in the CRUD operations
+   * @param {string} id_ag_resolution - Link to ag resolution - Foreign key - verification foreign key constraint handled in the CRUD operations
 
    */
 
 
-  constructor({ id, budgetAmount, budgetType, nbOfInstalments, budgetRecupTenant, idBudgetCategory, idAgResolution, actif = false, operationBudgetStart = null, operationBudgetEnd = null, createdAt = null, updatedAt = null }) {
+  constructor({ id, budget_amount, budget_type, nb_of_instalments, budget_recup_tenant, id_budget_category, id_ag_resolution, actif = false, operating_budget_start = null, operating_budget_end = null, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
-    this.budgetAmount = budgetAmount;
-    this.budgetType = budgetType;
-    this.operationBudgetStart = operationBudgetStart;
-    this.operationBudgetEnd = operationBudgetEnd;
-    this.nbOfInstalments = nbOfInstalments;
-    this.budgetRecupTenant = budgetRecupTenant;
+    this.budget_amount = budget_amount;
+    this.budget_type = budget_type;
+    this.operating_budget_start = operating_budget_start;
+    this.operating_budget_end = operating_budget_end;
+    this.nb_of_instalments = nb_of_instalments;
+    this.budget_recup_tenant = budget_recup_tenant;
     this.actif = actif;
-    this.idBudgetCategory = idBudgetCategory;
-    this.idAgResolution = idAgResolution;
+    this.id_budget_category = id_budget_category;
+    this.id_ag_resolution = id_ag_resolution;
   }
   
   /****************************getters and setters for data validation***********************************/
 
 
-  get budgetAmount() {
-    return this._budgetAmount;
+  get budget_amount() {
+    return this._budget_amount;
   }
  
-  set budgetAmount(value) {
+  set budget_amount(value) {
     if (typeof value !== 'number' || isNaN(value)) {
       throw new TypeError('Budget amount must be a valid number');
     }
@@ -59,60 +59,73 @@ module.exports = class AgResolutionBudget extends BaseClass {
     if (!Number.isInteger(value * 100)) {
       throw new RangeError('Budget amount must have at most 2 decimal places');
     }
-    this._budgetAmount = value;
+    this._budget_amount = value;
   }
 
-  get budgetType() {
-    return this._budgetType;
+  get budget_type() {
+    return this._budget_type;
   }
 
-  set budgetType(value) {
+  set budget_type(value) {
     if (typeof value !== 'string') {
       const error = new Error('Budget type must be a string.');
       error.statusCode = 400;
       throw error;
     }
 
-    if (value !== 'operating' || value !== 'exceptional') {
-      const error = new Error('Invalid budget type: must be operating pr exceptional.');
+    if (value !== 'operating' && value !== 'exceptional') {
+      const error = new Error('Invalid budget type: must be operating or exceptional.');
       error.statusCode = 400;
       throw error;
     }
-    this._budgetType = value;
+    this._budget_type = value;
   }
 
-  get operationBudgetStart() {
-    return this._operationBudgetStart;
+  get operating_budget_start() {
+    return this._operating_budget_start;
   }
 
-  set operationBudgetStart(value) {
-    if ((value !== null) && !(value instanceof Date)) {
-      const error = new Error('Invalid operation_budget_start: must be a date or null.');
-      error.statusCode = 400;
-      throw error;
+  set operating_budget_start(value) {
+    if (value !== null) {
+      const date = new Date(value);
+      if (isNaN(date.getTime())) {
+        const error = new Error('Invalid operating_budget_start: must be a valid Date or null.');
+        error.statusCode = 400;
+        throw error;
+      }
+      this._operating_budget_start = date;
+    } else {
+      this._operating_budget_start = null;
     }
-    this._operationBudgetStart = value;
+  }
+  
+
+
+  get operating_budget_end() {
+    return this._operating_budget_end;
   }
 
-  get operationBudgetEnd() {
-    return this._operationBudgetEnd;
-  }
-
-  set operationBudgetEnd(value) {
-    if ((value !== null) && !(value instanceof Date)) {
-      const error = new Error('Invalid operation_budget_end: must be a date or null.');
-      error.statusCode = 400;
-      throw error;
+  set operating_budget_end(value) {
+    if (value !== null) {
+      const date = new Date(value);
+      if (isNaN(date.getTime())) {
+        const error = new Error('Invalid operating_budget_end: must be a valid Date or null.');
+        error.statusCode = 400;
+        throw error;
+      }
+      this._operating_budget_end = date;
+    } else {
+      this._operating_budget_end = null;
     }
-    this._operationBudgetEnd = value;
   }
+  
 
-  get nbOfInstalments() {
-    return this._nbOfInstalments;
+  get nb_of_instalments() {
+    return this._nb_of_instalments;
   }
 
   
-  set nbOfInstalments(value) {
+  set nb_of_instalments(value) {
     if (typeof value !== 'number' || isNaN(value)) {
       throw new TypeError('Nb_of_instalments amount must be a valid number');
     }
@@ -124,20 +137,20 @@ module.exports = class AgResolutionBudget extends BaseClass {
     if (!Number.isInteger(value)) {
       throw new RangeError('Nb_of_instalments must be an integer');
     }
-    this._nbOfInstalments = value;
+    this._nb_of_instalments = value;
   }
     
-  get budgetRecupTenant() {
-    return this._budgetRecupTenant;
+  get budget_recup_tenant() {
+    return this._budget_recup_tenant;
   }
   
-  set budgetRecupTenant(value) {
-    if (!(value instanceof Boolean)) {
+  set budget_recup_tenant(value) {
+    if (typeof value !== 'boolean') {
       const error = new Error('Invalid budget_recup_tenant');
       error.statusCode = 400;
       throw error;
     }
-    this._budgetRecupTenant = value;
+    this._budget_recup_tenant = value;
   }
 
   get actif() {
@@ -145,7 +158,7 @@ module.exports = class AgResolutionBudget extends BaseClass {
   }
   
   set actif(value) {
-    if (!(value instanceof Boolean)) {
+    if (typeof value !== 'boolean') {
       const error = new Error('Invalid ag resolution budget actif status');
       error.statusCode = 400;
       throw error;
@@ -154,34 +167,34 @@ module.exports = class AgResolutionBudget extends BaseClass {
   }
 
 
-  get idBudgetCategory() {
-    return this._idBudgetCategory;
+  get id_budget_category() {
+    return this._id_budget_category;
   }
   
-  set idBudgetCategory(value) {
+  set id_budget_category(value) {
     if (!isValidUUIDv4(value)) {
       const error = new Error('Invalid id budget category');
       error.statusCode = 400;
       throw error;
     }
-    this._idBudgetCategory = value;
+    this._id_budget_category = value;
   }
 
 
-  get idAgResolution() {
-    return this._idAgResolution;
+  get id_ag_resolution() {
+    return this._id_ag_resolution;
   }
   
-  set idAgResolution(value) {
+  set id_ag_resolution(value) {
     if (!isValidUUIDv4(value)) {
       const error = new Error('Invalid id ag resolution');
       error.statusCode = 400;
       throw error;
     }
-    this._idAgResolution = value;
+    this._id_ag_resolution = value;
   }
 
-  /**********************************CRUD operations************************************/
+  /**********************************CRUD operatings************************************/
 
   /**
    * Fetch all ag resolution budgets from the database.
@@ -214,19 +227,28 @@ module.exports = class AgResolutionBudget extends BaseClass {
    * @returns {Promise<Object>}
    */
   async post() {
-    const [result] = await db.execute(
-      `INSERT INTO ag_resolution_budget
-        (id, budget_amount, budget_type, nb_of_instalments, budget_recup_tenant, id_budget_category, id_ag_resolution, actif, operation_budget_start, operation_budget_end)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-        [this.id, this.budgetAmount, this.budgetType, this.nbOfInstalments, this.budgetRecupTenant, this.idBudgetCategory, this.idAgResolution, this.actif, this.operationBudgetStart, this.operationBudgetEnd]
-      );
-    
-    if (result.affectedRows === 0) {
-      const error = new Error('Insert failed: no rows affected.');
-      error.statusCode = 500;
-      throw error;
+    try {
+      const [result] = await db.execute(
+        `INSERT INTO ag_resolution_budget
+          (id, budget_amount, budget_type, nb_of_instalments, budget_recup_tenant, id_budget_category, id_ag_resolution, actif, operating_budget_start, operating_budget_end)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+          [this.id, this.budget_amount, this.budget_type, this.nb_of_instalments, this.budget_recup_tenant, this.id_budget_category, this.id_ag_resolution, this.actif, this.operating_budget_start, this.operating_budget_end]
+        );
+      
+      if (result.affectedRows === 0) {
+        const error = new Error('Insert failed: no rows affected.');
+        error.statusCode = 500;
+        throw error;
+      }
+      return { message: 'Ag resolution budget created successfully' };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
     }
-    return { mssage: 'Ag resolution budget created successfully' };
   }
   
   /**
@@ -234,19 +256,28 @@ module.exports = class AgResolutionBudget extends BaseClass {
    * @returns {Promise<Object>}
    */
   async update() {
-    const [result] = await db.execute(
-      `UPDATE ag_resolution_budget
-        SET budget_amount = ?, budget_type = ?, nb_of_instalments = ?, budget_recup_tenant = ?, id_budget_category = ?, id_ag_resolution = ?, actif = ?, operation_budget_start = ?, operation_budget_end = ?
-        WHERE id = ?`,
-        [this.budgetAmount, this.budgetType, this.nbOfInstalments, this.budgetRecupTenant, this.idBudgetCategory, this.idAgResolution, this.actif, this.operationBudgetStart, this.operationBudgetEnd, this.id]
-      );
+    try {
+      const [result] = await db.execute(
+        `UPDATE ag_resolution_budget
+          SET budget_amount = ?, budget_type = ?, nb_of_instalments = ?, budget_recup_tenant = ?, id_budget_category = ?, id_ag_resolution = ?, actif = ?, operating_budget_start = ?, operating_budget_end = ?
+          WHERE id = ?`,
+          [this.budget_amount, this.budget_type, this.nb_of_instalments, this.budget_recup_tenant, this.id_budget_category, this.id_ag_resolution, this.actif, this.operating_budget_start, this.operating_budget_end, this.id]
+        );
 
-    if (result.affectedRows === 0) {
-      const error = new Error('Ag resolution budget budget not found');
-      error.statusCode = 404;
-      throw error;
+      if (result.affectedRows === 0) {
+        const error = new Error('Ag resolution budget not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      return { message: 'Ag resolution updated successfully' };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
     }
-    return { message: 'Ag resolution updated successfully' };
   }
 
   /**

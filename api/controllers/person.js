@@ -39,12 +39,12 @@ exports.postOne = async (req, res, next) => {
   try {
     const id = uuidv4();
     const email = req.body.email;
-    const idRole = req.body.idRole;
+    const id_role = req.body.id_role;
 
     const person = new Person({
       id,
       email,
-      idRole
+      id_role
     });
     const postResponse = await person.post();
     res.status(201).json(postResponse);
@@ -65,25 +65,25 @@ exports.updateOne = async (req, res, next) => {
     const id = req.params.id;
     const email = req.body.email;
     const password = req.body.password;
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
+    const first_name = req.body.first_name;
+    const last_name = req.body.last_name;
     const street = req.body.street;
-    const postalCode = req.body.postalCode;
+    const postal_code = req.body.postal_code;
     const city = req.body.city;
     const telephone = req.body.telephone;
-    const idRole = req.body.idRole;
+    const id_role = req.body.id_role;
 
     const person = new Person({
       id,
       email,
       password,
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       street,
-      postalCode,
+      postal_code,
       city, 
       telephone, 
-      idRole
+      id_role
     });
 
     await person.setHashedPassword(person._password);

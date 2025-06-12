@@ -14,15 +14,15 @@ module.exports = class Unitgroup extends BaseClass {
    * @param {string} id - UUID of the unit group
    * @param {string} name - Name of the unit group
    * @param {string|null} description - Optional description
-   * @param {boolean} specialShares- Special shares involved in this group?, false by default
-   * @param {Date|null} createdAt - creation date - set in MSQL code
-   * @param {Date|null} updatedAt - last update - set in MSQ code
+   * @param {boolean} special_shares - Special shares involved in this group?, false by default
+   * @param {Date|null} createdAt - creation date - set in SQL code
+   * @param {Date|null} updatedAt - last update - set in SQL code
    */
-  constructor({id, name, description = null, specialShares = false, createdAt = null, updatedAt = null }) {
+  constructor({id, name, description = null, special_shares = false, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
     this.name = name;
     this.description = description;
-    this.specialShares = specialShares;
+    this.special_shares = special_shares;
   }
   
   /****************************getters and setters for data validation***********************************/
@@ -44,7 +44,7 @@ module.exports = class Unitgroup extends BaseClass {
       error.statusCode = 400;
       throw error;
     }
-    this._name = value;
+    this._name = trimmedValue;
   }
 
   get description() {
@@ -60,17 +60,17 @@ module.exports = class Unitgroup extends BaseClass {
     this._description = value;
   }
 
-  get specialShares() {
-    return this._specialShares;
+  get special_shares() {
+    return this._special_shares;
   }
 
-  set specialShares(value) {
+  set special_shares(value) {
     if (typeof value !== "boolean") {
       const error = new Error('Special shares should be a boolean value');
       error.statusCode = 400;
       throw error;
     }
-    this._specialShares = value;
+    this._special_shares = value;
   }
 
   /**********************************CRUD operations************************************/
@@ -85,7 +85,7 @@ module.exports = class Unitgroup extends BaseClass {
   }
 
   /**
-   * Fetch a unitgroups by ID.
+   * Fetch a unitgroup by ID.
    * @param {string} id
    * @returns {Promise<Object>}
    */
@@ -93,7 +93,7 @@ module.exports = class Unitgroup extends BaseClass {
     const [rows] = await db.execute(`SELECT * FROM unit_group WHERE id = ?`, [id]);
    
     if (rows.length === 0) {
-      const error = new Error('Unitgroup group not found');
+      const error = new Error('Unitgroup not found');
       error.statusCode = 404;
       throw error;
     }
@@ -109,7 +109,7 @@ module.exports = class Unitgroup extends BaseClass {
       `INSERT INTO unit_group 
         (id, name, description, special_shares) 
         VALUES (?, ?, ?, ?)`, 
-        [this.id, this.name, this.description, this.specialShares]
+        [this.id, this.name, this.description, this.special_shares]
       );
     
     if (result.affectedRows === 0) {
@@ -129,7 +129,7 @@ module.exports = class Unitgroup extends BaseClass {
       `UPDATE unit_group
         SET name = ?, description = ?, special_shares = ?
         WHERE id = ?`,
-        [this.name, this.description, this.specialShares, this.id]
+        [this.name, this.description, this.special_shares, this.id]
       );
 
     if (result.affectedRows === 0) {

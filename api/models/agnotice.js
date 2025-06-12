@@ -12,17 +12,17 @@ module.exports = class AgNotice extends BaseClass {
   /**
    * Create a new AgNotice instance.
    * @param {string} id - UUID of the agNotice
-   * @param {string} title - title of the agNotice
-   * @param {string} place - place of the agNotice
-   * @param {date} agDate - place of the agNotice
-   * @param {Date|null} createdAt - creation date - set in MSQL code
-   * @param {Date|null} updatedAt - last update - set in MSQ code
+   * @param {string} title - title of the agNotice - should be unique (uniqueness handled in CRUD operations, not in setter) - not null
+   * @param {string} place - place of the agNotice - not null
+   * @param {Date} ag_date - date of the agNotice - not null
+   * @param {Date|null} createdAt - creation date - set in SQL code
+   * @param {Date|null} updatedAt - last update - set in SQL code
    */
-  constructor({id, title, place, agDate, createdAt = null, updatedAt = null }) {
+  constructor({id, title, place, ag_date, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
     this.title = title;
     this.place = place;
-    this.agDate = agDate;
+    this.ag_date = ag_date;
   }
   
   /****************************getters and setters for data validation***********************************/
@@ -44,7 +44,7 @@ module.exports = class AgNotice extends BaseClass {
       error.statusCode = 400;
       throw error;
     }
-    this._title = value;
+    this._title = trimmedValue;
   }
 
   get place() {
@@ -60,25 +60,26 @@ module.exports = class AgNotice extends BaseClass {
     const trimmedValue = value.trim();
 
     if (!isStringMin2Max255(trimmedValue)) {
-      const error = new Error('Invalid title: must be a string of minimum length 2 and maximum of 255.');
+      const error = new Error('Invalid place: must be a string of minimum length 2 and maximum of 255.');
       error.statusCode = 400;
       throw error;
     }
-    this._place = value;
+    this._place = trimmedValue;
   }
 
     
-  get agDate() {
-    return this._agDate;
+  get ag_date() {
+    return this._ag_date;
   }
-  
-  set agDate(value) {
-    if (!(value instanceof Date)) {
+
+  set ag_date(value) {
+    const agDate = new Date(value);
+    if (isNaN(agDate.getTime())) {
       const error = new Error('Invalid date');
       error.statusCode = 400;
       throw error;
-    }
-    this._agDate = value;
+    }  
+    this._ag_date = agDate;
   }
 
   /**********************************CRUD operations************************************/
@@ -108,24 +109,35 @@ module.exports = class AgNotice extends BaseClass {
     return rows[0];
   }
   
-  /**
+   /**
    * Insert the current ag notice into the database.
    * @returns {Promise<Object>}
    */
   async post() {
-    const [result] = await db.execute(
-      `INSERT INTO ag_notice 
-        (id, title, place, ag_date) 
-        VALUES (?, ?, ?, ?)`, 
-        [this.id, this.title, this.place, this.agDate]
+    try {
+      const [result] = await db.execute(
+        `INSERT INTO ag_notice 
+          (id, title, place, ag_date) 
+          VALUES (?, ?, ?, ?)`, 
+        [this.id, this.title, this.place, this.ag_date]
       );
-    
-    if (result.affectedRows === 0) {
-      const error = new Error('Insert failed: no rows affected.');
-      error.statusCode = 500;
-      throw error;
+
+      if (result.affectedRows === 0) {
+        const error = new Error('Insert failed: no rows affected.');
+        error.statusCode = 500;
+        throw error;
+      }
+
+      return { message: 'Ag notice created successfully' };
+
+    } catch (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        const error = new Error('The combination Title-date already exists.');
+        error.statusCode = 409;
+        throw error;
+      }
+      throw err;
     }
-    return { message: 'Ag notice created successfully' };
   }
   
   /**
@@ -133,23 +145,32 @@ module.exports = class AgNotice extends BaseClass {
    * @returns {Promise<Object>}
    */
   async update() {
-    const [result] = await db.execute(
-      `UPDATE ag_notice
-        SET title = ?, place = ?, ag_date = ?
-        WHERE id = ?`,
-        [this.title, this.place, this.agDate, this.id]
-      );
+    try {
+      const [result] = await db.execute(
+        `UPDATE ag_notice
+          SET title = ?, place = ?, ag_date = ?
+          WHERE id = ?`,
+          [this.title, this.place, this.ag_date, this.id]
+        );
 
-    if (result.affectedRows === 0) {
-      const error = new Error('Ag notice not found');
-      error.statusCode = 404;
-      throw error;
+      if (result.affectedRows === 0) {
+        const error = new Error('Ag notice not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      return { message: 'Ag notice updated successfully' };
+    } catch (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        const error = new Error('The combination Title-date already exists.');
+        error.statusCode = 409;
+        throw error;
+      }
+      throw err;
     }
-    return { message: 'Ag notice updated successfully' };
   }
 
   /**
-   * Delete a ag notice by ID.
+   * Delete an ag notice by ID.
    * @param {string} id
    * @returns {Promise<Object>}
    */
