@@ -4,7 +4,7 @@
  */
 
 const db = require('../util/database');
-const { isValidUUIDv4, isValidURL, isStringMin2Max50, isNullOrString } = require('../util/validation');
+const { isValidUUIDv4, isValidURL, isStringMin2Max50, isNullOrStringMin2Max255 } = require('../util/validation');
 const BaseClass = require('./baseclass');
 
 
@@ -12,12 +12,12 @@ module.exports = class Document extends BaseClass {
   /**
    * Create a new Document instance.
    * @param {string} id - UUID of the document
-   * @param {string} name - Name of the document
-   * @param {string} url - URL of the document
-   * @param {string} id_document_category - UUID of the category
+   * @param {string} name - Name of the document - not null
+   * @param {string} url - URL of the document - not null
+   * @param {string} id_document_category - UUID of the category - not null - Foreign key - verification foreign key constraint handled in the CRUD operations
    * @param {string|null} description - Optional description
-   * @param {Date|null} createdAt - creation date - set in MSQL code
-   * @param {Date|null} updatedAt - last update - set in MSQ code
+   * @param {Date|null} createdAt - creation date - set in SQL code
+   * @param {Date|null} updatedAt - last update - set in SQL code
    * @param {string|null} category_name - Optional, loaded via JOIN
    */
   constructor({id, name, url, id_document_category, description = null, createdAt = null, updatedAt = null, category_name = null }) {
@@ -48,7 +48,7 @@ module.exports = class Document extends BaseClass {
       error.statusCode = 400;
       throw error;
     }
-    this._name = value;
+    this._name = trimmedValue;
   }
 
   get url() {
@@ -56,6 +56,11 @@ module.exports = class Document extends BaseClass {
   }
 
   set url(value) {
+    if (typeof value !== 'string') {
+      const error = new Error('Url must be a string.');
+      error.statusCode = 400;
+      throw error;
+    }
     const trimmedValue = value.trim();
     if (!isValidURL(trimmedValue)) {
       const error = new Error('Invalid url');
@@ -68,8 +73,6 @@ module.exports = class Document extends BaseClass {
   get id_document_category() {
     return this._id_document_category;
   }
-
-  /**TO DO VALIDATION OF CROSS REF  */
   
   set id_document_category(value) {
     if (!isValidUUIDv4(value)) {
@@ -85,8 +88,8 @@ module.exports = class Document extends BaseClass {
   }
 
   set description(value) {
-    if (!isNullOrString(value)) {
-      const error = new Error('Invalid description: must be a string or null.');
+    if (!isNullOrStringMin2Max255(value)) {
+      const error = new Error('Invalid description: must be null or a string between 2 and 255 characters.');
       error.statusCode = 400;
       throw error;
     }
@@ -152,19 +155,28 @@ module.exports = class Document extends BaseClass {
    * @returns {Promise<Object>}
    */
   async post() {
-    const [result] = await db.execute(
-      `INSERT INTO document 
-        (id, name, description, url, id_document_category) 
-        VALUES (?, ?, ?, ?, ?)`, 
-        [this.id, this.name, this.description, this.url, this.id_document_category]
-      );
-    
-    if (result.affectedRows === 0) {
-      const error = new Error('Insert failed: no rows affected.');
-      error.statusCode = 500;
-      throw error;
+    try {
+      const [result] = await db.execute(
+        `INSERT INTO document 
+          (id, name, description, url, id_document_category) 
+          VALUES (?, ?, ?, ?, ?)`, 
+          [this.id, this.name, this.description, this.url, this.id_document_category]
+        );
+      
+      if (result.affectedRows === 0) {
+        const error = new Error('Insert failed: no rows affected.');
+        error.statusCode = 500;
+        throw error;
+      }
+      return { message: 'Document created successfully' };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
     }
-    return { message: 'Document created successfully' };
   }
   
   /**
@@ -172,19 +184,28 @@ module.exports = class Document extends BaseClass {
    * @returns {Promise<Object>}
    */
   async update() {
-    const [result] = await db.execute(
-      `UPDATE document
-        SET name = ?, description = ?, url = ?, id_document_category = ?
-        WHERE id = ?`,
-        [this.name, this.description, this.url, this.id_document_category, this.id]
-      );
+    try {
+      const [result] = await db.execute(
+        `UPDATE document
+          SET name = ?, description = ?, url = ?, id_document_category = ?
+          WHERE id = ?`,
+          [this.name, this.description, this.url, this.id_document_category, this.id]
+        );
 
-    if (result.affectedRows === 0) {
-      const error = new Error('Document not found');
-      error.statusCode = 404;
-      throw error;
+      if (result.affectedRows === 0) {
+        const error = new Error('Document not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      return { message: 'Document updated successfully' };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
     }
-    return { message: 'Document updated successfully' };
   }
 
   /**

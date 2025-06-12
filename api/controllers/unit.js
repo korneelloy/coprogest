@@ -39,12 +39,14 @@ exports.postOne = async (req, res, next) => {
   try {
     const id = uuidv4();
     const name = req.body.name;
+    const id_person = req.body.id_person;
     const shares = req.body.shares;
     const description = req.body.description;
 
     const unit = new Unit({
       id,
       name,
+      id_person,
       shares,
       description
     });
@@ -69,12 +71,14 @@ exports.updateOne = async (req, res, next) => {
   try {
     const id = req.params.id;
     const name = req.body.name;
+    const id_person = req.body.id_person;
     const shares = req.body.shares;
     const description = req.body.description;
 
     const unit = new Unit({
       id,
-      name,      
+      name,
+      id_person,      
       shares,
       description
     });

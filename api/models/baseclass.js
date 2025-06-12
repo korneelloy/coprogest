@@ -8,8 +8,8 @@ const { isValidUUIDv4 } = require('../util/validation');
 module.exports = class BaseClass {
   /**
    * @param {string} id - UUID
-   * @param {Date|null} createdAt - creation date - set in MSQL code
-   * @param {Date|null} updatedAt - last update - set in MSQ code
+   * @param {Date|null} createdAt - creation date - set in SQL code
+   * @param {Date|null} updatedAt - last update - set in SQL code
    */
   constructor({id, createdAt = null, updatedAt = null}) {
     this.id = id;
@@ -37,24 +37,35 @@ module.exports = class BaseClass {
   }
 
   set createdAt(value) {
-    if (value !== null && !(value instanceof Date)) {
-      const error = new Error('Invalid createdAt: must be a Date object or null.');
-      error.statusCode = 400;
-      throw error;
+    if (value === null) {
+      this._createdAt = null;
+    } else {
+      const date = new Date(value);
+      if (isNaN(date.getTime())) {
+        const error = new Error('Invalid createdAt: must be a valid date or null.');
+        error.statusCode = 400;
+        throw error;
+      }
+      this._createdAt = date;
     }
-    this._createdAt = value;
   }
+  
 
   get updatedAt() {
     return this._updatedAt;
   }
 
   set updatedAt(value) {
-    if (value !== null && !(value instanceof Date)) {
-      const error = new Error('Invalid updatedAt: must be a Date object or null.');
-      error.statusCode = 400;
-      throw error;
+    if (value === null) {
+      this._updatedAt = null;
+    } else {
+      const date = new Date(value);
+      if (isNaN(date.getTime())) {
+        const error = new Error('Invalid updatedAt: must be a valid date or null.');
+        error.statusCode = 400;
+        throw error;
+      }
+      this._updatedAtt = date;
     }
-    this._updatedAt = value;
   }
 }

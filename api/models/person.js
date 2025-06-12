@@ -19,10 +19,10 @@ module.exports = class Person extends BaseClass {
    * @param {string|null} street - address - null at creation - needs to be set by person
    * @param {string|null} postal_code - address - null at creation - needs to be set by person
    * @param {string|null} city - address - null at creation - needs to be set by person
-     * @param {string|null} telephone - optional telephone 
-  * @param {Date|null} createdAt - creation date - set in SQL code
+   * @param {string|null} telephone - optional telephone 
+   * @param {Date|null} createdAt - creation date - set in SQL code
    * @param {Date|null} updatedAt - last update - set in SQL code
-   * @param {string} id_role - UUID of the role
+   * @param {string} id_role - UUID of the role - not null - Foreign key - verification foreign key constraint handled in the CRUD operations
    * @param {string|null} role_name - Optional, loaded via JOIN
    */
   constructor({id, email, id_role = null, password = null, first_name = null, last_name = null, street = null, postal_code = null, city = null, telephone = null, createdAt = null, updatedAt = null, role_name = null}) {
@@ -58,27 +58,20 @@ module.exports = class Person extends BaseClass {
       error.statusCode = 400;
       throw error;
     }
-    this._email = value;
+    this._email = trimmedValue;
   }
 
   get id_role() {
     return this._id_role;
   }
 
-    /**TO DO VALIDATION OF CROSS REF  */
-
   set id_role(value) {
-    const trimmedValue = value.trim();
-    if (!isValidUUIDv4(trimmedValue)) {
+    if (!isValidUUIDv4(value)) {
       const error = new Error('Invalid UUID');
       error.statusCode = 400;
       throw error;
     }
-    this._id_role = trimmedValue;
-  }
-
-  get password() {
-    return this._password;
+    this._id_role = value;
   }
 
   async setHashedPassword(rawPassword) {
@@ -246,19 +239,28 @@ module.exports = class Person extends BaseClass {
    * @returns {Promise<Object>}
    */
   async post() {
-    const [result] = await db.execute(
-      `INSERT INTO person 
-        (id, email, id_role) 
-        VALUES (?, ?, ?)`, 
-        [this.id, this.email, this.id_role]
-      );
-    
-    if (result.affectedRows === 0) {
-      const error = new Error('Insert failed: no rows affected.');
-      error.statusCode = 500;
-      throw error;
+    try {
+      const [result] = await db.execute(
+        `INSERT INTO person 
+          (id, email, id_role) 
+          VALUES (?, ?, ?)`, 
+          [this.id, this.email, this.id_role]
+        );
+      
+      if (result.affectedRows === 0) {
+        const error = new Error('Insert failed: no rows affected.');
+        error.statusCode = 500;
+        throw error;
+      }
+      return { message: 'Person created successfully' };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
     }
-    return { message: 'Person created successfully' };
   }
   
   /**
@@ -266,18 +268,27 @@ module.exports = class Person extends BaseClass {
    * @returns {Promise<Object>}
    */
   async update() {
-    const [result] = await db.execute(
-      `UPDATE person
-        SET email = ?, password = ?, first_name = ?, last_name = ?, street = ?, postal_code = ?, city = ?, telephone = ?, id_role = ?
-        WHERE id = ?`,
-        [this.email, this.password, this.first_name, this.last_name, this.street, this.postal_code, this.city, this.telephone, this.id_role, this.id]
-      );
+    try {
+      const [result] = await db.execute(
+        `UPDATE person
+          SET email = ?, password = ?, first_name = ?, last_name = ?, street = ?, postal_code = ?, city = ?, telephone = ?, id_role = ?
+          WHERE id = ?`,
+          [this.email, this.password, this.first_name, this.last_name, this.street, this.postal_code, this.city, this.telephone, this.id_role, this.id]
+        );
 
-    if (result.affectedRows === 0) {
-      const error = new Error('Person not found');
-      error.statusCode = 404;
-      throw error;
+      if (result.affectedRows === 0) {
+        const error = new Error('Person not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      return { message: 'Person updated successfully' };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
     }
-    return { message: 'Person updated successfully' };
   }
 }

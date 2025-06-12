@@ -12,21 +12,21 @@ module.exports = class AgResolution extends BaseClass {
   /**
    * Create a new AgResolution instance.
    * @param {string} id - UUID of the ag resolution
-   * @param {string} title - Title of the ag resolution
-   * @param {string} description - Description
-   * @param {string} required_majority - majority needes to vote
-   * @param {boolean} budget - budget related to this vote? 
-   * @param {Date|null} createdAt - creation date - set in MSQL code
-   * @param {Date|null} updatedAt - last update - set in MSQ code
-   * @param {string} id_ag_minutes - Link to ag minutes
-   * @param {string} id_unit_group - Link to ag unit group
-   * @param {string} id_ag_notice - Link to ag notice
+   * @param {string} title - Title of the ag resolution - not null
+   * @param {string} resolution_text - resolution_text - not null
+   * @param {string} required_majority - majority needed to vote - not null - enum {24, 25, 25-1, 26, unanimity, no_vote}
+   * @param {boolean} budget - budget related to this vote? - not null
+   * @param {Date|null} createdAt - creation date - set in SQL code
+   * @param {Date|null} updatedAt - last update - set in SQL code
+   * @param {string} id_ag_minutes - Link to ag minutes - nullable - Foreign key - verification foreign key constraint handled in the CRUD operations
+   * @param {string} id_unit_group - Link to ag unit group - not null - Foreign key - verification foreign key constraint handled in the CRUD operations
+   * @param {string} id_ag_notice - Link to ag notice - not null - Foreign key - verification foreign key constraint handled in the CRUD operations
 
    */
-  constructor({id, title, description, required_majority, budget, id_ag_minutes, id_unit_group, id_ag_notice, createdAt = null, updatedAt = null }) {
+  constructor({id, title, resolution_text, required_majority, budget, id_unit_group, id_ag_notice, id_ag_minutes=null, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
     this.title = title;
-    this.description = description;
+    this.resolution_text = resolution_text;
     this.required_majority = required_majority;
     this.budget = budget;
     this.id_ag_minutes = id_ag_minutes;
@@ -53,20 +53,20 @@ module.exports = class AgResolution extends BaseClass {
       error.statusCode = 400;
       throw error;
     }
-    this._title = value;
+    this._title = trimmedValue;
   }
 
-  get description() {
-    return this._description;
+  get resolution_text() {
+    return this._resolution_text;
   }
 
-  set description(value) {
+  set resolution_text(value) {
     if (typeof value !== 'string') {
-      const error = new Error('Invalid description: must be a string.');
+      const error = new Error('Invalid resolution_text: must be a string.');
       error.statusCode = 400;
       throw error;
     }
-    this._description = value;
+    this._resolution_text = value;
   }
 
   get required_majority() {
@@ -74,7 +74,7 @@ module.exports = class AgResolution extends BaseClass {
   }
 
   set required_majority(value) {
-    if (!isStringMin2Max20(value)) {
+    if (!isStringMin2Max20(value) || !["24", "25", "25-1", "26", "unanimity", "no_vote"].includes(value)) {
       const error = new Error('Invalid majority');
       error.statusCode = 400;
       throw error;
@@ -167,19 +167,28 @@ module.exports = class AgResolution extends BaseClass {
    * @returns {Promise<Object>}
    */
   async post() {
-    const [result] = await db.execute(
-      `INSERT INTO ag_resolution 
-        (id, title, description, required_majority, budget, id_ag_minutes, id_unit_group, id_ag_notice) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
-        [this.id, this.title, this.description, this.required_majority, this.budget, this.id_ag_minutes, this.id_unit_group, this.id_ag_notice]
-      );
-    
-    if (result.affectedRows === 0) {
-      const error = new Error('Insert failed: no rows affected.');
-      error.statusCode = 500;
-      throw error;
+    try {
+      const [result] = await db.execute(
+        `INSERT INTO ag_resolution 
+          (id, title, resolution_text, required_majority, budget, id_ag_minutes, id_unit_group, id_ag_notice) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+          [this.id, this.title, this.resolution_text, this.required_majority, this.budget, this.id_ag_minutes, this.id_unit_group, this.id_ag_notice]
+        );
+      
+      if (result.affectedRows === 0) {
+        const error = new Error('Insert failed: no rows affected.');
+        error.statusCode = 500;
+        throw error;
+      }
+      return { message: 'Ag resolution created successfully' };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
     }
-    return { message: 'Ag resolution created successfully' };
   }
   
   /**
@@ -187,19 +196,28 @@ module.exports = class AgResolution extends BaseClass {
    * @returns {Promise<Object>}
    */
   async update() {
-    const [result] = await db.execute(
-      `UPDATE ag_resolution
-        SET title = ?, description = ?, required_majority = ?, budget = ?, id_ag_minutes = ?, id_unit_group = ?, id_ag_notice = ?
-        WHERE id = ?`,
-        [this.title, this.description, this.required_majority, this.budget, this.id_ag_minutes, this.id_unit_group, this.id_ag_notice, this.id]
-      );
+    try {
+      const [result] = await db.execute(
+        `UPDATE ag_resolution
+          SET title = ?, resolution_text = ?, required_majority = ?, budget = ?, id_ag_minutes = ?, id_unit_group = ?, id_ag_notice = ?
+          WHERE id = ?`,
+          [this.title, this.resolution_text, this.required_majority, this.budget, this.id_ag_minutes, this.id_unit_group, this.id_ag_notice, this.id]
+        );
 
-    if (result.affectedRows === 0) {
-      const error = new Error('Ag resolution not found');
-      error.statusCode = 404;
-      throw error;
+      if (result.affectedRows === 0) {
+        const error = new Error('Ag resolution not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      return { message: 'Ag resolution updated successfully' };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
     }
-    return { message: 'Ag resolution updated successfully' };
   }
 
   /**

@@ -39,7 +39,7 @@ exports.postOne = async (req, res, next) => {
   try {
     const id = uuidv4();
     const title = req.body.title;
-    const description = req.body.description;
+    const resolution_text = req.body.resolution_text;
     const required_majority = req.body.required_majority;
     const budget = req.body.budget;
     const id_ag_minutes = req.body.id_ag_minutes;
@@ -49,7 +49,7 @@ exports.postOne = async (req, res, next) => {
     const agResolution = new AgResolution({
       id,
       title,
-      description,
+      resolution_text,
       required_majority,
       budget,
       id_ag_minutes,
@@ -77,7 +77,7 @@ exports.updateOne = async (req, res, next) => {
   try {
     const id = req.params.id;
     const title = req.body.title;
-    const description = req.body.description;
+    const resolution_text = req.body.resolution_text;
     const required_majority = req.body.required_majority;
     const budget = req.body.budget;
     const id_ag_minutes = req.body.id_ag_minutes;
@@ -87,7 +87,7 @@ exports.updateOne = async (req, res, next) => {
     const agResolution = new AgResolution({
       id,
       title,
-      description,
+      resolution_text,
       required_majority,
       budget,
       id_ag_minutes,

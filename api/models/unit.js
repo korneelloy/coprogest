@@ -4,7 +4,7 @@
  */
 
 const db = require('../util/database');
-const { isStringMin2Max50, isNullOrString } = require('../util/validation');
+const { isStringMin2Max50, isNullOrStringMin2Max255, isValidUUIDv4 } = require('../util/validation');
 const BaseClass = require('./baseclass');
 
 
@@ -13,14 +13,16 @@ module.exports = class Unit extends BaseClass {
    * Create a new unit instance.
    * @param {string} id - UUID of the unit
    * @param {string} name - Name of the unit
-   * @param {number} shares- Shares 
+   * @param {number} shares - Shares 
    * @param {string|null} description - Optional description
-   * @param {Date|null} createdAt - creation date - set in MSQL code
-   * @param {Date|null} updatedAt - last update - set in MSQ code
+   * @param {Date|null} createdAt - creation date - set in SQL code
+   * @param {Date|null} updatedAt - last update - set in SQL code
+   * @param {string} id_person - UUID of the person - not null - Foreign key - verification foreign key constraint handled in the CRUD operations
    */
-  constructor({id, name, shares= null, description = null, createdAt = null, updatedAt = null }) {
+  constructor({id, name, id_person, shares, description = null, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
     this.name = name;
+    this.id_person = id_person;
     this.shares = shares;
     this.description = description;
   }
@@ -47,6 +49,19 @@ module.exports = class Unit extends BaseClass {
     this._name = value;
   }
 
+  get id_person() {
+    return this._id_person;
+  }
+  
+  set id_person(value) {
+    if (!isValidUUIDv4(value)) {
+      const error = new Error('Invalid id_person');
+      error.statusCode = 400;
+      throw error;
+    }
+    this._id_person = value;
+  }
+
   get shares() {
     return this._shares;
   }
@@ -71,8 +86,8 @@ module.exports = class Unit extends BaseClass {
   }
 
   set description(value) {
-    if (!isNullOrString(value)) {
-      const error = new Error('Invalid description: must be a string or null.');
+    if (!isNullOrStringMin2Max255(value)) {
+      const error = new Error('Invalid description: must be null or a string between 2 and 255 characters.');
       error.statusCode = 400;
       throw error;
     }
@@ -112,19 +127,28 @@ module.exports = class Unit extends BaseClass {
    * @returns {Promise<Object>}
    */
   async post() {
-    const [result] = await db.execute(
-      `INSERT INTO unit 
-        (id, name, shares, description) 
-        VALUES (?, ?, ?, ?)`, 
-        [this.id, this.name, this.shares, this.description]
-      );
-    
-    if (result.affectedRows === 0) {
-      const error = new Error('Insert failed: no rows affected.');
-      error.statusCode = 500;
-      throw error;
+    try {
+      const [result] = await db.execute(
+        `INSERT INTO unit 
+          (id, name, id_person, shares, description) 
+          VALUES (?, ?, ?, ?, ?)`, 
+          [this.id, this.name, this.id_person, this.shares, this.description]
+        );
+      
+      if (result.affectedRows === 0) {
+        const error = new Error('Insert failed: no rows affected.');
+        error.statusCode = 500;
+        throw error;
+      }
+      return { message: 'Unit created successfully' };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
     }
-    return { message: 'Unit created successfully' };
   }
   
   /**
@@ -132,18 +156,27 @@ module.exports = class Unit extends BaseClass {
    * @returns {Promise<Object>}
    */
   async update() {
-    const [result] = await db.execute(
-      `UPDATE unit
-        SET name = ?, shares = ?, description = ?
-        WHERE id = ?`,
-        [this.name, this.shares, this.description, this.id]
-      );
+    try {
+      const [result] = await db.execute(
+        `UPDATE unit
+          SET name = ?, id_person = ?, shares = ?, description = ?
+          WHERE id = ?`,
+          [this.name, this.id_person, this.shares, this.description, this.id]
+        );
 
-    if (result.affectedRows === 0) {
-      const error = new Error('Unit not found');
-      error.statusCode = 404;
-      throw error;
+      if (result.affectedRows === 0) {
+        const error = new Error('Unit not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      return { message: 'Unit updated successfully' };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
     }
-    return { message: 'Unit updated successfully' };
   }
 }
