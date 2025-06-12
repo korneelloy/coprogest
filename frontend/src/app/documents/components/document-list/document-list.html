@@ -10,28 +10,47 @@
 </div>
 
 
+<div>
+  <label for="category">Catégorie</label>
+  <select (change)="filter($event)">
+    <option value="">Toutes les catégories</option>
+    <option *ngFor="let cat of categories" [value]="cat.id">
+      {{ cat.name }}
+    </option>
+  </select>
+</div>
+
+
 <ul *ngIf="documents$ | async as documents; else loading">
-  <li *ngFor="let document of documents" class="space-y-4">
+  <li *ngFor="let document of documents" class="space-y-4 {{ document.id_document_category }} listitems">
     <strong>{{ document.name }}</strong><br>
-    URL: <a [href]="document.url" target="_blank">{{ document.url }}</a><br>
-    Category name: {{ document.category_name }}<br>
-    Description: {{ document.description }}<br>
+    <div>Catégorie: {{ document.category_name }}</div>
+    <div>Description: {{ document.description }}</div>
 
     <button (click)="seeDetails(document.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
       Voir les details
     </button><br>
-
-    <button (click)="change(document.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-      Changer ce document
-    </button><br>
-    
-    <button (click)="deletion(document.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-      Supprimer ce document
-    </button><br>
-    
     <hr>
   </li>
 </ul>
+
+<div class="m-4">
+
+  <a routerLink="/documents/new"
+    class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+    Enregistrer un nouveau document
+  </a>
+
+  <a routerLink="/documentcategories"
+    class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+    Catégories
+  </a>
+
+  <a routerLink="/documentcategories/new"
+    class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+    Créer une nouvelle catégorie
+  </a>
+</div>
 
 <ng-template #loading>
   <p>Loading documents...</p>

@@ -5,7 +5,7 @@ import { DocumentService } from '../../../services/document/document-service';
 import { DocumentCategoryService } from '../../../services/document-category/document-category-service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { DocumentCategory } from '../../../model/documentCategory';
+import { DocumentCategory } from '../../../model/documentcategory';
 
 @Component({
   selector: 'app-document-category-form',

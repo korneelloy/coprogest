@@ -4,7 +4,7 @@
  */
 
 const db = require('../util/database');
-const { isStringMin2Max50, isNullOrStringMin2Max255, isValidUUIDv4 } = require('../util/validation');
+const { isStringMax50, isNullOrStringMax255, isValidUUIDv4 } = require('../util/validation');
 const BaseClass = require('./baseclass');
 
 
@@ -41,7 +41,7 @@ module.exports = class Unit extends BaseClass {
     }
     const trimmedValue = value.trim();
 
-    if (!isStringMin2Max50(trimmedValue)) {
+    if (!isStringMax50(trimmedValue)) {
       const error = new Error('Invalid name: must be a string of minimum length 2 and maximum of 50.');
       error.statusCode = 400;
       throw error;
@@ -86,7 +86,7 @@ module.exports = class Unit extends BaseClass {
   }
 
   set description(value) {
-    if (!isNullOrStringMin2Max255(value)) {
+    if (!isNullOrStringMax255(value)) {
       const error = new Error('Invalid description: must be null or a string between 2 and 255 characters.');
       error.statusCode = 400;
       throw error;

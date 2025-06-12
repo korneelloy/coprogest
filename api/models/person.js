@@ -4,7 +4,7 @@
  */
 
 const db = require('../util/database');
-const { isValidUUIDv4, isValidEmail, isValidPassword, isNullOrStringMin2Max100, isNullOrStringMin2Max255, isNullOrStringMin2Max20, isNullOrStringMin2Max50, isValidTelephone } = require('../util/validation');
+const { isValidUUIDv4, isValidEmail, isValidPassword, isNullOrStringMax100, isNullOrStringMax255, isNullOrStringMax20, isNullOrStringMax50, isValidTelephone } = require('../util/validation');
 const BaseClass = require('./baseclass');
 const bcrypt = require('bcrypt');
 
@@ -90,7 +90,7 @@ module.exports = class Person extends BaseClass {
   }
 
   set first_name(value) {
-    if (!isNullOrStringMin2Max100(value)) {
+    if (!isNullOrStringMax100(value)) {
       const error = new Error('Invalid name: must be a string of minimum 2 characters and maximum 100.');
       error.statusCode = 400;
       throw error;
@@ -103,7 +103,7 @@ module.exports = class Person extends BaseClass {
   }
 
   set last_name(value) {
-    if (!isNullOrStringMin2Max100(value)) {
+    if (!isNullOrStringMax100(value)) {
       const error = new Error('Invalid name: must be a string of minimum 2 characters and maximum 100.');
       error.statusCode = 400;
       throw error;
@@ -116,7 +116,7 @@ module.exports = class Person extends BaseClass {
   }
 
   set street(value) {
-    if (!isNullOrStringMin2Max255(value)) {
+    if (!isNullOrStringMax255(value)) {
       const error = new Error('Invalid street name: must be a string of minimum 2 characters and maximum 255.');
       error.statusCode = 400;
       throw error;
@@ -129,7 +129,7 @@ module.exports = class Person extends BaseClass {
   }
 
   set postal_code(value) {
-     if (!isNullOrStringMin2Max20(value)) {
+     if (!isNullOrStringMax20(value)) {
       const error = new Error('Invalid postal code: must be a string of minimum 2 characters and maximum 20.');
       error.statusCode = 400;
       throw error;
@@ -142,7 +142,7 @@ module.exports = class Person extends BaseClass {
   }
 
   set city(value) {
-    if (!isNullOrStringMin2Max50(value)) {
+    if (!isNullOrStringMax50(value)) {
       const error = new Error('Invalid city name: must be a string of minimum 2 characters and maximum 50.');
       error.statusCode = 400;
       throw error;
@@ -168,7 +168,7 @@ module.exports = class Person extends BaseClass {
   }
 
   set role_name(value) {
-     if (!isNullOrStringMin2Max50(value)) {
+     if (!isNullOrStringMax50(value)) {
       const error = new Error('Invalid role name: must be a string of minimum 2 characters and maximum 50.');
       error.statusCode = 400;
       throw error;

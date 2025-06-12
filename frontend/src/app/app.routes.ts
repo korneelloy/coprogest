@@ -2,6 +2,11 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: '',
+    loadChildren: () =>
+      import('./home/home-module').then(m => m.HomeModule),
+  },
+  {
     path: 'documents',
     loadChildren: () =>
       import('./documents/documents-module').then(m => m.DocumentsModule),
@@ -11,6 +16,21 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./document-categories/document-categories-module').then(m => m.DocumentCategoriesModule),
   },
-  { path: '', redirectTo: 'documents', pathMatch: 'full' },
-  { path: '**', redirectTo: 'documents' }, // optional fallback
+  {
+    path: 'persons',
+    loadChildren: () =>
+      import('./persons/persons-module').then(m => m.PersonsModule),
+  },
+  {
+    path: 'units',
+    loadChildren: () =>
+      import('./units/units-module').then(m => m.UnitsModule),
+  },
+  {
+    path: 'unitgroups',
+    loadChildren: () =>
+      import('./unit-groups/unit-groups-module').then(m => m.UnitGroupsModule),
+  },
+  { path: '', redirectTo: '', pathMatch: 'full' },
+  { path: '**', redirectTo: '' },
 ];

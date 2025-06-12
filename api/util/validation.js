@@ -43,32 +43,32 @@ module.exports = {
     return value === null || (typeof value === 'string' && phoneRegex.test(value));
   },
 
-  isStringMin2Max20(value) {
+  isStringMax20(value) {
     /**
-     * Validate a string with some conditions: min 2 char and max 20
+     * Validate a string with some conditions: max 20
      * @param {string} value - supposed string
      * @returns {boolean} - true if conditions are met / false if not
      */
-      return typeof value === 'string' && value.length >= 2 && value.length <= 20;
+      return typeof value === 'string' && value.length <= 20;
     },
   
 
-  isStringMin2Max50(value) {
+  isStringMax50(value) {
   /**
-   * Validate a string with some conditions: min 2 char and max 50
+   * Validate a string with some conditions: max 50
    * @param {string} value - supposed string
    * @returns {boolean} - true if conditions are met / false if not
    */
-    return typeof value === 'string' && value.length >= 2 && value.length <= 50;
+    return typeof value === 'string' && value.length <= 50;
   },
 
-  isStringMin2Max255(value) {
+  isStringMax255(value) {
     /**
-     * Validate a string with some conditions: min 2 char and max 255
+     * Validate a string with some conditions: max 255
      * @param {string} value - supposed string
      * @returns {boolean} - true if conditions are met / false if not
      */
-      return typeof value === 'string' && value.length >= 2 && value.length <= 255;
+      return typeof value === 'string' && value.length <= 255;
   },
 
   isNullOrString(value) {
@@ -80,40 +80,40 @@ module.exports = {
     return value === null || typeof value === 'string';
   },
 
-  isNullOrStringMin2Max20(value) {
+  isNullOrStringMax20(value) {
     /**
-     * Validate a string to be a string of minimum 2 char and max 20 or null
+     * Validate a string to be a string of max 20 or null
      * @param {string} value - supposed string
      * @returns {boolean} - true if string with conditions or null / false if not
      */
-      return value === null || (typeof value === 'string' && value.length >= 2 && value.length <= 20) ;
+      return value === null || (typeof value === 'string' && value.length <= 20) ;
     },
 
-  isNullOrStringMin2Max50(value) {
+  isNullOrStringMax50(value) {
     /**
-     * Validate a string to be a string of minimum 2 char and max 50 or null
+     * Validate a string to be a string of max 50 or null
      * @param {string} value - supposed string
      * @returns {boolean} - true if string with conditions or null / false if not
      */
-      return value === null || (typeof value === 'string' && value.length >= 2 && value.length <= 50) ;
+      return value === null || (typeof value === 'string' && value.length <= 50) ;
     },
 
-  isNullOrStringMin2Max100(value) {
+  isNullOrStringMax100(value) {
     /**
-     * Validate a string to be a string of minimum 2 char and max 100 or null
+     * Validate a string to be a string of max 100 or null
      * @param {string} value - supposed string
      * @returns {boolean} - true if string with conditions or null / false if not
      */
-      return value === null || (typeof value === 'string' && value.length >= 2 && value.length <= 100) ;
+      return value === null || (typeof value === 'string' && value.length <= 100) ;
     },
 
-  isNullOrStringMin2Max255(value) {
+  isNullOrStringMax255(value) {
     /**
-     * Validate a string to be a string of minimum 2 char and max 255 or null
+     * Validate a string to be a string of max 255 or null
      * @param {string} value - supposed string
      * @returns {boolean} - true if string with conditions or null / false if not
      */
-      return value === null || (typeof value === 'string' && value.length >= 2 && value.length <= 255) ;
+      return value === null || (typeof value === 'string' && value.length <= 255) ;
     },
     
 

@@ -2,10 +2,11 @@
 <nav class="background-image min-h-48 flex flex-col justify-between px-6">
   <div class="relative flex items-center justify-between min-h-[80px] max-w-full mx-0 px-4">
     <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-      <div class="flex-shrink-0 flex items-center h-20 pt-6 pl-6">
-        <img class="h-full w-auto object-contain" src="./assets/images/logoCoproGest.png" alt="LogoCoprogest" />
-      </div>
-
+      <a routerLink="/">
+        <div class="flex-shrink-0 flex items-center h-20 pt-6 pl-6">
+          <img class="h-full w-auto object-contain" src="./assets/images/logoCoproGest.png" alt="LogoCoprogest" />
+        </div>
+      </a> 
       <div class="hidden sm:block sm:ml-6">
         <div class="hidden sm:flex flex-col items-center w-full mt-32">
           <div class="flex w-full gap-4">
@@ -45,14 +46,14 @@
               <div
                 class="absolute left-0 mt-2 min-w-[240px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                 <div class="grid grid-cols-1 gap-4 p-4">
-                  <a href="#" class="block text-black hover:text-orange-300">Copropriétaires</a>
-                  <a href="#" class="block text-black hover:text-orange-300">Lots</a>
-                  <a href="#" class="block text-black hover:text-orange-300">Groupes de Lots</a>
-                  <a href="#" class="block text-black hover:text-orange-300">Documents</a>
-                  <a href="#" class="block text-black hover:text-orange-300">Convocation AG</a>
-                  <a href="#" class="block text-black hover:text-orange-300">Compte-rendu d'AG</a>
-                  <a href="#" class="block text-black hover:text-orange-300">Appels de fonds</a>
-                  <a href="#" class="block text-black hover:text-orange-300">Factures</a>
+                  <a routerLink="/persons" class="block text-black hover:text-orange-300">Copropriétaires</a>
+                  <a routerLink="/units" class="block text-black hover:text-orange-300">Lots</a>
+                  <a routerLink="/unitgroups" class="block text-black hover:text-orange-300">Groupes de Lots</a>
+                  <a routerLink="/documents" class="block text-black hover:text-orange-300">Documents</a>
+                  <a routerLink="/" class="block text-black hover:text-orange-300">Convocation AG</a>
+                  <a routerLink="/" class="block text-black hover:text-orange-300">Compte-rendu d'AG</a>
+                  <a routerLink="/" class="block text-black hover:text-orange-300">Appels de fonds</a>
+                  <a routerLink="/" class="block text-black hover:text-orange-300">Factures</a>
                 </div>
               </div>
 
@@ -78,9 +79,9 @@
           <div class="grid grid-cols-1 gap-4 p-4">
             <div>
               <ul class="space-y-3 whitespace-nowrap">
-                <li><a href="#" class="text-black hover:text-orange-300">Mon profil</a></li>
-                <li><a href="#" class="text-black hover:text-orange-300">Redéfinir mon mot de passe</a></li>
-                <li><a href="#" class="text-black hover:text-orange-300">Déconnection</a></li>
+                <li><a routerLink="/" class="text-black hover:text-orange-300">Mon profil</a></li>
+                <li><a routerLink="/" class="text-black hover:text-orange-300">Redéfinir mon mot de passe</a></li>
+                <li><a routerLink="/" class="text-black hover:text-orange-300">Déconnection</a></li>
               </ul>
             </div>
           </div>
@@ -105,7 +106,7 @@
   <!-- Mobile menu, show/hide based on menu state -->
   <div class="sm:hidden hidden" id="mobile-menu">
     <div class="px-2 pt-2 pb-3 space-y-1">
-      <a href="#" class="bg-gray-100 text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Home</a>
+      <a routerLink="/" class="bg-gray-100 text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Home</a>
 
       <!-- Mobile Products Dropdown -->
       <div class="relative">
@@ -163,26 +164,6 @@
   <div class="px-4 py-6 sm:px-0">
 
     <router-outlet></router-outlet>
-    <div class="m-4">
-
-      <a routerLink="/documents/new"
-        class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
-        Enregistrer un nouveau document
-      </a>
-
-      <a routerLink="/documentcategories"
-        class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-        Catégories
-      </a>
-
-      <a routerLink="/documentcategories/new"
-        class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
-        Créer une nouvelle catégorie
-      </a>
-    </div>
-
-
-
   </div>
 </div>
 
