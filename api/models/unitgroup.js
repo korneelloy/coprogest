@@ -5,18 +5,18 @@
 
 const db = require('../util/database');
 const { isStringMin2Max50, isNullOrString } = require('../util/validation');
-const BaseClass = require('./baseClass');
+const BaseClass = require('./baseclass');
 
 
 module.exports = class Unitgroup extends BaseClass {
   /**
    * Create a new unitgroup instance.
-   * @param {string} id - UUID of the document
-   * @param {string} name - Name of the document
+   * @param {string} id - UUID of the unit group
+   * @param {string} name - Name of the unit group
    * @param {string|null} description - Optional description
-   * @param {boolean} special_shares- Special shares involved in this group?, false by default
-   * @param {Date|null} createdAt - creation date - set in MSQL code
-   * @param {Date|null} updatedAt - last update - set in MSQ code
+   * @param {boolean} special_shares - Special shares involved in this group?, false by default
+   * @param {Date|null} createdAt - creation date - set in SQL code
+   * @param {Date|null} updatedAt - last update - set in SQL code
    */
   constructor({id, name, description = null, special_shares = false, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
@@ -44,7 +44,7 @@ module.exports = class Unitgroup extends BaseClass {
       error.statusCode = 400;
       throw error;
     }
-    this._name = value;
+    this._name = trimmedValue;
   }
 
   get description() {
@@ -85,7 +85,7 @@ module.exports = class Unitgroup extends BaseClass {
   }
 
   /**
-   * Fetch a unitgroups by ID.
+   * Fetch a unitgroup by ID.
    * @param {string} id
    * @returns {Promise<Object>}
    */
@@ -93,7 +93,7 @@ module.exports = class Unitgroup extends BaseClass {
     const [rows] = await db.execute(`SELECT * FROM unit_group WHERE id = ?`, [id]);
    
     if (rows.length === 0) {
-      const error = new Error('Unitgroup group not found');
+      const error = new Error('Unitgroup not found');
       error.statusCode = 404;
       throw error;
     }

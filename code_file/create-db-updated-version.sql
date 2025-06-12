@@ -1,55 +1,14 @@
-/*
-chat changement types 
-Changer LOGICAL → BOOLEAN
-Changer BYTE → TINYINT
-
-pour avoir des created at remplit authomatiquement 
-created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-
-pour mettre l'option de special shares pour des groupes authomatiquement a false, sauf avis contraire
-special_shares BOOLEAN NOT NULL DEFAULT false,
-
-
-ag_resolution_budget - actif :  false by default
-   actif BOOLEAN DEFAULT false,
-
-
-charge_line - state : to be send by default
-   state VARCHAR(20) NOT NULL DEFAULT 'to_be_sent',
-
-chat : On Delete/Update Rules
-You don’t define what should happen when a referenced record is deleted. Add ON DELETE CASCADE or SET NULL as appropriate.
-
-chat: Indexes
-You define UNIQUE constraints, which is good. Consider adding indexes on frequently queried foreign keys for performance.
-
-
-voir si on cree tableau associtaif person - role ou si on rajoute le role sur la person, qui semble plus perttinent
-
-creer n° pour role?
-
-creer hashed_password?
-
-enlever: 
-CREATE TABLE person_role(
-   id_person VARCHAR(40),
-   id_role VARCHAR(40),
-   PRIMARY KEY(id_person, id_role),
-   FOREIGN KEY(id_person) REFERENCES person(id),
-   FOREIGN KEY(id_role) REFERENCES role(id)
+CREATE TABLE role(
+   id VARCHAR(36),
+   name VARCHAR(50) NOT NULL,
+   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY(id),
+   UNIQUE(name)
 );
 
-hashed_password
-
-   budget_amount DECIMAL(15,2), > NOT NULL enlevé
-   id_ag_minutes VARCHAR(40) NOT NULL, > NOT NULL enlevé (ag minutes qu'àepres ag resolution)
-
-
-*/
-
 CREATE TABLE person(
-   id VARCHAR(40),
+   id VARCHAR(36),
    email VARCHAR(255) NOT NULL,
    password VARCHAR(60),
    first_name VARCHAR(100),
@@ -62,33 +21,24 @@ CREATE TABLE person(
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY(id),
    UNIQUE(email),
-   id_role VARCHAR(40),
-   FOREIGN KEY (id_role) REFERENCES role(id_role) ON DELETE SET NULL ON UPDATE CASCADE
-);
-
-CREATE TABLE role(
-   id VARCHAR(40),
-   name VARCHAR(50) NOT NULL,
-   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-   PRIMARY KEY(id),
-   UNIQUE(name)
+   id_role VARCHAR(36) NOT NULL,
+   FOREIGN KEY (id_role) REFERENCES role(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE unit(
-   id VARCHAR(40),
+   id VARCHAR(36),
    name VARCHAR(50) NOT NULL,
    shares DECIMAL(6,2),
-   description TEXT,
+   description VARCHAR(255),
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-   id_person VARCHAR(40),
+   id_person VARCHAR(36) NOT NULL,
    PRIMARY KEY(id),
-   FOREIGN KEY(id_person) REFERENCES person(id)
+   FOREIGN KEY(id_person) REFERENCES person(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE unit_group(
-   id VARCHAR(40),
+   id VARCHAR(36),
    name VARCHAR(50) NOT NULL,
    description VARCHAR(255),
    special_shares BOOLEAN NOT NULL DEFAULT false,
@@ -98,18 +48,18 @@ CREATE TABLE unit_group(
 );
 
 CREATE TABLE ag_notice(
-   id VARCHAR(40),
+   id VARCHAR(36),
    title VARCHAR(50) NOT NULL,
    place VARCHAR(255) NOT NULL,
    ag_date DATETIME NOT NULL,
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY(id),
-   UNIQUE(title)
+   UNIQUE(title, ag_date)
 );
 
 CREATE TABLE ag_minutes(
-   id VARCHAR(40),
+   id VARCHAR(36),
    minutes_date DATETIME NOT NULL,
    place VARCHAR(255) NOT NULL,
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -118,29 +68,29 @@ CREATE TABLE ag_minutes(
 );
 
 CREATE TABLE charge_call(
-   id VARCHAR(40),
+   id VARCHAR(36),
    charge_call_date DATE NOT NULL,
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-   id_person VARCHAR(40) NOT NULL,
+   id_person VARCHAR(36) NOT NULL,
    PRIMARY KEY(id),
-   FOREIGN KEY(id_person) REFERENCES person(id)
+   FOREIGN KEY(id_person) REFERENCES person(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE charge_payment(
-   id VARCHAR(40),
+   id VARCHAR(36),
    amount DECIMAL(15,2) NOT NULL,
    charge_payment_date DATE NOT NULL,
    description VARCHAR(255),
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-   id_charge_call VARCHAR(40) NOT NULL,
+   id_charge_call VARCHAR(36) NOT NULL,
    PRIMARY KEY(id),
-   FOREIGN KEY(id_charge_call) REFERENCES charge_call(id)
+   FOREIGN KEY(id_charge_call) REFERENCES charge_call(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE document_category(
-   id VARCHAR(40),
+   id VARCHAR(36),
    name VARCHAR(50) NOT NULL,
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -149,7 +99,7 @@ CREATE TABLE document_category(
 );
 
 CREATE TABLE budget_category(
-   id VARCHAR(40),
+   id VARCHAR(36),
    name VARCHAR(50) NOT NULL,
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -158,7 +108,7 @@ CREATE TABLE budget_category(
 );
 
 CREATE TABLE call_dates(
-   id CHAR(40),
+   id CHAR(36),
    date_call DATE NOT NULL,
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -166,38 +116,38 @@ CREATE TABLE call_dates(
 );
 
 CREATE TABLE ag_resolution(
-   id VARCHAR(40),
+   id VARCHAR(36),
    title VARCHAR(50) NOT NULL,
-   description TEXT NOT NULL,
+   resolution_text TEXT NOT NULL,
    required_majority VARCHAR(20) NOT NULL,
    budget BOOLEAN NOT NULL,
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-   id_ag_minutes VARCHAR(40) NOT NULL,
-   id_unit_group VARCHAR(40) NOT NULL,
-   id_ag_notice VARCHAR(40) NOT NULL,
+   id_ag_minutes VARCHAR(36),
+   id_unit_group VARCHAR(36) NOT NULL,
+   id_ag_notice VARCHAR(36) NOT NULL,
    PRIMARY KEY(id),
-   FOREIGN KEY(id_ag_minutes) REFERENCES ag_minutes(id),
-   FOREIGN KEY(id_unit_group) REFERENCES unit_group(id),
-   FOREIGN KEY(id_ag_notice) REFERENCES ag_notice(id)
+   FOREIGN KEY(id_ag_minutes) REFERENCES ag_minutes(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+   FOREIGN KEY(id_unit_group) REFERENCES unit_group(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+   FOREIGN KEY(id_ag_notice) REFERENCES ag_notice(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE document(
-   id VARCHAR(40),
+   id VARCHAR(36),
    name VARCHAR(50) NOT NULL,
-   description TEXT,
+   description VARCHAR(255),
    url VARCHAR(255) NOT NULL,
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-   id_document_category VARCHAR(40) NOT NULL,
+   id_document_category VARCHAR(36) NOT NULL,
    PRIMARY KEY(id),
-   FOREIGN KEY(id_document_category) REFERENCES document_category(id)
+   FOREIGN KEY(id_document_category) REFERENCES document_category(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE ag_resolution_budget(
-   id VARCHAR(40),
+   id VARCHAR(36),
    budget_amount DECIMAL(15,2),
-   budget_type VARCHAR(10) NOT NULL,
+   budget_type VARCHAR(20) NOT NULL,
    operating_budget_start DATE,
    operating_budget_end DATE,
    nb_of_instalments TINYINT,
@@ -205,96 +155,102 @@ CREATE TABLE ag_resolution_budget(
    actif BOOLEAN DEFAULT false,
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-   id_budget_category VARCHAR(40) NOT NULL,
-   id_ag_resolution VARCHAR(40) NOT NULL,
+   id_budget_category VARCHAR(36) NOT NULL,
+   id_ag_resolution VARCHAR(36) NOT NULL,
    PRIMARY KEY(id),
    UNIQUE(id_ag_resolution),
-   FOREIGN KEY(id_budget_category) REFERENCES budget_category(id),
-   FOREIGN KEY(id_ag_resolution) REFERENCES ag_resolution(id)
+   FOREIGN KEY(id_budget_category) REFERENCES budget_category(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+   FOREIGN KEY(id_ag_resolution) REFERENCES ag_resolution(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE invoice(
-   id VARCHAR(40),
+   id VARCHAR(36),
    amount DECIMAL(15,2) NOT NULL,
    invoice_date DATE NOT NULL,
    description VARCHAR(255),
    state VARCHAR(20) NOT NULL,
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-   id_ag_resolution_budget VARCHAR(40) NOT NULL,
+   id_ag_resolution_budget VARCHAR(36) NOT NULL,
    PRIMARY KEY(id),
-   FOREIGN KEY(id_ag_resolution_budget) REFERENCES ag_resolution_budget(id)
+   FOREIGN KEY(id_ag_resolution_budget) REFERENCES ag_resolution_budget(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE invoice_payment(
-   id VARCHAR(40),
+   id VARCHAR(36),
    amount DECIMAL(15,2) NOT NULL,
    invoice_payment_date DATE NOT NULL,
    description VARCHAR(255),
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-   id_invoice VARCHAR(40) NOT NULL,
+   id_invoice VARCHAR(36) NOT NULL,
    PRIMARY KEY(id),
-   FOREIGN KEY(id_invoice) REFERENCES invoice(id)
+   FOREIGN KEY(id_invoice) REFERENCES invoice(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE charge_line(
-   id VARCHAR(40),
+   id VARCHAR(36),
    amount DECIMAL(15,2) NOT NULL,
    call_date DATE NOT NULL,
    state VARCHAR(20) NOT NULL DEFAULT 'to_be_sent',
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-   id_unit VARCHAR(40) NOT NULL,
-   id_charge_call VARCHAR(40),
-   id_ag_resolution_budget VARCHAR(40) NOT NULL,
+   id_unit VARCHAR(36) NOT NULL,
+   id_charge_call VARCHAR(36),
+   id_ag_resolution_budget VARCHAR(36) NOT NULL,
    PRIMARY KEY(id),
-   FOREIGN KEY(id_unit) REFERENCES unit(id),
-   FOREIGN KEY(id_charge_call) REFERENCES charge_call(id),
-   FOREIGN KEY(id_ag_resolution_budget) REFERENCES ag_resolution_budget(id)
+   FOREIGN KEY(id_unit) REFERENCES unit(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+   FOREIGN KEY(id_charge_call) REFERENCES charge_call(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+   FOREIGN KEY(id_ag_resolution_budget) REFERENCES ag_resolution_budget(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 
 CREATE TABLE unit_unit_group(
-   id_unit VARCHAR(40),
-   id_unit_group VARCHAR(40),
+   id_unit VARCHAR(36) NOT NULL,
+   id_unit_group VARCHAR(36) NOT NULL,
    adjusted_shares DECIMAL(6,2),
    PRIMARY KEY(id_unit, id_unit_group),
-   FOREIGN KEY(id_unit) REFERENCES unit(id),
-   FOREIGN KEY(id_unit_group) REFERENCES unit_group(id)
+   FOREIGN KEY(id_unit) REFERENCES unit(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+   FOREIGN KEY(id_unit_group) REFERENCES unit_group(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE ag_notice_sent_person(
-   id_person VARCHAR(40),
-   id_ag_notice VARCHAR(40),
+   id_person VARCHAR(36) NOT NULL,
+   id_ag_notice VARCHAR(36) NOT NULL,
    PRIMARY KEY(id_person, id_ag_notice),
-   FOREIGN KEY(id_person) REFERENCES person(id),
-   FOREIGN KEY(id_ag_notice) REFERENCES ag_notice(id)
+   FOREIGN KEY(id_person) REFERENCES person(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+   FOREIGN KEY(id_ag_notice) REFERENCES ag_notice(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE ag_notice_presence_person(
-   id_person VARCHAR(40),
-   id_ag_notice VARCHAR(40),
+   id_person VARCHAR(36) NOT NULL,
+   id_ag_notice VARCHAR(36) NOT NULL,
    presence VARCHAR(20) NOT NULL,
    represented_by VARCHAR(50),
    PRIMARY KEY(id_person, id_ag_notice),
-   FOREIGN KEY(id_person) REFERENCES person(id),
-   FOREIGN KEY(id_ag_notice) REFERENCES ag_notice(id)
+   FOREIGN KEY(id_person) REFERENCES person(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+   FOREIGN KEY(id_ag_notice) REFERENCES ag_notice(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE ag_resolution_budget_call_dates(
-   id_ag_resolution_budget VARCHAR(40),
-   id_call_dates CHAR(40),
+   id_ag_resolution_budget VARCHAR(36) NOT NULL,
+   id_call_dates CHAR(36) NOT NULL,
    PRIMARY KEY(id_ag_resolution_budget, id_call_dates),
-   FOREIGN KEY(id_ag_resolution_budget) REFERENCES ag_resolution_budget(id),
-   FOREIGN KEY(id_call_dates) REFERENCES call_dates(id)
+   FOREIGN KEY(id_ag_resolution_budget) REFERENCES ag_resolution_budget(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+   FOREIGN KEY(id_call_dates) REFERENCES call_dates(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE ag_resolution_person(
-   id_person VARCHAR(40),
-   id_ag_resolution VARCHAR(40),
+   id_person VARCHAR(36) NOT NULL,
+   id_ag_resolution VARCHAR(36) NOT NULL,
    vote VARCHAR(20) NOT NULL,
    PRIMARY KEY(id_person, id_ag_resolution),
-   FOREIGN KEY(id_person) REFERENCES person(id),
-   FOREIGN KEY(id_ag_resolution) REFERENCES ag_resolution(id)
+   FOREIGN KEY(id_person) REFERENCES person(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+   FOREIGN KEY(id_ag_resolution) REFERENCES ag_resolution(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+
+INSERT INTO role (id, name) VALUES
+('5041878f-2523-41d0-97b1-cd05bc60f1b8', 'coowner'),
+('9663d291-1a31-40a0-b5b1-7f73140bd5cc', 'manager'),
+('0641e7ea-d13d-46a3-86c2-6dcba6cd320c', 'assistant');

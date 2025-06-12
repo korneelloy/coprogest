@@ -1,13 +1,13 @@
-const Document = require('../models/document');
+const DocumentCategory = require('../models/documentcategory');
 const { v4: uuidv4 } = require('uuid');
 
 /**
- * Retrieve and return all documents.
+ * Retrieve and return all document categories.
  */
 exports.getAll = async (req, res, next) => {
   try {
-    const allDocuments = await Document.fetchAll();
-    res.status(200).json(allDocuments);
+    const allDocumentCategories = await DocumentCategory.fetchAll();
+    res.status(200).json(allDocumentCategories);
   } catch(err) {
     if(!err.statusCode) {
       err.statusCode = 500;
@@ -17,13 +17,13 @@ exports.getAll = async (req, res, next) => {
 };
 
 /**
- * Retrieve and return a document by its ID.
+ * Retrieve and return a document category by its ID.
  */
 exports.getOne = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const document = await Document.get(id);
-    res.status(200).json(document);
+    const documentCategory = await DocumentCategory.get(id);
+    res.status(200).json(documentCategory);
   } catch(err) {
     if(!err.statusCode) {
       err.statusCode = 500;
@@ -33,22 +33,16 @@ exports.getOne = async (req, res, next) => {
 };
 
 /**
- * Create a new document with the provided data.
+ * Create a new document category with the provided data.
  */
 exports.postOne = async (req, res, next) => {
   try {
     const id = uuidv4();
     const name = req.body.name;
-    const description = req.body.description;
-    const url = req.body.url;
-    const id_document_category = req.body.id_document_category;    
 
-    const document = new Document({
+    const document = new DocumentCategory({
       id,
-      name,
-      url,
-      id_document_category,
-      description
+      name
     });
     
     const postResponse = await document.post();
@@ -65,22 +59,16 @@ exports.postOne = async (req, res, next) => {
 
 
 /**
- * Update an existing document identified by its ID.
+ * Update an existing document category identified by its ID.
  */
 exports.updateOne = async (req, res, next) => {
   try {
     const id = req.params.id;
     const name = req.body.name;
-    const description = req.body.description;
-    const url = req.body.url;
-    const id_document_category = req.body.id_document_category;    
 
-    const document = new Document({
+    const document = new DocumentCategory({
       id,
-      name,
-      url,
-      id_document_category,
-      description
+      name
     });
     
     const updateResponse = await document.update();
@@ -96,12 +84,12 @@ exports.updateOne = async (req, res, next) => {
 };
 
 /**
- * Delete a document by its ID.
+ * Delete a document category by its ID.
  */
 exports.deleteOne = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const deleteResponse = await Document.delete(id);
+    const deleteResponse = await DocumentCategory.delete(id);
     res.status(200).json(deleteResponse);
   } catch(err) {
     if(!err.statusCode) {
