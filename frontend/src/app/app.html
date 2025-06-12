@@ -3,8 +3,9 @@
   <div class="relative flex items-center justify-between min-h-[80px] max-w-full mx-0 px-4">
     <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
       <div class="flex-shrink-0 flex items-center h-20 pt-6 pl-6">
-        <img class="h-full w-auto object-contain" src="./assets/images/logoCoproGest.png" alt="LogoCoprogest"/>
+        <img class="h-full w-auto object-contain" src="./assets/images/logoCoproGest.png" alt="LogoCoprogest" />
       </div>
+
       <div class="hidden sm:block sm:ml-6">
         <div class="hidden sm:flex flex-col items-center w-full mt-32">
           <div class="flex w-full gap-4">
@@ -30,15 +31,19 @@
             </a>
 
             <div class="relative group">
-              <button class="text-black hover:text-orange-300 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium flex items-center min-w-[240px]">
+              <button
+                class="text-black hover:text-orange-300 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium flex items-center min-w-[240px]">
                 Management
                 <svg class="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                  <path fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd" />
                 </svg>
               </button>
-            
-              <!-- Menu déroulant -->
-              <div class="absolute left-0 mt-2 min-w-[240px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+
+              <!-- Dropdown menu for "Management" button -->
+              <div
+                class="absolute left-0 mt-2 min-w-[240px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                 <div class="grid grid-cols-1 gap-4 p-4">
                   <a href="#" class="block text-black hover:text-orange-300">Copropriétaires</a>
                   <a href="#" class="block text-black hover:text-orange-300">Lots</a>
@@ -48,14 +53,10 @@
                   <a href="#" class="block text-black hover:text-orange-300">Compte-rendu d'AG</a>
                   <a href="#" class="block text-black hover:text-orange-300">Appels de fonds</a>
                   <a href="#" class="block text-black hover:text-orange-300">Factures</a>
-
-
-
-
                 </div>
               </div>
+
             </div>
-            
           </div>
         </div>
       </div>
@@ -71,10 +72,10 @@
               clip-rule="evenodd" />
           </svg>
         </button>
-        <!-- Mega Menu -->
+        <!-- Dropdown menu for "Nom Copropriétaire" button -->
         <div
           class="absolute left-0 mt-2 min-w-[240px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 p-6">
+          <div class="grid grid-cols-1 gap-4 p-4">
             <div>
               <ul class="space-y-3 whitespace-nowrap">
                 <li><a href="#" class="text-black hover:text-orange-300">Mon profil</a></li>
@@ -164,18 +165,21 @@
     <router-outlet></router-outlet>
     <div class="m-4">
 
-    <a routerLink="/documents/new" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
-      Enregistrer un nouveau document
-    </a>
+      <a routerLink="/documents/new"
+        class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+        Enregistrer un nouveau document
+      </a>
 
-    <a routerLink="/documentcategories" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-      Catégories
-    </a>
+      <a routerLink="/documentcategories"
+        class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+        Catégories
+      </a>
 
-    <a routerLink="/documentcategories/new" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
-      Créer une nouvelle catégorie
-    </a>
-  </div>
+      <a routerLink="/documentcategories/new"
+        class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+        Créer une nouvelle catégorie
+      </a>
+    </div>
 
 
 
