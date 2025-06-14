@@ -6,4 +6,7 @@ export interface Unit {
   description: string;
   created_at: Date;
   updated_at: Date;
+  owner_first_name?: string,
+  owner_last_name?: string,
+  owner_email?: string
 }
