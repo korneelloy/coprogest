@@ -264,16 +264,16 @@ module.exports = class Person extends BaseClass {
   }
   
   /**
-   * Update the current person in the database.
+   * Update the current person in the database / password dealt with in updatePw method
    * @returns {Promise<Object>}
    */
   async update() {
     try {
       const [result] = await db.execute(
         `UPDATE person
-          SET email = ?, password = ?, first_name = ?, last_name = ?, street = ?, postal_code = ?, city = ?, telephone = ?, id_role = ?
+          SET email = ?, first_name = ?, last_name = ?, street = ?, postal_code = ?, city = ?, telephone = ?, id_role = ?
           WHERE id = ?`,
-          [this.email, this.password, this.first_name, this.last_name, this.street, this.postal_code, this.city, this.telephone, this.id_role, this.id]
+          [this.email, this.first_name, this.last_name, this.street, this.postal_code, this.city, this.telephone, this.id_role, this.id]
         );
 
       if (result.affectedRows === 0) {
@@ -282,6 +282,36 @@ module.exports = class Person extends BaseClass {
         throw error;
       }
       return { message: 'Person updated successfully' };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
+    }
+  }
+
+
+  /**
+   * Update a password
+   * @returns {Promise<Object>}
+   */
+  static async updatePw(id, hashed_pw) {
+    try {
+      const [result] = await db.execute(
+        `UPDATE person
+          SET password = ?
+          WHERE id = ?`,
+          [hashed_pw, id]
+        );
+
+      if (result.affectedRows === 0) {
+        const error = new Error('Person not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      return { message: 'Password updated successfully' };
     } catch (err) {
       if (err.code === 'ER_NO_REFERENCED_ROW_2') {
         const error = new Error('Foreign key constraint violated');
