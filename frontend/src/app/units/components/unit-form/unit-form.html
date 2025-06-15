@@ -25,13 +25,12 @@
 
   <div>
     <label>Tantièmes: </label>
-    <input formControlName="shares" placeholder="120" />
+    <input formControlName="shares" placeholder="120.5" type="number" step="0.01" />
     <div *ngIf="unitForm.get('shares')?.invalid && unitForm.get('shares')?.touched">
       <small *ngIf="unitForm.get('shares')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="unitForm.get('shares')?.errors?.['pattern']">* Ce champ doit contenir une valeur numérique.</small>
     </div>
   </div>
-
 
   <div>
     <label for="person">Propriétaire</label>
@@ -41,10 +40,32 @@
         {{ person.first_name && person.last_name ? person.first_name + ' ' + person.last_name : person.email }}
       </option>
     </select>
-    <div *ngIf="unitForm.get('person')?.invalid && unitForm.get('person')?.touched">
-      <small *ngIf="unitForm.get('person')?.errors?.['required']">* Veuillez choisir un propriétaire.</small>
+    <div *ngIf="unitForm.get('id_person')?.invalid && unitForm.get('id_person')?.touched">
+      <small *ngIf="unitForm.get('id_person')?.errors?.['required']">* Veuillez choisir un propriétaire.</small>
     </div>
   </div>
+
+  <div>mis a jour des groupes > voir groupes</div>
+<!--
+ 
+  <div>
+    <div>Groupes: </div>
+    <ul>
+      <li *ngFor="let unitGroup of unitGroups">
+        <label>
+          <input 
+            type="checkbox" 
+            [value]="unitGroup.id"
+            [checked]="selectedUnitGroupIds.includes(unitGroup.id)"
+            class="groups"
+          />
+          {{ unitGroup.name }}
+        </label>
+      </li>
+    </ul>
+  </div>
+-->
+
 
   <button type="submit" [disabled]="unitForm.invalid" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
     {{ isEditMode ? 'Mettre à jour' : 'Créer' }} le lot

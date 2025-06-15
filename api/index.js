@@ -10,6 +10,7 @@ const personRoutes = require('./routes/person');
 const roleRoutes = require('./routes/roles');
 const unitgroupRoutes = require('./routes/unitgroup');
 const unitRoutes = require('./routes/unit');
+const unitUnitGroupRoutes = require('./routes/unitunitgroup');
 const agNoticeRoutes = require('./routes/agnotice');
 const agResolutionsRoutes = require('./routes/agresolution');
 const agResolutionBudgetRoutes = require('./routes/agresolutionbudget');
@@ -59,9 +60,13 @@ app.use('/api/v1/persons', personRoutes);
 app.use('/api/v1/roles', roleRoutes);
 app.use('/api/v1/unitgroups', unitgroupRoutes);
 app.use('/api/v1/units', unitRoutes);
+app.use('/api/v1/unitunitgroups', unitUnitGroupRoutes);
 app.use('/api/v1/agnotices', agNoticeRoutes);
 app.use('/api/v1/agresolutions', agResolutionsRoutes);
 app.use('/api/v1/agresolutionbudgets', agResolutionBudgetRoutes);
+
+
+
 
 
 // Error handlers

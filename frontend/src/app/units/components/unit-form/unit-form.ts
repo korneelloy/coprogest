@@ -8,7 +8,10 @@ import { Unit } from '../../../model/unit';
 import { RouterModule } from '@angular/router';
 import { Person } from '../../../model/person';
 import { PersonService } from '../../../services/person/person-service';
-
+import { UnitUnitGroup } from '../../../model/unitunitgroup';
+import { UnitUnitGroupService } from '../../../services/unitunitgroup/unit-unit-group-service';
+import { UnitGroup } from '../../../model/unitgroup';
+import { UnitGroupService } from '../../../services/unit-groups/unit-group-service';
 
 @Component({
   selector: 'app-unit-form',
@@ -23,18 +26,23 @@ export class UnitForm implements OnInit {
   unitId: string | null = null;
 
   persons: Person[] = [];
+  unitGroups: UnitGroup[] = [];
+  unitUnitGroups: UnitUnitGroup[] = [];
+  selectedUnitGroupIds: string[] = [];
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private unitService: UnitService,
-    private personService: PersonService
+    private personService: PersonService,
+    private unitUnitGroupService: UnitUnitGroupService,
+    private unitGroupService: UnitGroupService,
   ) {
     this.unitForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       id_person: ['', Validators.required],
-      shares: ['',[Validators.required, Validators.pattern(/^\d+(,\d{1,2})?$/)]],
+      shares: ['', [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
       description: ['']
     });
   }
@@ -43,10 +51,21 @@ export class UnitForm implements OnInit {
     this.personService.fetchAll().subscribe((data: Person[]) => {
           this.persons = data;
     });
+
+    this.unitGroupService.fetchAll().subscribe((data: UnitGroup[]) => {
+      this.unitGroups = data;
+    });
+ 
     this.unitId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.unitId;
 
     if (this.isEditMode) {
+      this.unitUnitGroupService.fetchAllByUnit(this.unitId!).subscribe((data: UnitUnitGroup[]) => {
+        this.unitUnitGroups = data;
+        this.selectedUnitGroupIds = data.map(UnitUnitGroup  => UnitUnitGroup.id_unit_group);
+      });
+
+
       this.unitService.fetchById(this.unitId!).subscribe((unit: Unit) => {
         this.unitForm.patchValue({
           name: unit.name,
@@ -62,7 +81,6 @@ export class UnitForm implements OnInit {
     if (this.unitForm.invalid) return;
 
     const formData = this.unitForm.value;
-    console.log(formData);
 
     formData.shares = Number(formData.shares);
     
