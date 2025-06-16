@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { Document } from '../../../model/document';
 import { DocumentService } from '../../../services/document/document-service';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-document-detail',
@@ -18,7 +20,8 @@ export class DocumentDetail implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -33,4 +36,21 @@ export class DocumentDetail implements OnInit {
       this.document$ = this.documentService.fetchById(id);
     }    
   }
+  openUrl(url: string): void {
+    window.open(url, '_blank');
+  }
+  deletion(id: string): void {
+    const confirmed = confirm("Êtes-vous sûr de vouloir supprimer cet élément ? Attention, action irréversible !");
+    
+    if (confirmed) {
+      this.documentService.delete(id).subscribe(() => {
+        this.router.navigate(['/documents'], { queryParams: { deleted: 'true' } });
+      });
+    }
+  }
+
+  change(id: string): void {
+    this.router.navigate(['/documents', id, 'edit']);
+  }
+
 }

@@ -4,7 +4,7 @@
  */
 
 const db = require('../util/database');
-const { isStringMin2Max50, isNullOrStringMin2Max255, isValidUUIDv4 } = require('../util/validation');
+const { isStringMax50, isNullOrStringMax255, isValidUUIDv4 } = require('../util/validation');
 const BaseClass = require('./baseclass');
 
 
@@ -18,13 +18,15 @@ module.exports = class Unit extends BaseClass {
    * @param {Date|null} createdAt - creation date - set in SQL code
    * @param {Date|null} updatedAt - last update - set in SQL code
    * @param {string} id_person - UUID of the person - not null - Foreign key - verification foreign key constraint handled in the CRUD operations
-   */
-  constructor({id, name, id_person, shares, description = null, createdAt = null, updatedAt = null }) {
+   * @param {string|null} name_person - Optional, loaded via JOIN
+  */
+  constructor({id, name, id_person, shares, description = null, createdAt = null, updatedAt = null, name_person = null }) {
     super({ id, createdAt, updatedAt });
     this.name = name;
     this.id_person = id_person;
     this.shares = shares;
     this.description = description;
+    this.name_person = name_person;
   }
   
   /****************************getters and setters for data validation***********************************/
@@ -41,7 +43,7 @@ module.exports = class Unit extends BaseClass {
     }
     const trimmedValue = value.trim();
 
-    if (!isStringMin2Max50(trimmedValue)) {
+    if (!isStringMax50(trimmedValue)) {
       const error = new Error('Invalid name: must be a string of minimum length 2 and maximum of 50.');
       error.statusCode = 400;
       throw error;
@@ -86,7 +88,7 @@ module.exports = class Unit extends BaseClass {
   }
 
   set description(value) {
-    if (!isNullOrStringMin2Max255(value)) {
+    if (!isNullOrStringMax255(value)) {
       const error = new Error('Invalid description: must be null or a string between 2 and 255 characters.');
       error.statusCode = 400;
       throw error;
@@ -102,7 +104,21 @@ module.exports = class Unit extends BaseClass {
    * @returns {Promise<Object[]>}
    */
   static async fetchAll() {
-    const [allUnits] = await db.execute(`SELECT * FROM unit;`);
+    const [allUnits] = await db.execute(`SELECT 
+      unit.id,
+      unit.name,
+      unit.id_person,
+      unit.shares,
+      unit.description, 
+      unit.created_at, 
+      unit.updated_at, 
+      person.first_name as owner_first_name,
+      person.last_name as owner_last_name,
+      person.email as owner_email
+      FROM unit
+      LEFT JOIN person ON unit.id_person = person.id
+      ORDER BY unit.name
+      ;`);
     return allUnits;
   }
 
@@ -112,7 +128,20 @@ module.exports = class Unit extends BaseClass {
    * @returns {Promise<Object>}
    */
   static async get(id) {
-    const [rows] = await db.execute(`SELECT * FROM unit WHERE id = ?`, [id]);
+    const [rows] = await db.execute(`SELECT 
+      unit.id,
+      unit.name,
+      unit.id_person,
+      unit.shares,
+      unit.description, 
+      unit.created_at, 
+      unit.updated_at, 
+      person.first_name as owner_first_name,
+      person.last_name as owner_last_name,
+      person.email as owner_email
+      FROM unit
+      LEFT JOIN person ON unit.id_person = person.id
+      WHERE unit.id = ?`, [id]);
    
     if (rows.length === 0) {
       const error = new Error('Unit not found');

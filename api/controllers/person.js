@@ -1,5 +1,6 @@
 const Person = require('../models/person');
 const { v4: uuidv4 } = require('uuid');
+const { hashPassword } = require('../util/hash');
 
 /**
  * Retrieve and return all persons.
@@ -58,13 +59,12 @@ exports.postOne = async (req, res, next) => {
 };
 
 /**
- * Update an existing person identified by its ID.
+ * Update an existing person identified by its ID / password dealt with in updatePw method
  */
 exports.updateOne = async (req, res, next) => {
   try {
     const id = req.params.id;
     const email = req.body.email;
-    const password = req.body.password;
     const first_name = req.body.first_name;
     const last_name = req.body.last_name;
     const street = req.body.street;
@@ -76,7 +76,6 @@ exports.updateOne = async (req, res, next) => {
     const person = new Person({
       id,
       email,
-      password,
       first_name,
       last_name,
       street,
@@ -86,9 +85,27 @@ exports.updateOne = async (req, res, next) => {
       id_role
     });
 
-    await person.setHashedPassword(person._password);
     
     const updateResponse = await person.update();
+
+    res.status(200).json(updateResponse);
+
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
+exports.updatePw = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const password = req.body.password;
+
+    const hashedPw = await hashPassword(password);
+
+    const updateResponse = await Person.updatePw(id, hashedPw);
 
     res.status(200).json(updateResponse);
 

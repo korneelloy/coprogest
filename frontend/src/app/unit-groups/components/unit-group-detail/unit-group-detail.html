@@ -1,0 +1,37 @@
+<h2><strong>Détails d'un groupe</strong></h2>
+<hr>
+
+<div *ngIf="updatedMessage" class="success-message">
+  {{ updatedMessage }}
+</div>
+
+<ul *ngIf="unitGroup$ | async as unitGroup; else loading">
+  <li class="space-y-4">
+    <strong>{{ unitGroup.name }}</strong><br>
+    <div>Déscription: {{ unitGroup.description }}</div>
+    <div>Tantièmes spécifique: {{ unitGroup.special_shares ? 'Oui' : 'Non' }}</div>
+
+    <div>
+      <div>Membres: </div>
+      <ul>
+        <li *ngFor="let unitUnitGroup of unitUnitGroups" class="space-y-4">
+          {{ unitUnitGroup.unit_name }}
+          <span *ngIf="unitGroup.special_shares"> - {{ unitUnitGroup.adjusted_shares }} - </span>
+          <span> {{ unitUnitGroup.unit_shares }} </span>
+
+        </ul>
+    </div>
+
+    <button (click)="change(unitGroup.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+      Changer ce groupe
+    </button><br>
+    
+    <button (click)="deletion(unitGroup.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+      Supprimer ce groupe
+    </button><br>
+  </li>
+</ul>
+
+<ng-template #loading>
+  <p>Loading unit groupe...</p>
+</ng-template>

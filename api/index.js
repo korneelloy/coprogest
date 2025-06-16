@@ -7,8 +7,10 @@ const express = require('express');
 const documentRoutes = require('./routes/document');
 const documentCategoryRoutes = require('./routes/documentcategory');
 const personRoutes = require('./routes/person');
+const roleRoutes = require('./routes/roles');
 const unitgroupRoutes = require('./routes/unitgroup');
 const unitRoutes = require('./routes/unit');
+const unitUnitGroupRoutes = require('./routes/unitunitgroup');
 const agNoticeRoutes = require('./routes/agnotice');
 const agResolutionsRoutes = require('./routes/agresolution');
 const agResolutionBudgetRoutes = require('./routes/agresolutionbudget');
@@ -33,7 +35,7 @@ app.use((req, res, next) => {
   // Specify the HTTP methods that are allowed when accessing the resource
   res.setHeader(
     'Access-Control-Allow-Methods',
-    'GET, POST, PUT, DELETE, OPTIONS' // ps: OPTIONS for preflight requests
+    'GET, POST, PUT, DELETE, PATCH, OPTIONS' // ps: OPTIONS for preflight requests
   );
 
   // Specify which headers can be used during the actual request
@@ -55,11 +57,16 @@ app.use((req, res, next) => {
 app.use('/api/v1/documentcategories', documentCategoryRoutes);
 app.use('/api/v1/documents', documentRoutes);
 app.use('/api/v1/persons', personRoutes);
+app.use('/api/v1/roles', roleRoutes);
 app.use('/api/v1/unitgroups', unitgroupRoutes);
 app.use('/api/v1/units', unitRoutes);
+app.use('/api/v1/unitunitgroups', unitUnitGroupRoutes);
 app.use('/api/v1/agnotices', agNoticeRoutes);
 app.use('/api/v1/agresolutions', agResolutionsRoutes);
 app.use('/api/v1/agresolutionbudgets', agResolutionBudgetRoutes);
+
+
+
 
 
 // Error handlers

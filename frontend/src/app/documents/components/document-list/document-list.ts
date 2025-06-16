@@ -5,11 +5,16 @@ import { Document } from '../../../model/document';
 import { DocumentService } from '../../../services/document/document-service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { DocumentCategoryService } from '../../../services/document-category/document-category-service';
+import { DocumentCategory } from '../../../model/documentcategory';
+
 
 
 @Component({
   selector: 'app-document-list',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './document-list.html',
   styleUrl: './document-list.scss'
 })
@@ -18,15 +23,20 @@ export class DocumentList implements OnInit{
   createdMessage: string | null = null;
   deletedMessage: string | null = null;
 
+  categories: DocumentCategory[] = [];
 
 
   constructor(
     private documentService: DocumentService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private documentCategoryService: DocumentCategoryService
   ) {}
 
   ngOnInit(): void {
+    this.documentCategoryService.fetchAll().subscribe((data: DocumentCategory[]) => {
+      this.categories = data;
+    });
     this.route.queryParamMap.subscribe(params => {
       if (params.get('created') === 'true') {
         this.createdMessage = "Le document a été créé avec succès.";
@@ -45,17 +55,27 @@ export class DocumentList implements OnInit{
     this.router.navigate(['/documents', id]);  
   }
 
-  deletion(id: string): void {
-    const confirmed = confirm("Êtes-vous sûr de vouloir supprimer cet élément ? Attention, action irréversible !");
-    
-    if (confirmed) {
-      this.documentService.delete(id).subscribe(() => {
-        this.router.navigate(['/documents'], { queryParams: { deleted: 'true' } });
-      });
+  filter(event: Event): void {
+    const selectedId = (event.target as HTMLSelectElement).value;
+    console.log('Catégorie sélectionnée :', selectedId);
+    if (selectedId == ""){
+      const all = document.getElementsByClassName("listitems");
+      for (const el of all) {
+        (el as HTMLElement).style.display = "block";
+    }
+    } else {
+      const all = document.getElementsByClassName("listitems");
+      for (const el of all) {
+        (el as HTMLElement).style.display = "none";
+      }
+      const selected = document.getElementsByClassName(selectedId);
+      for (const el of selected) {
+        (el as HTMLElement).style.display = "block";
+      }
     }
   }
-
-  change(id: string): void {
-    this.router.navigate(['/documents', id, 'edit']);
+  openUrl(url: string): void {
+    window.open(url, '_blank');
   }
+  
 }

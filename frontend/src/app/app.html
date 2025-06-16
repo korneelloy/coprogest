@@ -1,46 +1,35 @@
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CoproGest</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body>
-
-  <!-- Navbar with Mega Menu -->
-  <nav class="background-image min-h-48 flex flex-col justify-between px-6">
-    <div class="relative flex items-center justify-between min-h-[80px] max-w-full mx-0 px-4">
-      <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+<!-- Navbar with Mega Menu -->
+<nav class="background-image min-h-48 flex flex-col justify-between px-6">
+  <div class="relative flex items-center justify-between min-h-[80px] max-w-full mx-0 px-4">
+    <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+      <a routerLink="/">
         <div class="flex-shrink-0 flex items-center h-20 pt-6 pl-6">
           <img class="h-full w-auto object-contain" src="./assets/images/logoCoproGest.png" alt="LogoCoprogest" />
         </div>
-
-        <div class="hidden sm:block sm:ml-6">
-          <div class="hidden sm:flex flex-col items-center w-full mt-32">
-            <div class="flex w-full gap-4">
-              <a routerLink="/" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
-                class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-                Accueil
-              </a>
-              <a routerLink="/finances" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
-                class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-                Finances</a>
-              <a routerLink="/documents" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
-                class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-                Documents
-              </a>
-              <a routerLink="/ag" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
-                class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-                Assemblée
-                générale
-              </a>
-              <a routerLink="/contact" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
-                class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-                Contact
-              </a>
+      </a> 
+      <div class="hidden sm:block sm:ml-6">
+        <div class="hidden sm:flex flex-col items-center w-full mt-32">
+          <div class="flex w-full gap-4">
+            <a routerLink="/" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
+              class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+              Accueil
+            </a>
+            <a routerLink="/finances" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
+              class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+              Finances</a>
+            <a routerLink="/documents" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
+              class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+              Documents
+            </a>
+            <a routerLink="/ag" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
+              class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+              Assemblée
+              générale
+            </a>
+            <a routerLink="/contact" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
+              class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+              Contact
+            </a>
 
               <div class="relative group">
                 <button
@@ -53,51 +42,51 @@
                   </svg>
                 </button>
 
-                <!-- Dropdown menu for "Management" button -->
-                <div
-                  class="absolute left-0 mt-2 min-w-[240px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                  <div class="grid grid-cols-1 gap-4 p-4">
-                    <a href="#" class="block text-black hover:text-orange-300">Copropriétaires</a>
-                    <a href="#" class="block text-black hover:text-orange-300">Lots</a>
-                    <a href="#" class="block text-black hover:text-orange-300">Groupes de Lots</a>
-                    <a href="#" class="block text-black hover:text-orange-300">Documents</a>
-                    <a href="#" class="block text-black hover:text-orange-300">Convocation AG</a>
-                    <a href="#" class="block text-black hover:text-orange-300">Compte-rendu d'AG</a>
-                    <a href="#" class="block text-black hover:text-orange-300">Appels de fonds</a>
-                    <a href="#" class="block text-black hover:text-orange-300">Factures</a>
-                  </div>
+              <!-- Dropdown menu for "Management" button -->
+              <div
+                class="absolute left-0 mt-2 min-w-[240px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div class="grid grid-cols-1 gap-4 p-4">
+                  <a routerLink="/persons" class="block text-black hover:text-orange-300">Copropriétaires</a>
+                  <a routerLink="/units" class="block text-black hover:text-orange-300">Lots</a>
+                  <a routerLink="/unitgroups" class="block text-black hover:text-orange-300">Groupes de Lots</a>
+                  <a routerLink="/documents" class="block text-black hover:text-orange-300">Documents</a>
+                  <a routerLink="/" class="block text-black hover:text-orange-300">Convocation AG</a>
+                  <a routerLink="/" class="block text-black hover:text-orange-300">Compte-rendu d'AG</a>
+                  <a routerLink="/" class="block text-black hover:text-orange-300">Appels de fonds</a>
+                  <a routerLink="/" class="block text-black hover:text-orange-300">Factures</a>
                 </div>
-
               </div>
+
             </div>
           </div>
         </div>
       </div>
-      <div class="absolute inset-y-0 right-0 flex items-start pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-        <div class="relative group">
-          <button
-            class="text-black-900 bg-orange-300 px-4 py-2 rounded-md text-sm font-medium flex items-center min-w-[240px]">
-            Nom Copropriétaire
-            <svg class="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd" />
-            </svg>
-          </button>
-          <!-- Dropdown menu for "Nom Copropriétaire" button -->
-          <div
-            class="absolute left-0 mt-2 min-w-[240px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-            <div class="grid grid-cols-1 gap-4 p-4">
-              <div>
-                <ul class="space-y-3 whitespace-nowrap">
-                  <li><a href="#" class="text-black hover:text-orange-300">Mon profil</a></li>
-                  <li><a href="#" class="text-black hover:text-orange-300">Redéfinir mon mot de passe</a></li>
-                  <li><a href="#" class="text-black hover:text-orange-300">Déconnection</a></li>
-                </ul>
-              </div>
+    </div>
+    <div class="absolute inset-y-0 right-0 flex items-start pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+      <div class="relative group">
+        <button
+          class="text-black-900 bg-orange-300 px-4 py-2 rounded-md text-sm font-medium flex items-center min-w-[240px]">
+          Nom Copropriétaire
+          <svg class="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+        </button>
+        <!-- Dropdown menu for "Nom Copropriétaire" button -->
+        <div
+          class="absolute left-0 mt-2 min-w-[240px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+          <div class="grid grid-cols-1 gap-4 p-4">
+            <div>
+              <ul class="space-y-3 whitespace-nowrap">
+                <li><a routerLink="/" class="text-black hover:text-orange-300">Mon profil</a></li>
+                <li><a routerLink="/" class="text-black hover:text-orange-300">Redéfinir mon mot de passe</a></li>
+                <li><a routerLink="/" class="text-black hover:text-orange-300">Déconnection</a></li>
+              </ul>
             </div>
           </div>
         </div>
+      </div>
 
         <!-- Mobile menu button -->
         <div class="sm:hidden">
@@ -114,33 +103,25 @@
       </div>
     </div>
 
-    <!-- Mobile menu, show/hide based on menu state -->
-    <div class="sm:hidden hidden" id="mobile-menu">
-      <div class="px-2 pt-2 pb-3 space-y-1">
-        <a routerLink="/"
-          class="block text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-base font-medium">Accueil</a>
-        <a routerLink="/finances"
-          class="block text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-base font-medium">Finances</a>
-        <a routerLink="/documents"
-          class="block text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-base font-medium">Documents</a>
-        <a routerLink="/ag"
-          class="block text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-base font-medium">Assemblée
-          Générale</a>
-        <a routerLink="/contact"
-          class="block text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-base font-medium">Contact</a>
+  <!-- Mobile menu, show/hide based on menu state -->
+  <div class="sm:hidden hidden" id="mobile-menu">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+      <a routerLink="/" class="bg-gray-100 text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Home</a>
 
-        <!-- Mobile dropdown for Management -->
-        <div class="relative">
-          <button
-            class="w-full text-left text-black bg-zinc-100 hover:text-orange-300 px-3 py-2 rounded-md text-base font-medium flex items-center justify-between mobile-dropdown-trigger">
-            Management
-            <svg class="h-5 w-5 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd" />
-            </svg>
-          </button>
-          <div class="hidden px-4 py-2 mobile-dropdown-content">
+      <!-- Mobile Products Dropdown -->
+      <div class="relative">
+        <button
+          class="w-full text-left text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-base font-medium flex items-center justify-between mobile-dropdown-trigger">
+          Products
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+        </button>
+        <div class="hidden px-4 py-2 mobile-dropdown-content">
+          <div class="border-l-2 border-indigo-500 pl-2 mb-4">
+            <h4 class="font-medium text-gray-900 mb-2">Software</h4>
             <ul class="space-y-2">
               <li><a href="#" class="block text-black hover:text-orange-300">Copropriétaires</a></li>
               <li><a href="#" class="block text-black hover:text-orange-300">Lots</a></li>
@@ -162,29 +143,9 @@
   <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 overflow-hidden">
     <div class="px-4 py-6 sm:px-0">
 
-      <router-outlet></router-outlet>
-      <div class="m-4">
-
-        <a routerLink="/documents/new"
-          class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
-          Enregistrer un nouveau document
-        </a>
-
-        <a routerLink="/documentcategories"
-          class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-          Catégories
-        </a>
-
-        <a routerLink="/documentcategories/new"
-          class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
-          Créer une nouvelle catégorie
-        </a>
-      </div>
-
-
-
-    </div>
+    <router-outlet></router-outlet>
   </div>
+</div>
 
   <script>
     // Menu mobile toggle

@@ -32,9 +32,8 @@
     <div *ngIf="documentForm.get('id_document_category')?.invalid && documentForm.get('id_document_category')?.touched">
       <small *ngIf="documentForm.get('id_document_category')?.errors?.['required']">* Veuillez choisir une catégorie.</small>
     </div>
-    
   </div>
-
+  
   <div>
     <label>Description: </label>
     <textarea 

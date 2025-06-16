@@ -6,12 +6,14 @@ import { DocumentCategoryService } from '../../../services/document-category/doc
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Document } from '../../../model/document';
-import { DocumentCategory } from '../../../model/documentCategory';
+import { DocumentCategory } from '../../../model/documentcategory';
+import { RouterModule } from '@angular/router';
+
 
 @Component({
   selector: 'app-document-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './document-form.html',
   styleUrls: ['./document-form.scss']
 })

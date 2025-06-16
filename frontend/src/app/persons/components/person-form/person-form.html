@@ -1,0 +1,77 @@
+<h2><strong>Formulaire pour la gestion des copropriétaires</strong></h2>
+<hr>
+
+<form [formGroup]="personForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label>Email: </label>
+    <input formControlName="email" placeholder="Email" />
+    <div *ngIf="personForm.get('email')?.invalid && personForm.get('email')?.touched">
+      <small *ngIf="personForm.get('email')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+      <small *ngIf="personForm.get('email')?.errors?.['pattern']">* Ce champ doit correspondre à un mail valide.</small>
+    </div>
+  </div>
+
+  <div *ngIf="isEditMode">
+    <label>Prénom: </label>
+    <input type="first_name" formControlName="first_name" placeholder="Jean" />
+    <div *ngIf="personForm.get('first_name')?.invalid && personForm.get('first_name')?.touched">
+      <small *ngIf="personForm.get('first_name')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+    </div>
+  </div>
+
+  <div *ngIf="isEditMode">
+    <label>Nom de famille: </label>
+    <input type="last_name" formControlName="last_name" placeholder="Dupont" />
+    <div *ngIf="personForm.get('last_name')?.invalid && personForm.get('last_name')?.touched">
+      <small *ngIf="personForm.get('last_name')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+    </div>
+  </div>
+
+  <div *ngIf="isEditMode">
+    <label>Téléphone: </label>
+    <input type="telephone" formControlName="telephone" placeholder="0612345678" />
+    <div *ngIf="personForm.get('telephone')?.invalid && personForm.get('telephone')?.touched">
+      <small *ngIf="personForm.get('telephone')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+    </div>
+  </div>
+
+  <div *ngIf="isEditMode">
+    <label>N° + rue: </label>
+    <input type="street" formControlName="street" placeholder="6 rue Jules Vernes" />
+    <div *ngIf="personForm.get('street')?.invalid && personForm.get('street')?.touched">
+      <small *ngIf="personForm.get('street')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+    </div>
+  </div>
+
+  <div *ngIf="isEditMode">
+    <label>Code postale: </label>
+    <input type="postal_code" formControlName="postal_code" placeholder="33000" />
+    <div *ngIf="personForm.get('postal_code')?.invalid && personForm.get('postal_code')?.touched">
+      <small *ngIf="personForm.get('postal_code')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+    </div>
+  </div>
+
+  <div *ngIf="isEditMode">
+    <label>Ville: </label>
+    <input type="city" formControlName="city" placeholder="Bordeaux" />
+    <div *ngIf="personForm.get('city')?.invalid && personForm.get('city')?.touched">
+      <small *ngIf="personForm.get('city')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="role">Role</label>
+    <select id="role" formControlName="id_role" required>
+      <option value="" disabled>Choisissez un role</option>
+      <option *ngFor="let role of roles" [value]="role.id">
+        {{ role.name }}
+      </option>
+    </select>    
+  </div>
+  
+
+  <button type="submit" [disabled]="personForm.invalid" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+    {{ isEditMode ? 'Mettre à jour' : 'Créer' }} le copropriétaire
+  </button>
+</form>
+

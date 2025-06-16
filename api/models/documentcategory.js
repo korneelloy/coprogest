@@ -4,7 +4,7 @@
  */
 
 const db = require('../util/database');
-const { isStringMin2Max50 } = require('../util/validation');
+const { isStringMax50 } = require('../util/validation');
 const BaseClass = require('./baseclass');
 
 
@@ -35,7 +35,7 @@ module.exports = class DocumentCategory extends BaseClass {
     }
     const trimmedValue = value.trim();
 
-    if (!isStringMin2Max50(trimmedValue)) {
+    if (!isStringMax50(trimmedValue)) {
       const error = new Error('Invalid name: must be a string of minimum length 2 and maximum of 50.');
       error.statusCode = 400;
       throw error;

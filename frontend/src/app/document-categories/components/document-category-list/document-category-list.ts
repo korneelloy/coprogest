@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
-import { DocumentCategory } from '../../../model/documentCategory';
+import { DocumentCategory } from '../../../model/documentcategory';
 import { DocumentCategoryService } from '../../../services/document-category/document-category-service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';

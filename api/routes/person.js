@@ -19,4 +19,7 @@ router.post('/', personController.postOne);
 // Update a person by ID
 router.put('/:id', personController.updateOne);
 
+// Update the password
+router.patch('/:id', personController.updatePw);
+
 module.exports = router;

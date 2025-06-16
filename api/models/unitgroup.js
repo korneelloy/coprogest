@@ -4,7 +4,7 @@
  */
 
 const db = require('../util/database');
-const { isStringMin2Max50, isNullOrString } = require('../util/validation');
+const { isStringMax50, isNullOrString } = require('../util/validation');
 const BaseClass = require('./baseclass');
 
 
@@ -17,12 +17,15 @@ module.exports = class Unitgroup extends BaseClass {
    * @param {boolean} special_shares - Special shares involved in this group?, false by default
    * @param {Date|null} createdAt - creation date - set in SQL code
    * @param {Date|null} updatedAt - last update - set in SQL code
+   * @param {string[]|null} selectedUnitIds - list of units - handled by associatif table
+   * 
    */
-  constructor({id, name, description = null, special_shares = false, createdAt = null, updatedAt = null }) {
+  constructor({id, name, description = null, special_shares = false, createdAt = null, updatedAt = null, selectedUnitIds = null }) {
     super({ id, createdAt, updatedAt });
     this.name = name;
     this.description = description;
     this.special_shares = special_shares;
+    this.selectedUnitIds = selectedUnitIds;
   }
   
   /****************************getters and setters for data validation***********************************/
@@ -39,7 +42,7 @@ module.exports = class Unitgroup extends BaseClass {
     }
     const trimmedValue = value.trim();
 
-    if (!isStringMin2Max50(trimmedValue)) {
+    if (!isStringMax50(trimmedValue)) {
       const error = new Error('Invalid name: must be a string of minimum length 2 and maximum of 50.');
       error.statusCode = 400;
       throw error;
@@ -104,22 +107,37 @@ module.exports = class Unitgroup extends BaseClass {
    * Insert the current unitgroup into the database.
    * @returns {Promise<Object>}
    */
-  async post() {
-    const [result] = await db.execute(
-      `INSERT INTO unit_group 
-        (id, name, description, special_shares) 
-        VALUES (?, ?, ?, ?)`, 
-        [this.id, this.name, this.description, this.special_shares]
-      );
-    
-    if (result.affectedRows === 0) {
-      const error = new Error('Insert failed: no rows affected.');
-      error.statusCode = 500;
-      throw error;
-    }
-    return { message: 'Unitgroup created successfully' };
-  }
+
+  /**
+ * Insert the current unitgroup into the database.
+ * @returns {Promise<Object>}
+ */
+async post() {
+  const [result] = await db.execute(
+    `INSERT INTO unit_group 
+      (id, name, description, special_shares) 
+      VALUES (?, ?, ?, ?)`, 
+    [this.id, this.name, this.description, this.special_shares]
+  );
   
+  if (result.affectedRows === 0) {
+    const error = new Error('Insert failed: no rows affected.');
+    error.statusCode = 500;
+    throw error;
+  }
+
+  if (Array.isArray(this.selectedUnitIds)) {
+    for (const unitId of this.selectedUnitIds) {
+      await db.execute(
+        `INSERT INTO unit_unit_group (id_unit, id_unit_group) VALUES (?, ?)`,
+        [unitId, this.id]
+      );
+    }
+  }
+
+  return { message: 'Unitgroup and relations created successfully' };
+}
+ 
   /**
    * Update the current unitgroup in the database.
    * @returns {Promise<Object>}
@@ -136,6 +154,19 @@ module.exports = class Unitgroup extends BaseClass {
       const error = new Error('Unitgroup not found');
       error.statusCode = 404;
       throw error;
+    }
+
+    if (Array.isArray(this.selectedUnitIds)) {
+      await db.execute(
+        `DELETE FROM unit_unit_group WHERE id_unit_group = ?`,
+        [this.id]
+      );        
+      for (const unitId of this.selectedUnitIds) {
+        await db.execute(
+          `INSERT INTO unit_unit_group (id_unit, id_unit_group) VALUES (?, ?)`,
+          [unitId, this.id]
+        );
+      }
     }
     return { message: 'Unitgroup updated successfully' };
   }
