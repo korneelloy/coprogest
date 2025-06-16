@@ -41,7 +41,7 @@
         <input
           type="checkbox"
           [value]="unit.id"
-          [checked]="selectedUnitIds.includes(unit.id)"
+          [checked]="selectedIdsOnly.includes(unit.id)"
           (change)="onCheckboxChange(unit.id, $event)"
         />
         {{ unit.name }}

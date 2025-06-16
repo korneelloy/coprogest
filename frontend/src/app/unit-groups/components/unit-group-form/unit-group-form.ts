@@ -28,7 +28,8 @@ export class UnitGroupForm implements OnInit {
   units: Unit[] = [];
   unitUnitGroups: UnitUnitGroup[] = [];
   selectedUnitGroupIds: string[] = [];
-  selectedUnitIds: [string, string][] = [];
+  selectedUnitIds: [string, Number | undefined][] = [];
+  selectedIdsOnly: string[] = [];
   updatedSelectedUnitIds: string[] = [];
 
 
@@ -60,6 +61,7 @@ export class UnitGroupForm implements OnInit {
         ...unit,
         selected: this.selectedUnitIds.some(([id, _]) => id === unit.id)
       }));
+      this.selectedIdsOnly = this.selectedUnitIds.map(([id, _]) => id);
     });    
     
     this.unitGroupId = this.route.snapshot.paramMap.get('id');
@@ -149,13 +151,15 @@ export class UnitGroupForm implements OnInit {
 
   onCheckboxChange(unitId: string, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
+  
     if (checked) {
-      if (!this.selectedUnitIds.includes(unitId)) {
-        this.selectedUnitIds.push(unitId);
+      if (!this.selectedUnitIds.some(([id, _]) => id === unitId)) {
+        this.selectedUnitIds.push([unitId, 0]); 
       }
     } else {
-      this.selectedUnitIds = this.selectedUnitIds.filter(id => id !== unitId);
+      this.selectedUnitIds = this.selectedUnitIds.filter(([id, _]) => id !== unitId);
     }
   }
+  
   
 }
