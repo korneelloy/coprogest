@@ -8,5 +8,6 @@ export interface Unit {
   updated_at: Date;
   owner_first_name?: string,
   owner_last_name?: string,
-  owner_email?: string
+  owner_email?: string,
+  selected?: boolean
 }

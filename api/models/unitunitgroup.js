@@ -109,7 +109,9 @@ module.exports = class UnitUnitGroup  {
     const [allUnitUnitGroupsByUnitGroup] = await db.execute(`SELECT 
       unit_unit_group.id_unit_group,
       unit_unit_group.adjusted_shares,
-      unit.name as unit_name
+      unit_unit_group.id_unit,
+      unit.name as unit_name,
+      unit.shares as unit_shares
       FROM unit_unit_group 
       LEFT JOIN unit ON unit_unit_group.id_unit = unit.id
       WHERE id_unit_group = ?;`, [id]);

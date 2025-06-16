@@ -16,7 +16,9 @@
       <ul>
         <li *ngFor="let unitUnitGroup of unitUnitGroups" class="space-y-4">
           {{ unitUnitGroup.unit_name }}
-          <span *ngIf="unitGroup.special_shares">{{ unitUnitGroup.adjusted_shares }}</span>
+          <span *ngIf="unitGroup.special_shares"> - {{ unitUnitGroup.adjusted_shares }} - </span>
+          <span> {{ unitUnitGroup.unit_shares }} </span>
+
         </ul>
     </div>
 

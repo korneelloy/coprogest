@@ -4,4 +4,5 @@ export interface UnitUnitGroup {
   adjusted_shares?: Number; 
   unit_group_name?: string;
   unit_name?: string;
+  unit_shares?: Number;
 }
