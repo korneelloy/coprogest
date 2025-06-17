@@ -1,163 +1,181 @@
 <!-- Navbar with Mega Menu -->
-<nav class="background-image min-h-48 flex flex-col justify-between px-6">
-  <div class="relative flex items-center justify-between min-h-[80px] max-w-full mx-0 px-4">
-    <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-      <a routerLink="/">
-        <div class="flex-shrink-0 flex items-center h-20 pt-6 pl-6">
-          <img class="h-full w-auto object-contain" src="./assets/images/logoCoproGest.png" alt="LogoCoprogest" />
-        </div>
-      </a> 
-      <div class="hidden sm:block sm:ml-6">
-        <div class="hidden sm:flex flex-col items-center w-full mt-32">
-          <div class="flex w-full gap-4">
-            <a routerLink="/" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
-              class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-              Accueil
-            </a>
-            <a routerLink="/finances" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
-              class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-              Finances</a>
-            <a routerLink="/documents" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
-              class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-              Documents
-            </a>
-            <a routerLink="/ag" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
-              class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-              Assemblée
-              générale
-            </a>
-            <a routerLink="/contact" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
-              class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-              Contact
-            </a>
+<nav class="background-image min-h-32 flex Logo
+  Open main menuflex-col justify-between px-6">
+  <div>
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+      <div class="relative flex items-center justify-between h-16">
+        <div class="flex-1 flex items-center justify-center sm:justify-start">
+          <a routerLink="/">
+            <div class="flex-shrink-0 flex items-center min-w-[40px]">
+              <img class="block h-10 w-auto" src="../assets/images/logoCoproGest.png" alt="Logo">
+            </div>
+          </a>
+          <div class="hidden lg:block sm:ml-6">
+            <div class="hidden sm:flex flex-col items-center w-full mt-32">
+              <div class="flex w-full gap-4">
+                <a routerLink="/" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
+                  class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+                  Accueil
+                </a>
+                <a routerLink="/finances" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
+                  class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+                  Finances</a>
+                <a routerLink="/documents" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
+                  class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+                  Documents
+                </a>
+                <a routerLink="/ag" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
+                  class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+                  Assemblée
+                  générale
+                </a>
+                <a routerLink="/contact" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
+                  class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+                  Contact
+                </a>
 
-            <div class="relative group">
-              <button
-                class="text-black hover:text-orange-300 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium flex items-center min-w-[240px]">
-                Management
-                <svg class="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd" />
-                </svg>
-              </button>
 
-              <!-- Dropdown menu for "Management" button -->
-              <div
-                class="absolute left-0 mt-2 min-w-[240px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                <div class="grid grid-cols-1 gap-4 p-4">
-                  <a routerLink="/persons" class="block text-black hover:text-orange-300">Copropriétaires</a>
-                  <a routerLink="/units" class="block text-black hover:text-orange-300">Lots</a>
-                  <a routerLink="/unitgroups" class="block text-black hover:text-orange-300">Groupes de Lots</a>
-                  <a routerLink="/documents" class="block text-black hover:text-orange-300">Documents</a>
-                  <a routerLink="/" class="block text-black hover:text-orange-300">Convocation AG</a>
-                  <a routerLink="/" class="block text-black hover:text-orange-300">Compte-rendu d'AG</a>
-                  <a routerLink="/" class="block text-black hover:text-orange-300">Appels de fonds</a>
-                  <a routerLink="/" class="block text-black hover:text-orange-300">Factures</a>
+
+
+                <!-- Management Dropdown Trigger -->
+                <div class="relative group">
+                  <button
+                    class="text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium flex items-center min-w-[100px]">
+                    Management
+                    <svg class="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                      fill="currentColor">
+                      <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </button>
+
+                  <!-- Mega Menu -->
+                  <div
+                    class="absolute left-0 mt-2 min-w-[240px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                    <div class="grid grid-cols-1 gap-4 p-4">
+                      <div>
+                        <ul class="space-y-3">
+                          <li><a routerLink="/persons"
+                              class="text-gray-600 hover:text-orange-300 block">Copropriétaires</a></li>
+                          <li><a routerLink="/units" class="text-gray-600 hover:text-orange-300 block">Lots</a></li>
+                          <li><a routerLink="/unitgroups" class="text-gray-600 hover:text-orange-300 block">Groupes de
+                              lots</a></li>
+                          <li><a routerLink="/documents" class="text-gray-600 hover:text-orange-300 block">Documents</a>
+                          </li>
+                          <li><a routerLink="/" class="text-gray-600 hover:text-orange-300 block">Convocations AG</a>
+                          </li>
+                          <li><a routerLink="/" class="text-gray-600 hover:text-orange-300 block">Comptes-rendus
+                              d'AG</a></li>
+                          <li><a routerLink="/" class="text-gray-600 hover:text-orange-300 block">Appels de fonds</a>
+                          </li>
+                          <li><a routerLink="/" class="text-gray-600 hover:text-orange-300 block">Factures</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-
             </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- Management Dropdown Trigger -->
+        <div class="flex justify-end relative group hidden lg:block">
+          <button
+            class="text-black bg-orange-300 px-3 py-2 rounded-md text-sm font-medium flex items-center min-w-[180px]">
+            Nom copropriétaire
+            <svg class="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <!-- Mega Menu -->
+          <div
+            class="absolute left-0 mt-2 min-w-[240px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <div class="grid grid-cols-1 gap-4 p-4">
+              <div>
+                <ul class="space-y-3 whitespace-nowrap">
+                  <li><a routerLink="/" class="text-black hover:text-orange-300">Mon profil</a></li>
+                  <li><a routerLink="/" class="text-black hover:text-orange-300">Redéfinir mon mot de passe</a></li>
+                  <li><a routerLink="/" class="text-black hover:text-orange-300">Déconnection</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+
+
+          <!-- Mobile menu button -->
+          <div class="lg:hidden">
+            <button type="button"
+              class="inline-flex items-center justify-center p-4 rounded-md text-orange-400 bg-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-orange-500"
+              aria-expanded="false" id="mobile-menu-button">
+              <span class="sr-only">Open main menu</span>
+              <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
     </div>
-    <div class="absolute inset-y-0 right-0 flex items-start pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-      <div class="relative group">
-        <button
-          class="text-black-900 bg-orange-300 px-4 py-2 rounded-md text-sm font-medium flex items-center min-w-[240px]">
-          Nom Copropriétaire
-          <svg class="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-              clip-rule="evenodd" />
-          </svg>
-        </button>
-        <!-- Dropdown menu for "Nom Copropriétaire" button -->
-        <div
-          class="absolute left-0 mt-2 min-w-[240px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-          <div class="grid grid-cols-1 gap-4 p-4">
-            <div>
-              <ul class="space-y-3 whitespace-nowrap">
-                <li><a routerLink="/" class="text-black hover:text-orange-300">Mon profil</a></li>
-                <li><a routerLink="/" class="text-black hover:text-orange-300">Redéfinir mon mot de passe</a></li>
-                <li><a routerLink="/" class="text-black hover:text-orange-300">Déconnection</a></li>
+
+    <!-- Mobile menu, show/hide based on menu state -->
+    <div class="sm:hidden hidden" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1">
+        <a href="#"
+          class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">ACCUEIL</a>
+        <a href="#"
+          class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">FINANCES</a>
+        <a href="#"
+          class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">DOCUMENTS</a>
+        <a href="#"
+          class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">ASSEMBLEE
+          GENERALE</a>
+        <a href="#"
+          class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">CONTACT</a>
+
+        <!-- Mobile Products Dropdown -->
+        <div class="relative">
+          <button class="#"
+            class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+            Management
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd" />
+            </svg>
+          </button>
+          <div class="hidden px-4 py-2 mobile-dropdown-content">
+            <div class="border-l-2 border-orange-500 pl-2 mb-4">
+              <ul class="space-y-2">
+                <li><a href="#" class="text-gray-600 hover:text-orange-300 block">Copropriétaires</a></li>
+                <li><a href="#" class="text-gray-600 hover:text-orange-300 block">Lots</a></li>
+                <li><a href="#" class="text-gray-600 hover:text-orange-300 block">Groupes de lots</a></li>
+                <li><a href="#" class="text-gray-600 hover:text-orange-300 block">Documents</a></li>
+                <li><a href="#" class="text-gray-600 hover:text-orange-300 block">Convocations AG</a></li>
+                <li><a href="#" class="text-gray-600 hover:text-orange-300 block">Comptes-rendus d'AG</a></li>
+                <li><a href="#" class="text-gray-600 hover:text-orange-300 block">Appels de fonds</a></li>
+                <li><a href="#" class="text-gray-600 hover:text-orange-300 block">Factures</a></li>
               </ul>
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Mobile menu button -->
-      <div class="sm:hidden">
-        <button type="button"
-          class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-          aria-expanded="false" id="mobile-menu-button">
-          <span class="sr-only">Open main menu</span>
-          <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Mobile menu, show/hide based on menu state -->
-  <div class="sm:hidden hidden" id="mobile-menu">
-    <div class="px-2 pt-2 pb-3 space-y-1">
-      <a routerLink="/" class="bg-gray-100 text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Home</a>
-
-      <!-- Mobile Products Dropdown -->
-      <div class="relative">
-        <button
-          class="w-full text-left text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-base font-medium flex items-center justify-between mobile-dropdown-trigger">
-          Products
-          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-              clip-rule="evenodd" />
-          </svg>
-        </button>
-        <div class="hidden px-4 py-2 mobile-dropdown-content">
-          <div class="border-l-2 border-indigo-500 pl-2 mb-4">
-            <h4 class="font-medium text-gray-900 mb-2">Software</h4>
-            <ul class="space-y-2">
-              <li><a href="#" class="block text-black hover:text-orange-300">Copropriétaires</a></li>
-              <li><a href="#" class="block text-black hover:text-orange-300">Lots</a></li>
-              <li><a href="#" class="block text-black hover:text-orange-300">Groupes de Lots</a></li>
-              <li><a href="#" class="block text-black hover:text-orange-300">Documents</a></li>
-              <li><a href="#" class="block text-black hover:text-orange-300">Convocation AG</a></li>
-              <li><a href="#" class="block text-black hover:text-orange-300">Compte-rendu AG</a></li>
-              <li><a href="#" class="block text-black hover:text-orange-300">Appels de fonds</a></li>
-              <li><a href="#" class="block text-black hover:text-orange-300">Factures</a></li>
-            </ul>
+        <div class="pt-4 pb-3 border-t border-gray-200">
+          <div class="flex items-center px-3 space-y-2 flex-col">
           </div>
-          <div class="border-l-2 border-indigo-500 pl-2">
-            <h4 class="font-medium text-gray-900 mb-2">Hardware</h4>
-            <ul class="space-y-2">
-              <li><a href="#" class="text-gray-600 hover:text-orange-300 block">Laptops</a></li>
-              <li><a href="#" class="text-gray-600 hover:text-orange-300 block">Desktops</a></li>
-              <li><a href="#" class="text-gray-600 hover:text-orange-300 block">Accessories</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <a href="#" class="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Services</a>
-      <a href="#" class="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">About</a>
-      <a href="#" class="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Contact</a>
-
-      <div class="pt-4 pb-3 border-t border-gray-200">
-        <div class="flex items-center px-3 space-y-2 flex-col">
-          <a href="#"
-            class="block w-full text-center text-gray-900 bg-gray-100 px-3 py-2 rounded-md text-base font-medium">
-            Login
-          </a>
-          <a href="#"
-            class="block w-full text-center bg-indigo-600 text-white px-3 py-2 rounded-md text-base font-medium">
-            Sign Up
-          </a>
         </div>
       </div>
     </div>
@@ -171,6 +189,7 @@
     <router-outlet></router-outlet>
   </div>
 </div>
+
 
 <script>
   // Mobile menu toggle
