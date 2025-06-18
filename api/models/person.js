@@ -233,6 +233,41 @@ module.exports = class Person extends BaseClass {
     }
     return rows[0];
   }
+
+
+    /**
+   * Fetch a person by email (be carefull password included!!!).
+   * @param {string} email
+   * @returns {Promise<Object>}
+   */
+  static async getUserByEmail(email) {
+    const [rows] = await db.execute(`SELECT
+      person.id,
+      person.email,
+      person.password,
+      person.first_name,
+      person.last_name,
+      person.street,
+      person.postal_code,
+      person.city,
+      person.telephone,
+      person.created_at,
+      person.updated_at,
+      person.id_role,
+      role.name as role_name
+      FROM person
+      LEFT JOIN role ON person.id_role = role.id
+      WHERE person.email = ?`, [email]
+    );
+   
+    if (rows.length === 0) {
+      const error = new Error('Person not found');
+      error.statusCode = 404;
+      throw error;
+    }
+    return rows[0];
+  }
+
   
   /**
    * Insert the current person into the database (with only basic information)
@@ -297,13 +332,13 @@ module.exports = class Person extends BaseClass {
    * Update a password
    * @returns {Promise<Object>}
    */
-  static async updatePw(id, hashed_pw) {
+  static async updatePw(email, hashed_pw) {
     try {
       const [result] = await db.execute(
         `UPDATE person
           SET password = ?
-          WHERE id = ?`,
-          [hashed_pw, id]
+          WHERE email = ?`,
+          [hashed_pw, email]
         );
 
       if (result.affectedRows === 0) {

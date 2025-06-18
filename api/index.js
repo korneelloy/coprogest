@@ -4,6 +4,10 @@
  */
 
 const express = require('express');
+
+const { auth, isManager, isAssistant } = require('./util/auth')
+
+const loginRoutes = require('./routes/login');
 const documentRoutes = require('./routes/document');
 const documentCategoryRoutes = require('./routes/documentcategory');
 const personRoutes = require('./routes/person');
@@ -53,12 +57,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Route group for document operations
+// Route group for operations
+app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/documentcategories', documentCategoryRoutes);
-app.use('/api/v1/documents', documentRoutes);
-app.use('/api/v1/persons', personRoutes);
+app.use('/api/v1/documents', auth, documentRoutes);
+app.use('/api/v1/persons', auth, personRoutes);
 app.use('/api/v1/roles', roleRoutes);
-app.use('/api/v1/unitgroups', unitgroupRoutes);
+app.use('/api/v1/unitgroups', auth, isAssistant, unitgroupRoutes);
 app.use('/api/v1/units', unitRoutes);
 app.use('/api/v1/unitunitgroups', unitUnitGroupRoutes);
 app.use('/api/v1/agnotices', agNoticeRoutes);

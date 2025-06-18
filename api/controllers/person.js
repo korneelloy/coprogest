@@ -100,12 +100,13 @@ exports.updateOne = async (req, res, next) => {
 
 exports.updatePw = async (req, res, next) => {
   try {
-    const id = req.params.id;
+    const email = req.params.email;
+
     const password = req.body.password;
 
     const hashedPw = await hashPassword(password);
 
-    const updateResponse = await Person.updatePw(id, hashedPw);
+    const updateResponse = await Person.updatePw(email, hashedPw);
 
     res.status(200).json(updateResponse);
 
