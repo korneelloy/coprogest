@@ -20,7 +20,10 @@ export class AuthService {
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(this.url, credentials).pipe(
       tap((res) => {
+
+        /**httponly service  */
         localStorage.setItem('authToken', res.token);
+        console.log(res.token.personId);
         localStorage.setItem('id', JSON.stringify(res.person.id));
         localStorage.setItem('email', JSON.stringify(res.person.email));
         localStorage.setItem('frstName', JSON.stringify(res.person.first_name));
