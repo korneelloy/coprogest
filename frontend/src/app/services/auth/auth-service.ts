@@ -16,24 +16,26 @@ export class AuthService {
   private url = environment.apiBaseUrl + 'login';
 
   constructor(private http: HttpClient, private router: Router) {}
+  
 
   login(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.post<any>(this.url, credentials).pipe(
+    return this.http.post<any>(this.url, credentials, { withCredentials: true }).pipe(
       tap((res) => {
-
-        /**httponly service  */
-        localStorage.setItem('authToken', res.token);
-        console.log(res.token.personId);
+        
+        console.log('User logged in:', res.person);
+  
         localStorage.setItem('id', JSON.stringify(res.person.id));
         localStorage.setItem('email', JSON.stringify(res.person.email));
         localStorage.setItem('frstName', JSON.stringify(res.person.first_name));
         localStorage.setItem('lastName', JSON.stringify(res.person.last_name));
         localStorage.setItem('role', JSON.stringify(res.person.role));
-
+        
+  
         this.router.navigate(['/']);
       })
     );
   }
+  
 
   logout(): void {
     localStorage.removeItem('authToken');

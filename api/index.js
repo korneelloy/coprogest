@@ -4,6 +4,8 @@
  */
 
 const express = require('express');
+const cors = require('cors');
+
 
 const { auth, isManager, isAssistant } = require('./util/auth')
 
@@ -30,42 +32,19 @@ const port = process.env.PORT || 3000;
 // Middleware to parse JSON request bodies
 app.use(express.json());
 
-/** 
- * Middleware to handle Cross-Origin Resource Sharing (CORS) headers.
- * This allows the API to be called from different origins (domains).
- */
-app.use((req, res, next) => {
-  // Allow requests from any origin - '*' should be replaced with frontend domain in production for more security
-  res.setHeader('Access-Control-Allow-Origin', '*');
-
-  // Specify the HTTP methods that are allowed when accessing the resource
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PUT, DELETE, PATCH, OPTIONS' // ps: OPTIONS for preflight requests
-  );
-
-  // Specify which headers can be used during the actual request
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Authorization'
-  );
-
-  // Respond immediately to OPTIONS requests (preflight) with status 200 (OK)
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-
-  // Pass control to the next middleware or route handler
-  next();
-});
+app.use(cors({
+  origin: true, // to be changed in production
+  credentials: true
+}));
 
 // Route group for operations
 app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/documentcategories', documentCategoryRoutes);
-app.use('/api/v1/documents', auth, documentRoutes);
-app.use('/api/v1/persons', auth, personRoutes);
+app.use('/api/v1/documents', documentRoutes);
+app.use('/api/v1/persons', personRoutes);
 app.use('/api/v1/roles', roleRoutes);
-app.use('/api/v1/unitgroups', auth, isAssistant, unitgroupRoutes);
+app.use('/api/v1/unitgroups', unitgroupRoutes);
+/** app.use('/api/v1/unitgroups', auth, isAssistant, unitgroupRoutes);*/
 app.use('/api/v1/units', unitRoutes);
 app.use('/api/v1/unitunitgroups', unitUnitGroupRoutes);
 app.use('/api/v1/agnotices', agNoticeRoutes);

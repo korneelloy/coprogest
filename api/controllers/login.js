@@ -27,17 +27,26 @@ exports.login = async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    res.status(200).json({
-      message: 'Login successful',
-      token,
-      person: {
-        id: person.id,
-        email: person.email,
-        role: person.role_name,
-        first_name: person.first_name,
-        last_name:person.last_name
-      }
-    });
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', 
+      sameSite: 'Strict', 
+      maxAge: 60 * 60 * 1000 
+    };
+    
+    res
+      .cookie('token', token, cookieOptions)
+      .status(200)
+      .json({
+        message: 'Login successful',
+        person: {
+          id: person.id,
+          email: person.email,
+          role: person.role_name,
+          first_name: person.first_name,
+          last_name: person.last_name
+        }
+      });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Internal server error' });
