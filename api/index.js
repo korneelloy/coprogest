@@ -14,7 +14,9 @@ const unitUnitGroupRoutes = require('./routes/unitunitgroup');
 const agNoticeRoutes = require('./routes/agnotice');
 const agResolutionsRoutes = require('./routes/agresolution');
 const agResolutionBudgetRoutes = require('./routes/agresolutionbudget');
-
+const budgetCategoryRoutes = require('./routes/budgetcategory');
+const callDateRoutes = require('./routes/calldate');
+const agResolutionBudgetCallDateRoutes = require('./routes/agresolutionbudgetcalldate');
 
 const errorController = require('./controllers/error');
 
@@ -64,10 +66,9 @@ app.use('/api/v1/unitunitgroups', unitUnitGroupRoutes);
 app.use('/api/v1/agnotices', agNoticeRoutes);
 app.use('/api/v1/agresolutions', agResolutionsRoutes);
 app.use('/api/v1/agresolutionbudgets', agResolutionBudgetRoutes);
-
-
-
-
+app.use('/api/v1/budgetcategories', budgetCategoryRoutes);
+app.use('/api/v1/calldates', callDateRoutes);
+app.use('/api/v1/agresolutionbudgetcalldates', agResolutionBudgetCallDateRoutes);
 
 // Error handlers
 app.use(errorController.get404);
