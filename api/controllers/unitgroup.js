@@ -41,14 +41,14 @@ exports.postOne = async (req, res, next) => {
     const name = req.body.name;
     const description = req.body.description;
     const special_shares = req.body.special_shares;
-    const selectedUnitIds = req.body.selectedUnitIds;
+    const selectedUnits = req.body.selectedUnits;
 
     const unitGroup = new Unitgroup({
       id,
       name,
       description,
       special_shares,
-      selectedUnitIds
+      selectedUnits
     });
     
     const postResponse = await unitGroup.post();
@@ -73,14 +73,14 @@ exports.updateOne = async (req, res, next) => {
     const name = req.body.name;
     const description = req.body.description;
     const special_shares = req.body.special_shares;
-    const selectedUnitIds = req.body.selectedUnitIds;
+    const selectedUnits = req.body.selectedUnits;
 
     const unitGroup = new Unitgroup({
       id,
       name,
       description,
       special_shares,
-      selectedUnitIds
+      selectedUnits
     });
     
     const updateResponse = await unitGroup.update();

@@ -28,9 +28,12 @@ export class UnitGroupForm implements OnInit {
   units: Unit[] = [];
   unitUnitGroups: UnitUnitGroup[] = [];
   selectedUnitGroupIds: string[] = [];
-  selectedUnitIds: [string, Number | undefined][] = [];
-  selectedIdsOnly: string[] = [];
+
+  selectedUnits: [string, Number | undefined][] = [];
+  selectedUnitsIdsOnly: string[] = [];
+
   updatedSelectedUnitIds: string[] = [];
+
 
 
   constructor(
@@ -49,28 +52,25 @@ export class UnitGroupForm implements OnInit {
   }
 
   ngOnInit(): void {
-    /** 
-    this.unitGroupService.fetchAll().subscribe((data: UnitGroup[]) => {
-      this.unitGroups = data;
-      console.log(this.unitGroups);
-    });
-    */
-
     this.unitService.fetchAll().subscribe((data: Unit[]) => {
-      this.units = data.map(unit => ({
-        ...unit,
-        selected: this.selectedUnitIds.some(([id, _]) => id === unit.id)
-      }));
-      this.selectedIdsOnly = this.selectedUnitIds.map(([id, _]) => id);
-    });    
-    
+      this.units = data;
+    });
+
+    this.unitUnitGroupService.fetchAll().subscribe((data: UnitUnitGroup[]) => {
+      this.unitUnitGroups = data;
+      for (const unitUnitGroup of this.unitUnitGroups) {
+        document.getElementById('adj_shares-'+unitUnitGroup.id_unit)?.setAttribute("value", "eeee" );
+      }  
+    });
+
+
     this.unitGroupId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.unitGroupId;
 
     if (this.isEditMode) {
       this.unitUnitGroupService.fetchAllByGroup(this.unitGroupId!).subscribe((unitUnitGroups: UnitUnitGroup[]) => {
         unitUnitGroups.forEach(unitUnitGroup => {
-          this.selectedUnitIds.push([unitUnitGroup.id_unit, unitUnitGroup.adjusted_shares]);
+          this.selectedUnitsIdsOnly.push(unitUnitGroup.id_unit);
         });
       });
       this.unitGroupService.fetchById(this.unitGroupId!).subscribe((unitGroup: UnitGroup) => {
@@ -88,12 +88,23 @@ export class UnitGroupForm implements OnInit {
     if (this.unitGroupForm.invalid) return;
   
     const formData = this.unitGroupForm.value;
-  
-    formData.special_shares = formData.special_shares === 0 ? false : true;
-  
-    console.log('Form data:', formData);
-    console.log('Selected units:', this.selectedUnitIds);
-    formData.selectedUnitIds = this.selectedUnitIds;
+    
+    if (formData.special_shares === 'false') {
+      formData.special_shares = false;
+    } else {
+      formData.special_shares = true;
+    }
+    
+    this.selectedUnits = [];
+
+    for (const selectedUnitsId of this.selectedUnitsIdsOnly) {
+      const currentid = "adj_shares-"+selectedUnitsId;
+      const el = document.getElementById(currentid) as HTMLInputElement;
+      const value = el?.value;
+      this.selectedUnits.push([selectedUnitsId, Number(value)]);
+    }
+
+    formData.selectedUnits = this.selectedUnits;
     
     if (this.isEditMode) {
       this.unitGroupService.update(this.unitGroupId!, formData).subscribe(() => {
@@ -105,6 +116,7 @@ export class UnitGroupForm implements OnInit {
       });
     }
   }
+
 
 /**  
   onSubmit(): void {
@@ -118,7 +130,7 @@ export class UnitGroupForm implements OnInit {
       }
     }
     
-    console.log(checkedUnits); // e.g., ['2', '3']
+    console.log(checkedUnits);
     
     if (this.unitGroupForm.invalid) return;
 
@@ -153,13 +165,20 @@ export class UnitGroupForm implements OnInit {
     const checked = (event.target as HTMLInputElement).checked;
   
     if (checked) {
-      if (!this.selectedUnitIds.some(([id, _]) => id === unitId)) {
-        this.selectedUnitIds.push([unitId, 0]); 
+      if (!this.selectedUnitsIdsOnly.includes(unitId)) {
+        this.selectedUnitsIdsOnly.push(unitId);
       }
     } else {
-      this.selectedUnitIds = this.selectedUnitIds.filter(([id, _]) => id !== unitId);
+      this.selectedUnitsIdsOnly = this.selectedUnitsIdsOnly.filter(id => id !== unitId);
     }
   }
-  
-  
+
+  getShareValue(unitId: string): string {
+    for (const unitUnitGroup of this.unitUnitGroups) {
+      if (unitUnitGroup.id_unit === unitId) {
+        return String(unitUnitGroup.adjusted_shares);
+      }
+    }
+    return "0";
+  }
 }

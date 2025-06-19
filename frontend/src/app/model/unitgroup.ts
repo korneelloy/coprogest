@@ -5,4 +5,5 @@ export interface UnitGroup {
   special_shares: boolean; 
   created_at: Date;
   updated_at: Date;
+  selectedUnits?: [string, string];
 }

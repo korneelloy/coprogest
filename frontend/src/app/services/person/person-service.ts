@@ -52,6 +52,14 @@ export class PersonService {
       );
   }
 
+  updatePw(email: string, password: string): Observable<Person> {
+    return this.http
+      .patch<Person>(`${this.url}/${email}`, { password })
+      .pipe(
+        tap(() => console.log(`Updated person id=${email}`)),
+        catchError(this.handleError)
+      );
+  }
   delete(id: string): Observable<void> {
     return this.http
       .delete<void>(`${this.url}/${id}`)

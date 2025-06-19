@@ -26,12 +26,37 @@
   <div>
     <label for="special_shares">Tantième spécifique? : </label>
     <select id="special_shares" formControlName="special_shares">
-      <option value="0">Non</option>
-      <option value="1">Oui</option>
+      <option value="false">Non</option>
+      <option value="true">Oui</option>
     </select>
     
   </div>
 
+
+
+  <div *ngFor="let unit of units">
+    <label>
+      <input
+        type="checkbox"
+        [value]="unit.id"
+        [checked]="selectedUnitsIdsOnly.includes(unit.id)"
+        (change)="onCheckboxChange(unit.id, $event)"
+      />
+      {{ unit.name }}
+    </label>
+  
+    <span *ngIf="unitGroupForm.get('special_shares')?.value == 'true'">
+      <label [for]="'adj_shares-' + unit.id">Millièmes ajustées</label>
+      <input 
+        type="text"
+        name="adj_shares"
+        [id]="'adj_shares-' + unit.id"
+        [value]="getShareValue(unit.id)"
+      />
+    </span>
+  </div>
+  
+<!--
 
   <div>
     <div>Lots: </div>
@@ -41,14 +66,24 @@
         <input
           type="checkbox"
           [value]="unit.id"
-          [checked]="selectedIdsOnly.includes(unit.id)"
-          (change)="onCheckboxChange(unit.id, $event)"
-        />
-        {{ unit.name }}
-      </label>
+          [checked]="selectedUnitsIdsOnly.includes(unit.id)"
+          (change)="onCheckboxChange(unit.id,$event)"
+          />
+        {{ unit.name }}        
+        <span *ngIf="unitGroupForm.get('special_shares')?.value == '1'">
+          <label for='adj_shares'> Millièmes ajustées </label>
+          <input 
+            type= 'text' 
+            name='adj_shares' 
+            [id]="'adj_shares-' + unit.id"
+            [value]="getShareValue(unit.id)"
+          />  
+        </span>
+        </label>
     </div>
   </div>
 
+  -->
 
   <button type="submit" [disabled]="unitGroupForm.invalid" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
     {{ isEditMode ? 'Mettre à jour' : 'Créer' }} le groupe

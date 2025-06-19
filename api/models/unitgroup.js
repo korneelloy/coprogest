@@ -17,15 +17,15 @@ module.exports = class Unitgroup extends BaseClass {
    * @param {boolean} special_shares - Special shares involved in this group?, false by default
    * @param {Date|null} createdAt - creation date - set in SQL code
    * @param {Date|null} updatedAt - last update - set in SQL code
-   * @param {string[]|null} selectedUnitIds - list of units - handled by associatif table
+   * @param {[][]|null} selectedUnits - list of units (with id and ajusted shares) - handled by associatif table
    * 
    */
-  constructor({id, name, description = null, special_shares = false, createdAt = null, updatedAt = null, selectedUnitIds = null }) {
+  constructor({id, name, description = null, special_shares = false, createdAt = null, updatedAt = null, selectedUnits = null }) {
     super({ id, createdAt, updatedAt });
     this.name = name;
     this.description = description;
     this.special_shares = special_shares;
-    this.selectedUnitIds = selectedUnitIds;
+    this.selectedUnits = selectedUnits;
   }
   
   /****************************getters and setters for data validation***********************************/
@@ -72,6 +72,11 @@ module.exports = class Unitgroup extends BaseClass {
       const error = new Error('Special shares should be a boolean value');
       error.statusCode = 400;
       throw error;
+    }
+    if (value === 0) {
+      value = false;
+    } else if (value === 1) {
+      value = true;
     }
     this._special_shares = value;
   }
@@ -126,11 +131,11 @@ async post() {
     throw error;
   }
 
-  if (Array.isArray(this.selectedUnitIds)) {
-    for (const unitId of this.selectedUnitIds) {
+  if (Array.isArray(this.selectedUnits)) {
+    for (const unit of this.selectedUnits) {
       await db.execute(
-        `INSERT INTO unit_unit_group (id_unit, id_unit_group) VALUES (?, ?)`,
-        [unitId, this.id]
+        `INSERT INTO unit_unit_group (id_unit, id_unit_group, adjusted_shares) VALUES (?, ?, ?)`,
+        [unit[0], this.id, unit[1]]
       );
     }
   }
@@ -143,6 +148,17 @@ async post() {
    * @returns {Promise<Object>}
    */
   async update() {
+    console.log(this.special_shares);
+    
+    /**
+     * let specialShares = 1;
+    if(this.special_shares === false) {
+      specialShares = 0;
+    }
+     */
+    
+    
+
     const [result] = await db.execute(
       `UPDATE unit_group
         SET name = ?, description = ?, special_shares = ?
@@ -155,16 +171,16 @@ async post() {
       error.statusCode = 404;
       throw error;
     }
-
-    if (Array.isArray(this.selectedUnitIds)) {
+    console.log(this.selectedUnits)
+    if (Array.isArray(this.selectedUnits)) {
       await db.execute(
         `DELETE FROM unit_unit_group WHERE id_unit_group = ?`,
         [this.id]
       );        
-      for (const unitId of this.selectedUnitIds) {
+      for (const unit of this.selectedUnits) {
         await db.execute(
-          `INSERT INTO unit_unit_group (id_unit, id_unit_group) VALUES (?, ?)`,
-          [unitId, this.id]
+          `INSERT INTO unit_unit_group (id_unit, id_unit_group, adjusted_shares) VALUES (?, ?, ?)`,
+          [unit[0], this.id, unit[1]]
         );
       }
     }

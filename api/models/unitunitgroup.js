@@ -77,6 +77,7 @@ module.exports = class UnitUnitGroup  {
   static async fetchAll() {
     const [allUnitUnitGroups] = await db.execute(`SELECT 
       unit_unit_group.id_unit_group,
+      unit_unit_group.id_unit,
       unit_unit_group.adjusted_shares,
       unit_group.name as unit_group_name
       FROM unit_unit_group 

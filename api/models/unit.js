@@ -128,21 +128,22 @@ module.exports = class Unit extends BaseClass {
    * @returns {Promise<Object>}
    */
   static async get(id) {
-    const [rows] = await db.execute(`SELECT 
-      unit.id,
-      unit.name,
-      unit.id_person,
-      unit.shares,
-      unit.description, 
-      unit.created_at, 
-      unit.updated_at, 
-      person.first_name as owner_first_name,
-      person.last_name as owner_last_name,
-      person.email as owner_email
+    const [rows] = await db.execute(`
+      SELECT 
+        unit.id,
+        unit.name,
+        unit.id_person,
+        unit.shares,
+        unit.description, 
+        unit.created_at, 
+        unit.updated_at, 
+        person.first_name as owner_first_name,
+        person.last_name as owner_last_name,
+        person.email as owner_email
       FROM unit
       LEFT JOIN person ON unit.id_person = person.id
       WHERE unit.id = ?`, [id]);
-   
+
     if (rows.length === 0) {
       const error = new Error('Unit not found');
       error.statusCode = 404;

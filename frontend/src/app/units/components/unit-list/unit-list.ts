@@ -28,7 +28,7 @@ export class UnitList implements OnInit{
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
       if (params.get('created') === 'true') {
-        this.createdMessage = "Le lot a été créé avec succès.";
+        this.createdMessage = "Le lot a été créé avec succès.Pensez à le rajouter à des groupes";
         setTimeout(() => this.createdMessage = null, 5000);
       }
       this.units$ = this.unitService.fetchAll();

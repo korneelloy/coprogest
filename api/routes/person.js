@@ -20,6 +20,6 @@ router.post('/', personController.postOne);
 router.put('/:id', personController.updateOne);
 
 // Update the password
-router.patch('/:id', personController.updatePw);
+router.patch('/:email', personController.updatePw);
 
 module.exports = router;
