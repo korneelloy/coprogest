@@ -7,7 +7,7 @@ function auth(req, res, next) {
 
   if (!token) return res.sendStatus(401); // Unauthorized
 
-  jwt.verify(token, SECRET, (err, user) => {
+  jwt.verify(token, SECRET, {algorithms: ['HS256']}, (err, user) => {
     if (err) return res.sendStatus(403); // Forbidden
     req.user = user; 
     next();

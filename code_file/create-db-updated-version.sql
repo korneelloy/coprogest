@@ -107,7 +107,7 @@ CREATE TABLE budget_category(
    UNIQUE(name)
 );
 
-CREATE TABLE call_dates(
+CREATE TABLE call_date(
    id CHAR(36),
    date_call DATE NOT NULL,
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -232,12 +232,12 @@ CREATE TABLE ag_notice_presence_person(
    FOREIGN KEY(id_ag_notice) REFERENCES ag_notice(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE TABLE ag_resolution_budget_call_dates(
+CREATE TABLE ag_resolution_budget_call_date(
    id_ag_resolution_budget VARCHAR(36) NOT NULL,
-   id_call_dates CHAR(36) NOT NULL,
-   PRIMARY KEY(id_ag_resolution_budget, id_call_dates),
+   id_call_date CHAR(36) NOT NULL,
+   PRIMARY KEY(id_ag_resolution_budget, id_call_date),
    FOREIGN KEY(id_ag_resolution_budget) REFERENCES ag_resolution_budget(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-   FOREIGN KEY(id_call_dates) REFERENCES call_dates(id) ON DELETE RESTRICT ON UPDATE CASCADE
+   FOREIGN KEY(id_call_date) REFERENCES call_date(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE ag_resolution_person(
