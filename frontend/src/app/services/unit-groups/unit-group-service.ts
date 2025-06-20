@@ -18,7 +18,7 @@ export class UnitGroupService {
 
   fetchAll(): Observable<UnitGroup[]> {
     return this.http
-      .get<UnitGroup[]>(this.url)
+      .get<UnitGroup[]>(this.url, { withCredentials: true })
       .pipe(
         tap(() => console.log('Fetched unit-groups')),
         catchError(this.handleError)
@@ -27,7 +27,7 @@ export class UnitGroupService {
 
   fetchById(id: string): Observable<UnitGroup> {
     return this.http
-      .get<UnitGroup>(`${this.url}/${id}`)
+      .get<UnitGroup>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Fetched unit-group id=${id}`)),
         catchError(this.handleError)
@@ -36,7 +36,7 @@ export class UnitGroupService {
 
   create(unitgroup: UnitGroup): Observable<UnitGroup> {
     return this.http
-      .post<UnitGroup>(this.url, unitgroup)
+      .post<UnitGroup>(this.url, unitgroup, { withCredentials: true })
       .pipe(
         tap((newUnitGroup) => console.log(`Created unit-group id=${newUnitGroup.id}`)),
         catchError(this.handleError)
@@ -45,7 +45,7 @@ export class UnitGroupService {
 
   update(id: string, unitgroup: UnitGroup): Observable<UnitGroup> {
     return this.http
-      .put<UnitGroup>(`${this.url}/${id}`, unitgroup)
+      .put<UnitGroup>(`${this.url}/${id}`, unitgroup, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Updated unit-group id=${id}`)),
         catchError(this.handleError)
@@ -54,7 +54,7 @@ export class UnitGroupService {
 
   delete(id: string): Observable<void> {
     return this.http
-      .delete<void>(`${this.url}/${id}`)
+      .delete<void>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Deleted unit-group id=${id}`)),
         catchError(this.handleError)

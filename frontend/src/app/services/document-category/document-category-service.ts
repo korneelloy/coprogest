@@ -18,7 +18,7 @@ export class DocumentCategoryService {
 
   fetchAll(): Observable<DocumentCategory[]> {
     return this.http
-      .get<DocumentCategory[]>(this.url)
+      .get<DocumentCategory[]>(this.url, { withCredentials: true })
       .pipe(
         tap(() => console.log('Fetched document categories')),
         catchError(this.handleError)
@@ -27,7 +27,7 @@ export class DocumentCategoryService {
 
   fetchById(id: string): Observable<DocumentCategory> {
     return this.http
-      .get<DocumentCategory>(`${this.url}/${id}`)
+      .get<DocumentCategory>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Fetched document category id=${id}`)),
         catchError(this.handleError)
@@ -36,7 +36,7 @@ export class DocumentCategoryService {
 
   create(documentCategory: DocumentCategory): Observable<DocumentCategory> {
     return this.http
-      .post<DocumentCategory>(this.url, documentCategory)
+      .post<DocumentCategory>(this.url, documentCategory, { withCredentials: true })
       .pipe(
         tap((newDocCat) => console.log(`Created document category id=${newDocCat.id}`)),
         catchError(this.handleError)
@@ -45,7 +45,7 @@ export class DocumentCategoryService {
 
   update(id: string, documentCategory: DocumentCategory): Observable<DocumentCategory> {
     return this.http
-      .put<DocumentCategory>(`${this.url}/${id}`, documentCategory)
+      .put<DocumentCategory>(`${this.url}/${id}`, documentCategory, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Updated document category id=${id}`)),
         catchError(this.handleError)
@@ -54,7 +54,7 @@ export class DocumentCategoryService {
 
   delete(id: string): Observable<void> {
     return this.http
-      .delete<void>(`${this.url}/${id}`)
+      .delete<void>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Deleted document category id=${id}`)),
         catchError(this.handleError)

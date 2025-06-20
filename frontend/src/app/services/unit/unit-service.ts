@@ -18,7 +18,7 @@ export class UnitService {
 
   fetchAll(): Observable<Unit[]> {
     return this.http
-      .get<Unit[]>(this.url)
+      .get<Unit[]>(this.url, { withCredentials: true })
       .pipe(
         tap(() => console.log('Fetched units')),
         catchError(this.handleError)
@@ -27,7 +27,7 @@ export class UnitService {
 
   fetchById(id: string): Observable<Unit> {
     return this.http
-      .get<Unit>(`${this.url}/${id}`)
+      .get<Unit>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Fetched unit id=${id}`)),
         catchError(this.handleError)
@@ -36,7 +36,7 @@ export class UnitService {
 
   create(unit: Unit): Observable<Unit> {
     return this.http
-      .post<Unit>(this.url, unit)
+      .post<Unit>(this.url, unit, { withCredentials: true })
       .pipe(
         tap((newDoc) => console.log(`Created unit id=${newDoc.id}`)),
         catchError(this.handleError)
@@ -45,7 +45,7 @@ export class UnitService {
 
   update(id: string, unit: Unit): Observable<Unit> {
     return this.http
-      .put<Unit>(`${this.url}/${id}`, unit)
+      .put<Unit>(`${this.url}/${id}`, unit, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Updated unit id=${id}`)),
         catchError(this.handleError)
@@ -54,7 +54,7 @@ export class UnitService {
 
   delete(id: string): Observable<void> {
     return this.http
-      .delete<void>(`${this.url}/${id}`)
+      .delete<void>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Deleted unit id=${id}`)),
         catchError(this.handleError)

@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 
 import { SessionService } from '../../services/session/session-service';
 import { environment } from '../../../environments/environment';
-
 
 @Injectable({
   providedIn: 'root'
@@ -18,37 +17,28 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private sessionService: SessionService,
-  
+    private sessionService: SessionService
   ) {}
-  
 
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(this.url, credentials, { withCredentials: true }).pipe(
       tap((res) => {
-        /**
-         *     
-        console.log('User logged in:', res.person);
-        localStorage.setItem('id', JSON.stringify(res.person.id));
-        localStorage.setItem('email', JSON.stringify(res.person.email));
-        localStorage.setItem('frstName', JSON.stringify(res.person.first_name));
-        localStorage.setItem('lastName', JSON.stringify(res.person.last_name));
-        localStorage.setItem('role', JSON.stringify(res.person.role));
-         */
         this.sessionService.setUser(res.person);
-  
         this.router.navigate(['/']);
+      }),
+      catchError(err => {
+        console.error('Login failed:', err);
+        return of(null);
       })
     );
   }
-  
 
   logout(): void {
-    localStorage.removeItem('authToken');
+    this.sessionService.clearUser();
     this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('authToken');
+    return this.sessionService.isLoggedIn();
   }
 }

@@ -18,7 +18,7 @@ export class RoleService {
 
   fetchAll(): Observable<Role[]> {
     return this.http
-      .get<Role[]>(this.url)
+      .get<Role[]>(this.url, { withCredentials: true })
       .pipe(
         tap(() => console.log('Fetched roles')),
         catchError(this.handleError)
@@ -27,7 +27,7 @@ export class RoleService {
 
   fetchById(id: string): Observable<Role> {
     return this.http
-      .get<Role>(`${this.url}/${id}`)
+      .get<Role>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Fetched role id=${id}`)),
         catchError(this.handleError)

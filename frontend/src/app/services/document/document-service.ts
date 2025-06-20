@@ -18,7 +18,7 @@ export class DocumentService {
 
   fetchAll(): Observable<Document[]> {
     return this.http
-      .get<Document[]>(this.url)
+      .get<Document[]>(this.url, { withCredentials: true })
       .pipe(
         tap(() => console.log('Fetched documents')),
         catchError(this.handleError)
@@ -27,7 +27,7 @@ export class DocumentService {
 
   fetchById(id: string): Observable<Document> {
     return this.http
-      .get<Document>(`${this.url}/${id}`)
+      .get<Document>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Fetched document id=${id}`)),
         catchError(this.handleError)
@@ -36,7 +36,7 @@ export class DocumentService {
 
   create(document: Document): Observable<Document> {
     return this.http
-      .post<Document>(this.url, document)
+      .post<Document>(this.url, document, { withCredentials: true })
       .pipe(
         tap((newDoc) => console.log(`Created document id=${newDoc.id}`)),
         catchError(this.handleError)
@@ -45,7 +45,7 @@ export class DocumentService {
 
   update(id: string, document: Document): Observable<Document> {
     return this.http
-      .put<Document>(`${this.url}/${id}`, document)
+      .put<Document>(`${this.url}/${id}`, document, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Updated document id=${id}`)),
         catchError(this.handleError)
@@ -54,7 +54,7 @@ export class DocumentService {
 
   delete(id: string): Observable<void> {
     return this.http
-      .delete<void>(`${this.url}/${id}`)
+      .delete<void>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Deleted document id=${id}`)),
         catchError(this.handleError)

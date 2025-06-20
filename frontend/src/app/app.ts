@@ -20,8 +20,12 @@ export class App implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.sessionService.loadUserFromServer().subscribe();
-
+    this.sessionService.loadUserFromServer().subscribe(user => {
+      if (!user) {
+        this.router.navigate(['/login']);
+      }
+    });
+    
     const mobile_menu_button = document.getElementById('mobile-menu-button');
     mobile_menu_button?.addEventListener('click', function (this: HTMLElement) {
       const mobileMenu = document.getElementById('mobile-menu');

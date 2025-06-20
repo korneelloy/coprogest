@@ -18,7 +18,7 @@ export class PersonService {
 
   fetchAll(): Observable<Person[]> {
     return this.http
-      .get<Person[]>(this.url)
+      .get<Person[]>(this.url, { withCredentials: true })
       .pipe(
         tap(() => console.log('Fetched persons')),
         catchError(this.handleError)
@@ -27,7 +27,7 @@ export class PersonService {
 
   fetchById(id: string): Observable<Person> {
     return this.http
-      .get<Person>(`${this.url}/${id}`)
+      .get<Person>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Fetched person id=${id}`)),
         catchError(this.handleError)
@@ -36,7 +36,7 @@ export class PersonService {
 
   create(person: Person): Observable<Person> {
     return this.http
-      .post<Person>(this.url, person)
+      .post<Person>(this.url, person, { withCredentials: true })
       .pipe(
         tap((newPerson) => console.log(`Created person id=${newPerson.id}`)),
         catchError(this.handleError)
@@ -45,7 +45,7 @@ export class PersonService {
 
   update(id: string, person: Person): Observable<Person> {
     return this.http
-      .put<Person>(`${this.url}/${id}`, person)
+      .put<Person>(`${this.url}/${id}`, person, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Updated person id=${id}`)),
         catchError(this.handleError)
@@ -54,7 +54,7 @@ export class PersonService {
 
   updatePw(email: string, password: string): Observable<Person> {
     return this.http
-      .patch<Person>(`${this.url}/${email}`, { password })
+      .patch<Person>(`${this.url}/${email}`, { password }, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Updated person id=${email}`)),
         catchError(this.handleError)
@@ -62,7 +62,7 @@ export class PersonService {
   }
   delete(id: string): Observable<void> {
     return this.http
-      .delete<void>(`${this.url}/${id}`)
+      .delete<void>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Deleted person id=${id}`)),
         catchError(this.handleError)

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
 
 import { Person } from '../../model/person';
 import { environment } from '../../../environments/environment';
@@ -16,7 +18,10 @@ export class SessionService {
   private url = environment.apiBaseUrl + 'persons';
 
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   setUser(user: Person): void {
     this.currentUser = user;
@@ -43,6 +48,9 @@ export class SessionService {
       }),
       catchError(err => {
         this.currentUser = null;
+        if (err.status === 401) {
+          this.router.navigate(['/login']);
+        }
         return of(null); 
       })
     );
