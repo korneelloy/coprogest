@@ -7,7 +7,7 @@ const db = require('../util/database');
 const { isValidUUIDv4 } = require('../util/validation');
 
 
-module.exports = class AgResolutionBudgetCallDate  {
+module.exports = class AgResolutionBudgetCallDate {
   /**
    * Create a new Ag resolution-call date instance.
    * @param {string} id_ag_resolution_budget - UUID of the ag resolution
