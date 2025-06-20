@@ -3,6 +3,7 @@ import { RouterModule, Router, ActivatedRoute, RouterOutlet } from '@angular/rou
 import { CommonModule } from '@angular/common';
 
 import { SessionService } from './services/session/session-service';
+import { Person } from '../app/model/person';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,9 @@ import { SessionService } from './services/session/session-service';
 })
 export class App implements OnInit {
   protected title = 'frontend';
+  connectedUser: Person | null = null;
+
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -21,6 +25,15 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     this.sessionService.loadUserFromServer().subscribe(user => {
+      if (!user) {
+        this.router.navigate(['/login']);
+      } else {
+        this.connectedUser = user;
+      }
+    });
+
+    this.sessionService.user$.subscribe(user => {
+      this.connectedUser = user;
       if (!user) {
         this.router.navigate(['/login']);
       }
@@ -41,4 +54,8 @@ export class App implements OnInit {
       });
     });
   }
+  get isConnected(): boolean {
+    return this.sessionService.isLoggedIn();
+  }
+  
 }

@@ -18,7 +18,8 @@ import { AuthService } from '../../../services/auth/auth-service';
 export class LoginForm implements OnInit{
   loginForm!: FormGroup;
   loginError = '';
-
+  emailFocused = false;
+  passwordFocused = false;
  
   constructor(
     private fb: FormBuilder,
@@ -50,5 +51,15 @@ export class LoginForm implements OnInit{
         this.loginError = 'Email ou mot de passe invalide.';
       }
     });
+  }
+
+  focusEmailInput() {
+    const input = document.querySelector('input[formControlName="email"]') as HTMLInputElement;
+    input?.focus();
+  }
+  
+  focusPasswordInput() {
+    const input = document.querySelector('input[formControlName="password"]') as HTMLInputElement;
+    input?.focus();
   }
 }

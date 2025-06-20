@@ -45,6 +45,8 @@ app.use(cors({
 
 // Route group for operations
 
+/**
+ * 
 app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/documentcategories', documentCategoryRoutes);
 app.use('/api/v1/documents', documentRoutes);
@@ -61,10 +63,10 @@ app.use('/api/v1/calldates', callDateRoutes);
 app.use('/api/v1/agresolutionbudgetcalldates', agResolutionBudgetCallDateRoutes);
 app.use('/api/v1/agnoticesentpersons', agNoticeSentPersonRoutes);
 
+ */
 
 
-/**
- * 
+
 app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/documentcategories', auth, documentCategoryRoutes);
 app.use('/api/v1/documents', auth, documentRoutes);
@@ -81,7 +83,6 @@ app.use('/api/v1/calldates', auth, callDateRoutes);
 app.use('/api/v1/agresolutionbudgetcalldates', auth, agResolutionBudgetCallDateRoutes);
 app.use('/api/v1/agnoticesentpersons', auth, agNoticeSentPersonRoutes);
 
- */
 
 // Error handlers
 app.use(errorController.get404);

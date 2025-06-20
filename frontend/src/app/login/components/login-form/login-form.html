@@ -1,29 +1,96 @@
-<h2><strong>Login</strong></h2>
-<hr>
+<div class="flex h-screen">
+  <!-- Left Sidebar (Login Form) -->
+  <div class="w-full sm:w-1/5 bg-white p-4 space-y-4">
+    <img src="../assets/images/logoCoproGest.png" alt="logoCoproGest" class="mx-auto" />
 
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label>Email: </label>
-    <input type="email" formControlName="email" placeholder="Email" />
-    <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-      <small *ngIf="loginForm.get('email')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
-      <small *ngIf="loginForm.get('email')?.errors?.['pattern']">* Ce champ doit correspondre à un mail valide.</small>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <!-- Email Input -->
+      <div class="relative mb-4">
+        <input
+          #emailInput
+          type="email"
+          formControlName="email"
+          [class.active]="emailFocused || loginForm.get('email')?.value"
+          (focus)="emailFocused = true"
+          (blur)="emailFocused = false"
+          placeholder="example@email.com"
+          class="transition-all duration-300 w-full px-4 py-2 text-sm font-medium rounded bg-zinc-100 text-black border border-zinc-300 focus:outline-none focus:ring-2 focus:ring-orange-300"
+          autocomplete="email"
+        />
+        <label
+          *ngIf="!emailFocused && !loginForm.get('email')?.value"
+          (click)="emailInput.focus()"
+          class="absolute inset-0 flex items-center justify-center px-4 py-2 cursor-text text-sm font-medium text-black bg-zinc-100 rounded">
+          Identifiant
+        </label>
+      </div>
+      <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-red-600 text-sm">
+        <small *ngIf="loginForm.get('email')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+        <small *ngIf="loginForm.get('email')?.errors?.['pattern']">* Ce champ doit correspondre à un mail valide.</small>
+      </div>
+
+      <!-- Password Input -->
+      <div class="relative mb-4">
+        <input
+          #passwordInput
+          type="password"
+          formControlName="password"
+          [class.active]="passwordFocused || loginForm.get('password')?.value"
+          (focus)="passwordFocused = true"
+          (blur)="passwordFocused = false"
+          placeholder="Password123"
+          class="transition-all duration-300 w-full px-4 py-2 text-sm font-medium rounded bg-zinc-100 text-black border border-zinc-300 focus:outline-none focus:ring-2 focus:ring-orange-300"
+          autocomplete="current-password"
+        />
+        <label
+          *ngIf="!passwordFocused && !loginForm.get('password')?.value"
+          (click)="passwordInput.focus()"
+          class="absolute inset-0 flex items-center justify-center px-4 py-2 cursor-text text-sm font-medium text-black bg-zinc-100 rounded">
+          Mot de passe
+        </label>
+      </div>
+      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-red-600 text-sm">
+        <small *ngIf="loginForm.get('password')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+        <small *ngIf="loginForm.get('password')?.errors?.['pattern']">
+          * Le mot de passe doit contenir au minimum 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.
+        </small>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="mt-6">
+        <button
+          type="submit"
+          [disabled]="loginForm.invalid"
+          class="w-full text-white bg-orange-300 hover:bg-orange-400 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200">
+          S'identifier
+        </button>
+      </div>
+    </form>
+
+    <!-- Links -->
+    <div class="pt-6 space-y-2">
+      <button class="w-full text-black hover:text-orange-300 bg-zinc-100 px-4 py-2 text-sm font-medium rounded">
+        Mot de passe oublié
+      </button>
+      <button class="w-full text-black hover:text-orange-300 bg-zinc-100 px-4 py-2 text-sm font-medium rounded">
+        Contact
+      </button>
+      <button class="w-full text-black hover:text-orange-300 bg-zinc-100 px-4 py-2 text-sm font-medium rounded">
+        Mentions légales
+      </button>
     </div>
   </div>
 
-  <div>
-    <label>Mot de passe: </label>
-    <input type="password" formControlName="password" placeholder="Password123!" />
-    <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-      <small *ngIf="loginForm.get('password')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
-      <small *ngIf="loginForm.get('password')?.errors?.['pattern']">* Le mot de passe doit contenir au minimum 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.</small>
-
+  <!-- Right Panel (Image + Welcome Text) -->
+  <div class="hidden sm:block w-4/5 relative">
+    <img src="../assets/images/backgroundImage.jpg" alt="backgroundImage" class="w-full h-full object-cover" />
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="bg-black/50 p-6 text-white max-w-xl text-center rounded">
+        <h1 class="text-4xl font-bold mb-2">BIENVENUE DANS VOTRE COPROPRIÉTÉ</h1>
+        <p class="text-xl">
+          Consultez votre compte et vos documents.
+        </p>
+      </div>
     </div>
   </div>
-  
-
-  <button type="submit" [disabled]="loginForm.invalid" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
-    Login
-  </button>
-</form>
-
+</div>
