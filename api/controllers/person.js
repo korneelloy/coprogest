@@ -3,6 +3,28 @@ const { v4: uuidv4 } = require('uuid');
 const { hashPassword } = require('../util/hash');
 
 /**
+ * Retrieve and return the information of the connected persons.
+ */
+exports.getConnectedPerson = async (req, res, next) => {
+  try {
+    const person = await Person.get(req.user.personId);
+    if (!person) return res.status(404).json({ message: 'User not found' });
+
+    res.json({
+      id: person.id,
+      email: person.email,
+      role: person.role_name,
+      first_name: person.first_name,
+      last_name: person.last_name
+    });
+  } catch (err) {
+    console.error('Error in getConnectedPerson:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+
+/**
  * Retrieve and return all persons.
  */
 exports.getAll = async (req, res, next) => {

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, Router, ActivatedRoute, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+
+import { SessionService } from './services/session/session-service';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -12,9 +15,13 @@ export class App implements OnInit {
   protected title = 'frontend';
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private sessionService: SessionService
   ) {}
+
   ngOnInit(): void {
+    this.sessionService.loadUserFromServer().subscribe();
+
     const mobile_menu_button = document.getElementById('mobile-menu-button');
     mobile_menu_button?.addEventListener('click', function (this: HTMLElement) {
       const mobileMenu = document.getElementById('mobile-menu');

@@ -2,16 +2,16 @@ const jwt = require('jsonwebtoken');
 const SECRET = process.env.JWT_SECRET || 'your_secret_key';
 
 function auth(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = req.cookies.token;
+  if (!token) return res.status(401).json({ message: 'No token provided' });
 
-  if (!token) return res.sendStatus(401); // Unauthorized
-
-  jwt.verify(token, SECRET, {algorithms: ['HS256']}, (err, user) => {
-    if (err) return res.sendStatus(403); // Forbidden
-    req.user = user; 
+  try {
+    const decoded = jwt.verify(token, SECRET);
+    req.user = decoded;
     next();
-  });
+  } catch (err) {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
 }
 
 function isManager(req, res, next) {

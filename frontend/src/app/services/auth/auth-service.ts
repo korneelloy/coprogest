@@ -18,7 +18,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private session: SessionService,
+    private sessionService: SessionService,
   
   ) {}
   
@@ -35,7 +35,7 @@ export class AuthService {
         localStorage.setItem('lastName', JSON.stringify(res.person.last_name));
         localStorage.setItem('role', JSON.stringify(res.person.role));
          */
-        this.session.setUser(res.person);
+        this.sessionService.setUser(res.person);
   
         this.router.navigate(['/']);
       })

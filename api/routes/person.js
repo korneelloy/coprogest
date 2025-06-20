@@ -6,6 +6,11 @@
 const express = require('express');
 const personController = require('../controllers/person');
 const router = express.Router();
+const { auth } = require('../util/auth');
+
+
+// Get logged in person
+router.get('/me', auth, personController.getConnectedPerson);
 
 // Get all persons
 router.get('/', personController.getAll);

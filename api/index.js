@@ -5,6 +5,8 @@
 
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+
 
 
 const { auth, isManager, isAssistant } = require('./util/auth')
@@ -28,6 +30,8 @@ const errorController = require('./controllers/error');
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(cookieParser());
 
 // Middleware to parse JSON request bodies
 app.use(express.json());
