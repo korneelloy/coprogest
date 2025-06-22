@@ -50,14 +50,17 @@ export class SessionService {
     }).pipe(
       tap(user => {
         this.currentUser = user;
+        this.userSubject.next(user);
       }),
       catchError(err => {
         this.currentUser = null;
+        this.userSubject.next(null);
         if (err.status === 401) {
           this.router.navigate(['/login']);
         }
-        return of(null); 
+        return of(null);
       })
     );
   }
+  
 }

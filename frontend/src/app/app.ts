@@ -20,7 +20,7 @@ export class App implements OnInit  {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private sessionService: SessionService,
+    public sessionService: SessionService,
   ) {}
 
   ngOnInit(): void {
@@ -31,14 +31,13 @@ export class App implements OnInit  {
         this.connectedUser = user;
       }
     });
-
+    
     this.sessionService.user$.subscribe(user => {
+      console.log("user$ updated:", user);
       this.connectedUser = user;
-      if (!user) {
-        this.router.navigate(['/login']);
-      }
     });
   }
+    
 
   get isConnected(): boolean {
     return this.sessionService.isLoggedIn();
