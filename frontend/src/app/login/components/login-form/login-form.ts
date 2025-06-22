@@ -20,6 +20,8 @@ export class LoginForm implements OnInit{
   loginError = '';
   emailFocused = false;
   passwordFocused = false;
+  loginErrorMessage: string | null = null;
+
  
   constructor(
     private fb: FormBuilder,
@@ -49,6 +51,8 @@ export class LoginForm implements OnInit{
       error: (err) => {
         console.error('Login error:', err);
         this.loginError = 'Email ou mot de passe invalide.';
+        this.loginErrorMessage = "Erreur dans email ou mot de passe";
+        setTimeout(() => this.loginErrorMessage = null, 5000);
       }
     });
   }

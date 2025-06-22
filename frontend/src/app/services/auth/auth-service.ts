@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+
 import { tap, catchError } from 'rxjs/operators';
 
 import { SessionService } from '../../services/session/session-service';
@@ -32,7 +33,7 @@ export class AuthService {
       }),
       catchError(err => {
         console.error('Login failed:', err);
-        return of(null);
+        return throwError(() => err);
       })
     );
   }

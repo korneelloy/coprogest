@@ -56,6 +56,10 @@
         </small>
       </div>
 
+      <div *ngIf="loginErrorMessage" class="error-message">
+        {{ loginErrorMessage }}
+      </div>
+
       <!-- Submit Button -->
       <div class="mt-6">
         <button

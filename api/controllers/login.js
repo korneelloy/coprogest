@@ -10,6 +10,7 @@ exports.login = async (req, res) => {
 
   try {
     const person = await Person.getUserByEmail(email);
+    console.log(person);
 
     if (!person) {
       return res.status(401).json({ message: 'Invalid email or password' });
@@ -48,7 +49,7 @@ exports.login = async (req, res) => {
         }
       });
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('Login error:', error.message); 
     res.status(500).json({ message: 'Internal server error' });
   }
 };
