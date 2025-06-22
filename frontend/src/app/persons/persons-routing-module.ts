@@ -9,7 +9,7 @@ import { PersonPw } from './components/person-pw/person-pw';
 const routes: Routes = [
   { path: '', component: PersonList },
   { path: 'new', component: PersonForm },
-  { path: 'pw', component: PersonPw },
+  { path: 'pw/:email', component: PersonPw },
   { path: ':id', component: PersonDetail },
   { path: ':id/edit', component: PersonForm },
 

@@ -4,7 +4,7 @@
 <form [formGroup]="personForm" (ngSubmit)="onSubmit()">
   <div>
     <label>Email: </label>
-    <input  type="email" formControlName="email" placeholder="Email" />
+    <input type="email" formControlName="email" placeholder="Email" readonly class="bg-gray-100 text-gray-600 cursor-not-allowed" />
     <div *ngIf="personForm.get('email')?.invalid && personForm.get('email')?.touched">
       <small *ngIf="personForm.get('email')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="personForm.get('email')?.errors?.['pattern']">* Ce champ doit correspondre à un mail valide.</small>

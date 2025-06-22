@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 
 import { SessionService } from './services/session/session-service';
 import { Person } from '../app/model/person';
+import { AuthService } from './services/auth/auth-service';
+
 
 @Component({
   selector: 'app-root',
@@ -20,7 +22,8 @@ export class App implements OnInit  {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public sessionService: SessionService,
+    private sessionService: SessionService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -66,5 +69,10 @@ export class App implements OnInit  {
     ) {
       menu.classList.add('hidden');
     }
+  }
+
+  logout(): void {
+    localStorage.removeItem('authToken');
+    this.authService.logout();  
   }
 }  

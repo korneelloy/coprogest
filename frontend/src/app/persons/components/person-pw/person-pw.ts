@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PersonService } from '../../../services/person/person-service';
+import { ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -27,11 +28,14 @@ export class PersonPw implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private personService: PersonService,
+    private route: ActivatedRoute,
+
   ) {}
 
   ngOnInit(): void {  
+    const email = this.route.snapshot.paramMap.get('email');
     this.personForm = this.fb.group({
-      email: ['', [Validators.required, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
+      email: [email, [Validators.required, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
       password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)]]
     });
   }
