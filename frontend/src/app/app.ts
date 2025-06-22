@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { RouterModule, Router, ActivatedRoute, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -12,7 +12,7 @@ import { Person } from '../app/model/person';
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
-export class App implements OnInit {
+export class App implements OnInit  {
   protected title = 'frontend';
   connectedUser: Person | null = null;
 
@@ -20,7 +20,7 @@ export class App implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private sessionService: SessionService
+    private sessionService: SessionService,
   ) {}
 
   ngOnInit(): void {
@@ -38,24 +38,34 @@ export class App implements OnInit {
         this.router.navigate(['/login']);
       }
     });
-    
-    const mobile_menu_button = document.getElementById('mobile-menu-button');
-    mobile_menu_button?.addEventListener('click', function (this: HTMLElement) {
-      const mobileMenu = document.getElementById('mobile-menu');
-      const isExpanded = this.getAttribute('aria-expanded') === 'true';
-      this.setAttribute('aria-expanded', String(!isExpanded));
-      mobileMenu?.classList.toggle('hidden');
-    });
-    const mobile_dropdown_triggers = document.querySelectorAll('.mobile-dropdown-trigger');
-    mobile_dropdown_triggers.forEach(trigger => {
-      trigger.addEventListener('click', function (this: HTMLElement) {
-        const content = this.nextElementSibling;
-        content?.classList.toggle('hidden');
-      });
-    });
   }
+
   get isConnected(): boolean {
     return this.sessionService.isLoggedIn();
   }
+ 
+  openMenu(){
+    const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenu?.classList.toggle('hidden');
+  }
+
+  openManagementMenu() {
+    const mobileMenu = document.getElementById('mobile-management-menu');
+      mobileMenu?.classList.toggle('hidden');
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event) {
+    const menu = document.getElementById('mobile-menu');
+    const button = document.getElementById('mobile-menu-button');
   
-}
+    if (
+      menu &&
+      !menu.contains(event.target as Node) &&
+      button &&
+      !button.contains(event.target as Node)
+    ) {
+      menu.classList.add('hidden');
+    }
+  }
+}  
