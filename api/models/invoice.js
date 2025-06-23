@@ -4,7 +4,7 @@
  */
 
 const db = require('../util/database');
-const { isValidUUIDv4, isNullOrStringMax255, isStringMax20 } = require('../util/validation');
+const { isValidUUIDv4, isStringMax255, isStringMax20, isValidAmount } = require('../util/validation');
 const BaseClass = require('./baseclass');
 
 
@@ -13,7 +13,7 @@ module.exports = class Invoice extends BaseClass {
    * Create a new Invoice instance.
    * @param {string} id - UUID of the invoice
    * @param {Number} amount - Amount - can be null
-   * @param {Date|null} invoice_date - Invoice date
+   * @param {Date} invoice_date - Invoice date
    * @param {string} description - not null
    * @param {string} state - not null - enum {to be paid, contested, paid}
    * @param {string} id_ag_resolution_budget - Link to ag resolution/budget- Foreign key - verification foreign key constraint handled in the CRUD operations
@@ -22,13 +22,13 @@ module.exports = class Invoice extends BaseClass {
    */
 
 
-  constructor({ id, amount, description, state, id_ag_resolution_budget, invoice_date = null, createdAt = null, updatedAt = null }) {
+  constructor({ id, amount, invoice_date, description, state, id_ag_resolution_budget, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
     this.amount = amount;
+    this.invoice_date = invoice_date;
     this.description = description;
     this.state = state;
     this.id_ag_resolution_budget = id_ag_resolution_budget;
-    this.invoice_date = invoice_date;
   }
   
   /****************************getters and setters for data validation***********************************/
@@ -36,18 +36,12 @@ module.exports = class Invoice extends BaseClass {
   get amount() {
     return this._amount;
   }
- 
+
   set amount(value) {
-    if (typeof value !== 'number' || isNaN(value)) {
-      throw new TypeError('Amount must be a valid number');
-    }
-
-    if (value < 0 || value > 9999999999999) {
-      throw new RangeError('Amount must be between 0 and 9999999999999');
-    }
-
-    if (!Number.isInteger(value * 100)) {
-      throw new RangeError('Amount must have at most 2 decimal places');
+    if (!isValidAmount(value)) {
+      const error = new Error('Invalid value');
+      error.statusCode = 400;
+      throw error;
     }
     this._amount = value;
   }
@@ -75,7 +69,7 @@ module.exports = class Invoice extends BaseClass {
   }
 
   set description(value) {
-    if (!isNullOrStringMax255(value)) {
+    if (!isStringMax255(value)) {
       const error = new Error('Invalid description: must be null or a string between 2 and 255 characters.');
       error.statusCode = 400;
       throw error;
@@ -84,7 +78,7 @@ module.exports = class Invoice extends BaseClass {
   }
 
   get state() {
-    return this._presence;
+    return this._state;
   }
 
   set state(value) {
@@ -145,9 +139,9 @@ module.exports = class Invoice extends BaseClass {
     try {
       const [result] = await db.execute(
         `INSERT INTO invoice
-          (id, amount, description, state, id_ag_resolution_budget)
-          VALUES (?, ?, ?, ?, ?)`, 
-          [this.amount, this.description, this.state, this.id_ag_resolution_budget, this.invoice_date]
+          (id, amount, invoice_date, description, state, id_ag_resolution_budget)
+          VALUES (?, ?, ?, ?, ?, ?)`, 
+          [this.id, this.amount, this.invoice_date, this.description, this.state, this.id_ag_resolution_budget]
         );
       
       if (result.affectedRows === 0) {
@@ -174,9 +168,9 @@ module.exports = class Invoice extends BaseClass {
     try {
       const [result] = await db.execute(
         `UPDATE invoice
-          SET id = ?, amount = ?, invoice_date = ?, description = ?, state = ?, id_ag_resolution_budget = ?
+          SET amount = ?, invoice_date = ?, description = ?, state = ?, id_ag_resolution_budget = ?
           WHERE id = ?`,
-          [this.id, this.amount, this.invoice_date, this.description, this.state, this.id_ag_resolution_budget]
+          [this.amount, this.invoice_date, this.description, this.state, this.id_ag_resolution_budget, this.id]
         );
 
       if (result.affectedRows === 0) {

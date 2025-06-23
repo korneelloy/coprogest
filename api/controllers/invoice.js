@@ -52,7 +52,6 @@ exports.postOne = async (req, res, next) => {
       state,
       id_ag_resolution_budget
     });
-    
     const postResponse = await invoice.post();
 
     res.status(201).json(postResponse);
