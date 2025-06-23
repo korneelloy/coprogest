@@ -26,6 +26,9 @@ const budgetCategoryRoutes = require('./routes/budgetcategory');
 const callDateRoutes = require('./routes/calldate');
 const agResolutionBudgetCallDateRoutes = require('./routes/agresolutionbudgetcalldate');
 const agNoticeSentPersonRoutes = require('./routes/agnoticesentperson');
+const agResolutionPersonRoutes = require('./routes/agresolutionperson');
+const agNoticePresencePersonRoutes = require('./routes/agnoticepresenceperson');
+const invoiceRoutes = require('./routes/invoice');
 
 
 const errorController = require('./controllers/error');
@@ -60,6 +63,9 @@ app.use('/api/v1/budgetcategories', budgetCategoryRoutes);
 app.use('/api/v1/calldates', callDateRoutes);
 app.use('/api/v1/agresolutionbudgetcalldates', agResolutionBudgetCallDateRoutes);
 app.use('/api/v1/agnoticesentpersons', agNoticeSentPersonRoutes);
+app.use('/api/v1/agresolutionpersons', agResolutionPersonRoutes);
+app.use('/api/v1/agnoticepresencepersons', agNoticePresencePersonRoutes);
+app.use('/api/v1/invoices', invoiceRoutes);
 
 
 
