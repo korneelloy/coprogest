@@ -26,7 +26,7 @@ const budgetCategoryRoutes = require('./routes/budgetcategory');
 const callDateRoutes = require('./routes/calldate');
 const agResolutionBudgetCallDateRoutes = require('./routes/agresolutionbudgetcalldate');
 const agNoticeSentPersonRoutes = require('./routes/agnoticesentperson');
-
+const chargeCallRoutes = require('./routes/chargecall');
 
 const errorController = require('./controllers/error');
 
@@ -45,8 +45,7 @@ app.use(cors({
 
 // Route group for operations
 
-/**
- * 
+
 app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/documentcategories', documentCategoryRoutes);
 app.use('/api/v1/documents', documentRoutes);
@@ -62,10 +61,11 @@ app.use('/api/v1/budgetcategories', budgetCategoryRoutes);
 app.use('/api/v1/calldates', callDateRoutes);
 app.use('/api/v1/agresolutionbudgetcalldates', agResolutionBudgetCallDateRoutes);
 app.use('/api/v1/agnoticesentpersons', agNoticeSentPersonRoutes);
+app.use('/api/v1/chargecalls', chargeCallRoutes);
 
- */
 
-
+/**
+ * 
 
 app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/documentcategories', auth, documentCategoryRoutes);
@@ -82,6 +82,7 @@ app.use('/api/v1/budgetcategories', auth, budgetCategoryRoutes);
 app.use('/api/v1/calldates', auth, callDateRoutes);
 app.use('/api/v1/agresolutionbudgetcalldates', auth, agResolutionBudgetCallDateRoutes);
 app.use('/api/v1/agnoticesentpersons', auth, agNoticeSentPersonRoutes);
+ */
 
 
 // Error handlers
