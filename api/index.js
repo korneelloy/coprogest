@@ -26,9 +26,11 @@ const budgetCategoryRoutes = require('./routes/budgetcategory');
 const callDateRoutes = require('./routes/calldate');
 const agResolutionBudgetCallDateRoutes = require('./routes/agresolutionbudgetcalldate');
 const agNoticeSentPersonRoutes = require('./routes/agnoticesentperson');
-const agResolutionPersonRoutes = require('./routes/agresolutionperson');
-const agNoticePresencePersonRoutes = require('./routes/agnoticepresenceperson');
-const invoiceRoutes = require('./routes/invoice');
+const chargeCallRoutes = require('./routes/chargecall');
+const chargePaymentRoutes = require('./routes/chargepayment');
+const chargeLineRoutes = require('./routes/chargeline');
+const agMinuteRoutes = require('./routes/agminute');
+const invoicePaymentRoutes = require('./routes/invoicepayment');
 
 
 const errorController = require('./controllers/error');
@@ -48,6 +50,7 @@ app.use(cors({
 
 // Route group for operations
 
+
 app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/documentcategories', documentCategoryRoutes);
 app.use('/api/v1/documents', documentRoutes);
@@ -63,14 +66,15 @@ app.use('/api/v1/budgetcategories', budgetCategoryRoutes);
 app.use('/api/v1/calldates', callDateRoutes);
 app.use('/api/v1/agresolutionbudgetcalldates', agResolutionBudgetCallDateRoutes);
 app.use('/api/v1/agnoticesentpersons', agNoticeSentPersonRoutes);
-app.use('/api/v1/agresolutionpersons', agResolutionPersonRoutes);
-app.use('/api/v1/agnoticepresencepersons', agNoticePresencePersonRoutes);
-app.use('/api/v1/invoices', invoiceRoutes);
-
-
+app.use('/api/v1/chargecalls', chargeCallRoutes);
+app.use('/api/v1/chargepayments', chargePaymentRoutes);
+app.use('/api/v1/chargelines', chargeLineRoutes);
+app.use('/api/v1/agminutes', agMinuteRoutes);
+app.use('/api/v1/invoicepayments', invoicePaymentRoutes);
 
 /**
  * 
+
 app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/documentcategories', auth, documentCategoryRoutes);
 app.use('/api/v1/documents', auth, documentRoutes);
@@ -86,8 +90,8 @@ app.use('/api/v1/budgetcategories', auth, budgetCategoryRoutes);
 app.use('/api/v1/calldates', auth, callDateRoutes);
 app.use('/api/v1/agresolutionbudgetcalldates', auth, agResolutionBudgetCallDateRoutes);
 app.use('/api/v1/agnoticesentpersons', auth, agNoticeSentPersonRoutes);
-
  */
+
 
 // Error handlers
 app.use(errorController.get404);

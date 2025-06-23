@@ -261,9 +261,7 @@ module.exports = class Person extends BaseClass {
     );
    
     if (rows.length === 0) {
-      const error = new Error('Person not found');
-      error.statusCode = 404;
-      throw error;
+      return null;
     }
     return rows[0];
   }

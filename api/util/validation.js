@@ -126,6 +126,31 @@ module.exports = {
    */
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     return value === null || (typeof value === 'string' && passwordRegex.test(value));
-},
+  },
+
+  isValidAmount(value) {
+  /**
+  * Validate a value to be a number with max 15 digits total and 2 decimal places.
+  * @param {number|string} value - input to validate
+  * @returns {boolean} - true if valid, false otherwise
+  */
+  
+    if (typeof value === 'string') {
+      value = value.trim();
+      if (value === '') return false;
+      value = Number(value);
+    }
+  
+    if (typeof value !== 'number' || isNaN(value)) return false;
+  
+    const decimalPart = value.toString().split('.')[1];
+    if (decimalPart && decimalPart.length > 2) return false;
+  
+    const digitsOnly = value.toString().replace('.', '');
+    if (digitsOnly.length > 15) return false;
+  
+    return true;
+  }
+  
 
 }

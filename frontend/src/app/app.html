@@ -1,9 +1,11 @@
-<!-- Navbar -->
+
+<ng-container *ngIf="isConnected">
+  <!-- Navbar -->
 <nav class="background-image min-h-32 flex flex-col justify-between px-6">
 
   <div>
   <!-- Main menu -->
-    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8" id="navbar">
       <div class="relative flex items-center justify-between h-16">
         <div class="flex-1 flex items-center justify-center sm:justify-start">
           <a routerLink="/">
@@ -76,7 +78,8 @@
         <div class="flex justify-end relative group hidden lg:block">
           <button
             class="text-black bg-orange-300 px-3 py-2 rounded-md text-sm font-medium flex items-center min-w-[180px]">
-            Nom copropriétaire
+            {{ connectedUser?.first_name && connectedUser?.last_name ? connectedUser?.first_name + ' ' + connectedUser?.last_name : connectedUser?.email }}
+
             <svg class="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd"
                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -90,9 +93,9 @@
             <div class="grid grid-cols-1 gap-4 p-4">
               <div>
                 <ul class="space-y-3 whitespace-nowrap">
-                  <li><a routerLink="/" class="text-black hover:text-orange-300">Mon profil</a></li>
-                  <li><a routerLink="/" class="text-black hover:text-orange-300">Redéfinir mon mot de passe</a></li>
-                  <li><a routerLink="/" class="text-black hover:text-orange-300">Déconnection</a></li>
+                  <li><a routerLink="persons/{{ connectedUser?.id }}" class="text-black hover:text-orange-300">Mon profil</a></li>
+                  <li><a routerLink="persons/pw/{{ connectedUser?.email }}" class="text-black hover:text-orange-300">Redéfinir mon mot de passe</a></li>
+                  <li><button (click)="logout()" class="text-black hover:text-orange-300">Déconnection</button></li>
                 </ul>
               </div>
             </div>
@@ -104,7 +107,8 @@
           <div class="lg:hidden">
             <button type="button"
               class="inline-flex items-center justify-center p-4 rounded-md text-orange-400 bg-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-orange-500"
-              aria-expanded="false" id="mobile-menu-button">
+              aria-expanded="false" id="mobile-menu-button"
+              (click)="openMenu()">
               <span class="sr-only">Open main menu</span>
               <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" aria-hidden="true">
@@ -142,14 +146,15 @@
         <!-- Mobile Management Dropdown -->
         <div class="relative">
           <button
-            class="mobile-dropdown-trigger flex items-center text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium w-full justify-between">
+            class="mobile-dropdown-trigger flex items-center text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium w-full justify-between"
+            (click)="openManagementMenu()">
             Management
             <svg class="h-5 w-5 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
-          <div class="hidden px-4 py-2 mobile-dropdown-content">
+          <div class="hidden px-4 py-2 mobile-dropdown-content" id="mobile-management-menu">
             <ul class="space-y-2 border-l-2 border-orange-500 pl-2 mt-2">
               <li><a routerLink="/persons" class="text-gray-600 hover:text-orange-300 block">Copropriétaires</a></li>
               <li><a routerLink="/units" class="text-gray-600 hover:text-orange-300 block">Lots</a></li>
@@ -173,6 +178,7 @@
     </div>
   </div>
 </nav>
+</ng-container>
 
 
 <!-- Page content -->

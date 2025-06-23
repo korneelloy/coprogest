@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+
 import { tap, catchError } from 'rxjs/operators';
 
 import { SessionService } from '../../services/session/session-service';
 import { environment } from '../../../environments/environment';
+import { Person } from '../../../app/model/person';
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +16,8 @@ import { environment } from '../../../environments/environment';
 export class AuthService {
 
   private url = environment.apiBaseUrl + 'login';
+  connectedUser: Person | null = null;
+  
 
   constructor(
     private http: HttpClient,
@@ -28,7 +33,7 @@ export class AuthService {
       }),
       catchError(err => {
         console.error('Login failed:', err);
-        return of(null);
+        return throwError(() => err);
       })
     );
   }

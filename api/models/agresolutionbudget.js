@@ -4,7 +4,7 @@
  */
 
 const db = require('../util/database');
-const { isValidUUIDv4 } = require('../util/validation');
+const { isValidUUIDv4, isValidAmount } = require('../util/validation');
 const BaseClass = require('./baseclass');
 
 
@@ -48,16 +48,10 @@ module.exports = class AgResolutionBudget extends BaseClass {
   }
  
   set budget_amount(value) {
-    if (typeof value !== 'number' || isNaN(value)) {
-      throw new TypeError('Budget amount must be a valid number');
-    }
-
-    if (value < 0 || value > 9999999999999) {
-      throw new RangeError('Budget amount must be between 0 and 9999999999999');
-    }
-
-    if (!Number.isInteger(value * 100)) {
-      throw new RangeError('Budget amount must have at most 2 decimal places');
+    if (!isValidAmount(value)) {
+      const error = new Error('Invalid value');
+      error.statusCode = 400;
+      throw error;
     }
     this._budget_amount = value;
   }
@@ -145,7 +139,7 @@ module.exports = class AgResolutionBudget extends BaseClass {
   }
   
   set budget_recup_tenant(value) {
-    if (typeof value !== 'boolean') {
+    if (value !== 0 && value !== 1) {
       const error = new Error('Invalid budget_recup_tenant');
       error.statusCode = 400;
       throw error;
@@ -158,7 +152,7 @@ module.exports = class AgResolutionBudget extends BaseClass {
   }
   
   set actif(value) {
-    if (typeof value !== 'boolean') {
+    if (value !== 0 && value !== 1) {
       const error = new Error('Invalid ag resolution budget actif status');
       error.statusCode = 400;
       throw error;

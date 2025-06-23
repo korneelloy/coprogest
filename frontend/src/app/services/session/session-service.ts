@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 
 
@@ -16,6 +17,9 @@ export class SessionService {
 
   private currentUser: Person | null = null;
   private url = environment.apiBaseUrl + 'persons';
+  private userSubject = new BehaviorSubject<Person | null>(null);
+  public user$: Observable<Person | null> = this.userSubject.asObservable();
+
 
 
   constructor(
@@ -24,19 +28,20 @@ export class SessionService {
   ) {}
 
   setUser(user: Person): void {
-    this.currentUser = user;
+    this.userSubject.next(user);
+
   }
 
   getUser(): Person | null {
-    return this.currentUser;
+    return this.userSubject.value;
   }
 
   clearUser(): void {
-    this.currentUser = null;
+    this.userSubject.next(null);
   }
 
   isLoggedIn(): boolean {
-    return !!this.currentUser;
+    return this.userSubject.value !== null;
   }
 
   loadUserFromServer(): Observable<any> {
@@ -45,14 +50,17 @@ export class SessionService {
     }).pipe(
       tap(user => {
         this.currentUser = user;
+        this.userSubject.next(user);
       }),
       catchError(err => {
         this.currentUser = null;
+        this.userSubject.next(null);
         if (err.status === 401) {
           this.router.navigate(['/login']);
         }
-        return of(null); 
+        return of(null);
       })
     );
   }
+  
 }

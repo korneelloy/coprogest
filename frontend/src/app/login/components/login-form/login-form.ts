@@ -18,6 +18,9 @@ import { AuthService } from '../../../services/auth/auth-service';
 export class LoginForm implements OnInit{
   loginForm!: FormGroup;
   loginError = '';
+  emailFocused = false;
+  passwordFocused = false;
+  loginErrorMessage: string | null = null;
 
  
   constructor(
@@ -48,7 +51,19 @@ export class LoginForm implements OnInit{
       error: (err) => {
         console.error('Login error:', err);
         this.loginError = 'Email ou mot de passe invalide.';
+        this.loginErrorMessage = "Erreur dans email ou mot de passe";
+        setTimeout(() => this.loginErrorMessage = null, 5000);
       }
     });
+  }
+
+  focusEmailInput() {
+    const input = document.querySelector('input[formControlName="email"]') as HTMLInputElement;
+    input?.focus();
+  }
+  
+  focusPasswordInput() {
+    const input = document.querySelector('input[formControlName="password"]') as HTMLInputElement;
+    input?.focus();
   }
 }
