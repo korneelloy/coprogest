@@ -4,7 +4,7 @@
  */
 
 const db = require('../util/database');
-const { isStringMax50, isNullOrStringMax255, isValidUUIDv4 } = require('../util/validation');
+const { isValidUUIDv4 } = require('../util/validation');
 const BaseClass = require('./baseclass');
 
 
