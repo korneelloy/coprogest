@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AgNoticeService } from '../../../services/agnotice/ag-notice-service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AgNotice } from '../../../model/agnotice';
 import { RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
+
+
+import { AgNotice } from '../../../model/agnotice';
+import { AgNoticeService } from '../../../services/agnotice/ag-notice-service';
+
+import { AgResolution } from '../../../model/agresolution';
+import { AgResolutionService } from '../../../services/agResolution/ag-resolution-service';
 
 @Component({
   selector: 'app-ag-notice-form',
@@ -18,12 +24,15 @@ export class AgNoticeForm implements OnInit {
   agNoticeForm: FormGroup;
   isEditMode = false;
   agNoticeId: string | null = null;
+  agResolutions$!: Observable<AgResolution[]>;
+  
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private agNoticeService: AgNoticeService
+    private agNoticeService: AgNoticeService,
+    private agResolutionService: AgResolutionService
   ) {
     this.agNoticeForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
@@ -38,6 +47,8 @@ export class AgNoticeForm implements OnInit {
     this.isEditMode = !!this.agNoticeId;
 
     if (this.isEditMode) {
+      this.agResolutions$ = this.agResolutionService.fetchAllByAgNotice(this.agNoticeId!);
+
       this.agNoticeService.fetchById(this.agNoticeId!).subscribe((agNotice: AgNotice) => {
         const dateObj = new Date(agNotice.ag_date);
 
@@ -78,5 +89,8 @@ export class AgNoticeForm implements OnInit {
         this.router.navigate(['/agnotices'], { queryParams: { created: 'true' } });
       });
     }
+  }
+  changeResolution(id: string): void {
+    this.router.navigate(['/agresolutions', id, 'edit']);
   }
 }

@@ -41,6 +41,11 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./ag-notices/ag-notices-module').then(m => m.AgNoticesModule),
   },
+  {
+    path: 'agresolutions',
+    loadChildren: () =>
+      import('./ag-resolutions/ag-resolutions-module').then(m => m.AgResolutionsModule),
+  },
   { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '**', redirectTo: '' },
 ];

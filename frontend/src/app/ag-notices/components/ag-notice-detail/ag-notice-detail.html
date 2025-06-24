@@ -12,17 +12,19 @@
       <div>Date: {{ agNotice.ag_date | date:'short' }}</div>
       <div>Lieu: {{ agNotice.place }}</div>
 
-      <h3>Résolutions associées</h3>
-      <ul *ngIf="agResolutions$ | async as agResolutions; else noResolutions">
-        <li *ngFor="let agResolution of agResolutions" class="space-y-4 listitems">
-          <strong>{{ agResolution.title }}</strong><br>
-          <div>Texte: {{ agResolution.resolution_text }}</div>
+      <strong>Résolutions associées</strong>
+      <ul *ngIf="agResolutions$ | async as agResolutions">
+        <ng-container *ngIf="agResolutions.length > 0; else noResolutions">
+          <li *ngFor="let agResolution of agResolutions" class="space-y-4 listitems">
+            <strong>{{ agResolution.title }}</strong><br>
+            <div>Texte: {{ agResolution.resolution_text }}</div>
 
-          <div>Majorité requise: article {{ agResolution.required_majority }}</div>
-          <div>Budget: {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</div>
+            <div>Majorité requise: article {{ agResolution.required_majority }}</div>
+            <div>Budget: {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</div>
 
-          <hr>
-        </li>
+            <hr>
+          </li>
+        </ng-container>
       </ul>
 
       <ng-template #noResolutions>

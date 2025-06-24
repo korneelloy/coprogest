@@ -46,6 +46,7 @@ export class AgNoticeDetail implements OnInit {
       this.agNotice$ = this.agNoticeService.fetchById(id);
     };    
   }
+  
   change(id: string): void {
     this.router.navigate(['/agnotices', id, 'edit']);
   }
