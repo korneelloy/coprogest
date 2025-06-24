@@ -8,7 +8,7 @@
 <ul *ngIf="unitGroup$ | async as unitGroup; else loading">
   <li class="space-y-4">
     <strong>{{ unitGroup.name }}</strong><br>
-    <div>Déscription: {{ unitGroup.description }}</div>
+    <div>Description: {{ unitGroup.description }}</div>
     <div>Tantièmes spécifique: {{ unitGroup.special_shares ? 'Oui' : 'Non' }}</div>
 
     <div>
@@ -16,17 +16,27 @@
       <ul>
         <li *ngFor="let unitUnitGroup of unitUnitGroups" class="space-y-4">
           {{ unitUnitGroup.unit_name }}
-          <span *ngIf="unitGroup.special_shares"> Millièmes ajustées:  {{ unitUnitGroup.adjusted_shares }}  </span>
-          <span *ngIf="!unitGroup.special_shares"> Millièmes standards:  {{ unitUnitGroup.unit_shares }}  </span>
-
-        </ul>
+          <span *ngIf="unitGroup.special_shares">
+            Millièmes ajustées: {{ unitUnitGroup.adjusted_shares }}
+          </span>
+          <span *ngIf="!unitGroup.special_shares">
+            Millièmes standards: {{ unitUnitGroup.unit_shares }}
+          </span>
+        </li>
+      </ul>
     </div>
 
-    <button (click)="change(unitGroup.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+    <button 
+      (click)="change(unitGroup.id)" 
+      class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center"
+    >
       Changer ce groupe
     </button><br>
-    
-    <button (click)="deletion(unitGroup.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+
+    <button 
+      (click)="deletion(unitGroup.id)" 
+      class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center"
+    >
       Supprimer ce groupe
     </button><br>
   </li>

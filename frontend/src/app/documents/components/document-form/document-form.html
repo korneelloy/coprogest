@@ -2,50 +2,51 @@
 <hr>
 
 <form [formGroup]="documentForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label>Nom: </label>
-    <input formControlName="name" placeholder="Nom du document" />
-    <div *ngIf="documentForm.get('name')?.invalid && documentForm.get('name')?.touched">
+  <div class="mb-4">
+    <label class="block mb-1">Nom: </label>
+    <input formControlName="name" placeholder="Nom du document" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+    <div *ngIf="documentForm.get('name')?.invalid && documentForm.get('name')?.touched" class="text-sm text-red-600 mt-1">
       <small *ngIf="documentForm.get('name')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="documentForm.get('name')?.errors?.['minlength']">* Ce champ doit contenir au moins 2 caractères.</small>
       <small *ngIf="documentForm.get('name')?.errors?.['maxlength']">* Ce champ ne peut contenir plus que 50 caractères.</small>
     </div>
   </div>
 
-  <div>
-    <label>Lien: </label>
-    <input type="url" formControlName="url" placeholder="https://drive.google.com/..." />
-    <div *ngIf="documentForm.get('url')?.invalid && documentForm.get('url')?.touched">
+  <div class="mb-4">
+    <label class="block mb-1">Lien: </label>
+    <input type="url" formControlName="url" placeholder="https://drive.google.com/..." class="w-full border border-gray-300 rounded-md px-3 py-2" />
+    <div *ngIf="documentForm.get('url')?.invalid && documentForm.get('url')?.touched" class="text-sm text-red-600 mt-1">
       <small *ngIf="documentForm.get('url')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="documentForm.get('url')?.errors?.['pattern']">* Ce champ doit contenir une URL valide.</small>
     </div>
   </div>
 
-  <div>
-    <label for="category">Catégorie</label>
-    <select id="category" formControlName="id_document_category" required>
+  <div class="mb-4">
+    <label for="category" class="block mb-1">Catégorie</label>
+    <select id="category" formControlName="id_document_category" required class="w-full border border-gray-300 rounded-md px-3 py-2">
       <option value="" disabled>Choisissez une catégorie</option>
       <option *ngFor="let cat of categories" [value]="cat.id">
         {{ cat.name }}
       </option>
     </select>
-    <div *ngIf="documentForm.get('id_document_category')?.invalid && documentForm.get('id_document_category')?.touched">
-      <small *ngIf="documentForm.get('id_document_category')?.errors?.['required']">* Veuillez choisir une catégorie.</small>
+    <div *ngIf="documentForm.get('id_document_category')?.invalid && documentForm.get('id_document_category')?.touched" class="text-sm text-red-600 mt-1">
+      <small>* Veuillez choisir une catégorie.</small>
     </div>
   </div>
   
-  <div>
-    <label>Description: </label>
+  <div class="mb-4">
+    <label class="block mb-1">Description: </label>
     <textarea 
       formControlName="description" 
       placeholder="Donnez ici un peu plus de détails sur le contenu du document (champ non obligatoire)." 
       style="width: 100%; min-height: 20px; overflow:hidden;"
       #description
       (input)="description.style.height = 'auto'; description.style.height = description.scrollHeight + 'px';"
+      class="w-full border border-gray-300 rounded-md px-3 py-2"
     ></textarea>
   </div>
 
-  <button type="submit" [disabled]="documentForm.invalid" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+  <button type="submit" [disabled]="documentForm.invalid" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
     {{ isEditMode ? 'Mettre à jour' : 'Créer' }} le document
   </button>
 </form>

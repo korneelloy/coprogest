@@ -1,18 +1,19 @@
-<h2><strong>Détails d'une catégorie</strong></h2>
-<hr>
+<h2 class="text-xl font-bold mb-2">
+  <strong>Détails d'une catégorie</strong>
+</h2>
+<hr class="mb-4">
 
-<div *ngIf="updatedMessage" class="success-message">
+<div *ngIf="updatedMessage" class="success-message text-green-600 font-medium mb-4">
   {{ updatedMessage }}
 </div>
 
-<ul *ngIf="documentCategory$ | async as documentCategory; else loading">
-  <li>
-    <strong>{{ documentCategory.name }}</strong><br>
-    <hr>
+<ul *ngIf="documentCategory$ | async as documentCategory; else loading" class="space-y-2">
+  <li class="border border-gray-200 rounded-md p-4">
+    <strong class="block text-lg">{{ documentCategory.name }}</strong>
+    <hr class="mt-2">
   </li>
 </ul>
 
 <ng-template #loading>
-  <p>Loading document...</p>
+  <p class="text-gray-500 italic">Loading document...</p>
 </ng-template>
-

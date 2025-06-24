@@ -5,12 +5,14 @@ import { DocumentCategory } from '../../../model/documentcategory';
 import { DocumentCategoryService } from '../../../services/document-category/document-category-service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { RouterModule } from '@angular/router';
+
 
 
 
 @Component({
   selector: 'app-document-category-list',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './document-category-list.html',
   styleUrl: './document-category-list.scss'
 })
