@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
-import { AgNotice } from '../../../model/agnotice';
-import { AgNoticeService } from '../../../services/agnotice/ag-notice-service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { AgNotice } from '../../../model/agnotice';
+import { AgNoticeService } from '../../../services/agnotice/ag-notice-service';
+
 
 @Component({
   selector: 'app-ag-notice-list',

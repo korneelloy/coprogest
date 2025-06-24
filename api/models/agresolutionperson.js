@@ -9,7 +9,7 @@ const { isValidUUIDv4, isStringMax20 } = require('../util/validation');
 
 module.exports = class AgResolutionPerson  {
   /**
-   * Create a new unit - unit group instance.
+   * Create a new ag_resolution / person instance.
    * @param {string} id_ag_resolution - UUID of the agresolution
    * @param {string} id_person - UUID of the person
    * @param {string} vote - majority needed to vote - not null - enum {for, against, abstention}
@@ -66,66 +66,25 @@ module.exports = class AgResolutionPerson  {
   /**********************************CRUD operations************************************/
 
   /**
-   * Fetch all unit  unit groups from the database.
+   * Fetch all ag_resolution / persons from the database.
    * @returns {Promise<Object[]>}
    */
   static async fetchAll() {
-    const [allUnitUnitGroups] = await db.execute(`SELECT 
-      unit_unit_group.id_unit_group,
-      unit_unit_group.id_unit,
-      unit_unit_group.adjusted_shares,
-      unit_group.name as unit_group_name
-      FROM unit_unit_group 
-      LEFT JOIN unit_group ON unit_unit_group.id_unit_group = unit_group.id
-      ;`);
-    return allUnitUnitGroups;
+    const [all] = await db.execute(`SELECT * FROM ag_resolution_person;`);
+    return all;
   }
 
-  /**
-   * Fetch all unit  unit groups from the database for one particular unit.
-   * @returns {Promise<Object[]>}
-   */
-  static async fetchAllByUnit(id) {
-    const [allUnitUnitGroupsByUnit] = await db.execute(`SELECT 
-      unit_unit_group.id_unit_group,
-      unit_unit_group.adjusted_shares,
-      unit_group.name as unit_group_name
-      FROM unit_unit_group 
-      LEFT JOIN unit_group ON unit_unit_group.id_unit_group = unit_group.id
-      WHERE id_unit = ?;`, [id]);
-    return allUnitUnitGroupsByUnit;
-  }
-
-
-  /**
-   * Fetch all unit  unit groups from the database for one particular unit group
-   * @returns {Promise<Object[]>}
-   */
-  static async fetchAllByUnitGroup(id) {
-    const [allUnitUnitGroupsByUnitGroup] = await db.execute(`SELECT 
-      unit_unit_group.id_unit_group,
-      unit_unit_group.adjusted_shares,
-      unit_unit_group.id_unit,
-      unit.name as unit_name,
-      unit.shares as unit_shares
-      FROM unit_unit_group 
-      LEFT JOIN unit ON unit_unit_group.id_unit = unit.id
-      WHERE id_unit_group = ?;`, [id]);
-    return allUnitUnitGroupsByUnitGroup;
-  }
-
-
-  /**
-   * Fetch a unit/unit group by ID.
-   * @param {string} id_unit
-   * @param {string} id_unit_group
+   /**
+   * Fetch a ag_resolution / person  by ID.
+   * @param {string} id_ag_resolution
+   * @param {string} id_person
    * @returns {Promise<Object>}
    */
-  static async get(id_unit, id_unit_group) {
-    const [rows] = await db.execute(`SELECT * FROM unit_unit_group WHERE id_unit = ? AND id_unit_group = ?`, [id_unit, id_unit_group]);
+  static async get(id_ag_resolution, id_person) {
+    const [rows] = await db.execute(`SELECT * FROM ag_resolution_person WHERE id_ag_resolution = ? AND id_person = ?`, [id_ag_resolution, id_person]);
    
     if (rows.length === 0) {
-      const error = new Error('Unit / unit group not found');
+      const error = new Error('ag_resolution / person not found');
       error.statusCode = 404;
       throw error;
     }
@@ -133,23 +92,23 @@ module.exports = class AgResolutionPerson  {
   }
   
   /**
-   * Insert the current unit / unit group into the database.
+   * Insert the current ag_resolution / person into the database.
    * @returns {Promise<Object>}
    */
   async post() {
     try {
       const [result] = await db.execute(
-        `INSERT INTO unit_unit_group 
-          (id_unit, id_unit_group, adjusted_shares) 
+        `INSERT INTO ag_resolution_person 
+          (id_ag_resolution, id_person, vote) 
           VALUES (?, ?, ?)`, 
-          [this.id_unit, this.id_unit_group, this.adjusted_shares]
+          [this.id_ag_resolution, this.id_person, this.vote]
         );
       if (result.affectedRows === 0) {
         const error = new Error('Insert failed: no rows affected.');
         error.statusCode = 500;
         throw error;
       }
-      return { message: 'Unit Unit group created successfully' };
+      return { message: 'ag_resolution / person created successfully' };
     } catch (err) {
       if (err.code === 'ER_NO_REFERENCED_ROW_2') {
         const error = new Error('Foreign key constraint violated');
@@ -157,7 +116,7 @@ module.exports = class AgResolutionPerson  {
         throw error;
       }
       if (err.code === 'ER_DUP_ENTRY') {
-        const error = new Error('Duplicate entry: this unit is already in this group');
+        const error = new Error('Duplicate entry: this ag_resolution or person is already in this group');
         error.statusCode = 409;
         throw error;
       }
@@ -166,24 +125,24 @@ module.exports = class AgResolutionPerson  {
   }
   
   /**
-   * Update the current unit in the database.
+   * Update the current ag_resolution / person  in the database.
    * @returns {Promise<Object>}
    */
   async update() {
     try {
       const [result] = await db.execute(
-        `UPDATE unit_unit_group
-          SET adjusted_shares = ?
-          WHERE id_unit = ? AND id_unit_group = ?`,
-          [this.adjusted_shares ?? null, this.id_unit, this.id_unit_group]
+        `UPDATE ag_resolution_person 
+          SET vote = ?
+          WHERE id_ag_resolution = ? AND id_person = ?`,
+          [this.vote, this.id_ag_resolution, this.id_person]
         );
 
       if (result.affectedRows === 0) {
-        const error = new Error('Unit unit group not found');
+        const error = new Error('ag_resolution / person not found');
         error.statusCode = 404;
         throw error;
       }
-      return { message: 'Unit / unit group updated successfully' };
+      return { message: 'ag_resolution / person updated successfully' };
     } catch (err) {
       if (err.code === 'ER_NO_REFERENCED_ROW_2') {
         const error = new Error('Foreign key constraint violated');
@@ -195,33 +154,18 @@ module.exports = class AgResolutionPerson  {
   }
 
   /**
-    * Delete a unit / unitgroup by ID.
-    * @param {string} id
-    * @returns {Promise<Object>}
-    */
-  static async deleteAllByUnit(id_unit) {
-    const [result] = await db.execute(`DELETE FROM unit_unit_group WHERE id_unit = ?`, [id_unit]);
-    if (result.affectedRows === 0) {
-      const error = new Error('Unit/unit group not found');
-      error.statusCode = 404;
-      throw error;
-    }
-    return { message: 'Unit / Unitgroups deleted successfully' };
-  }
-
-  /**
-     * Delete a unit / unitgroup by ID.
+     * Delete a ag_resolution / person by ID.
      * @param {string} id
      * @returns {Promise<Object>}
      */
-    static async delete(id_unit, id_unit_group) {
-      const [result] = await db.execute(`DELETE FROM unit_unit_group WHERE id_unit = ? AND id_unit_group = ?`, [id_unit, id_unit_group]);
+    static async delete(id_ag_resolution, id_person) {
+      const [result] = await db.execute(`DELETE FROM ag_resolution_person WHERE id_ag_resolution = ? AND id_person = ?`, [id_ag_resolution, id_person]);
       if (result.affectedRows === 0) {
-        const error = new Error('Unit/unit group not found');
+        const error = new Error('ag_resolution / person not found');
         error.statusCode = 404;
         throw error;
       }
-      return { message: 'Unit / Unitgroup deleted successfully' };
+      return { message: 'ag_resolution / person deleted successfully' };
     }
   
 }

@@ -5,17 +5,39 @@
   {{ updatedMessage }}
 </div>
 
-<ul *ngIf="agNotice$ | async as agNotice; else loading">
-  <li class="space-y-4">
-    <strong>{{ agNotice.title }}</strong><br>
-    <div>Date: {{ agNotice.ag_date | date:'short' }}</div>
-    <div>Lieu: {{ agNotice.place }}</div>
-    
-    <button (click)="change(agNotice.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-      Modifier la convocation
-    </button><br>
-  </li>
-</ul>
+<div *ngIf="agNotice$ | async as agNotice; else loading">
+  <div>
+    <div class="space-y-4">
+      <strong>{{ agNotice.title }}</strong><br>
+      <div>Date: {{ agNotice.ag_date | date:'short' }}</div>
+      <div>Lieu: {{ agNotice.place }}</div>
+
+      <strong>Résolutions associées</strong>
+      <ul *ngIf="agResolutions$ | async as agResolutions">
+        <ng-container *ngIf="agResolutions.length > 0; else noResolutions">
+          <li *ngFor="let agResolution of agResolutions" class="space-y-4 listitems">
+            <strong>{{ agResolution.title }}</strong><br>
+            <div>Texte: {{ agResolution.resolution_text }}</div>
+
+            <div>Majorité requise: article {{ agResolution.required_majority }}</div>
+            <div>Budget: {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</div>
+
+            <hr>
+          </li>
+        </ng-container>
+      </ul>
+
+      <ng-template #noResolutions>
+        <p>Aucune résolution associée.</p>
+      </ng-template>
+    </div>
+
+
+      <button (click)="change(agNotice.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+        Modifier la convocation
+      </button><br>
+    </div>
+  </div>
 
 <ng-template #loading>
   <p>Loading unit...</p>

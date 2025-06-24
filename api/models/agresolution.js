@@ -146,6 +146,18 @@ module.exports = class AgResolution extends BaseClass {
   }
 
   /**
+     * Fetch all ag resolutions by ag notice ID.
+     * @param {string} id_ag_notice
+     * @returns {Promise<Object>}
+     */
+  static async getByAgNotice(id_ag_notice) {
+    const [agResolutions] = await db.execute(`SELECT * FROM ag_resolution WHERE id_ag_notice = ?`, [id_ag_notice]);
+    console.log("xxxxxx");
+    return agResolutions;
+  }
+
+
+  /**
    * Fetch a ag resolution by ID.
    * @param {string} id
    * @returns {Promise<Object>}

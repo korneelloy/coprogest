@@ -17,6 +17,23 @@ exports.getAll = async (req, res, next) => {
 };
 
 /**
+ * Retrieve and return a agresolution by ag notice.
+ */
+exports.getByAgNotice = async (req, res, next) => {
+  try {
+    const id_ag_notice = req.params.id_ag_notice;
+    console.log(id_ag_notice);
+    const agResolution = await AgResolution.getByAgNotice(id_ag_notice);
+    res.status(200).json(agResolution);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
+/**
  * Retrieve and return a agresolution by its ID.
  */
 exports.getOne = async (req, res, next) => {
