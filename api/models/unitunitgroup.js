@@ -6,7 +6,6 @@
 const db = require('../util/database');
 const { isValidUUIDv4 } = require('../util/validation');
 
-
 module.exports = class UnitUnitGroup  {
   /**
    * Create a new unit - unit group instance.
@@ -19,7 +18,7 @@ module.exports = class UnitUnitGroup  {
     this.id_unit_group = id_unit_group;
     this.adjusted_shares = adjusted_shares;
   }
-  
+
   /****************************getters and setters for data validation***********************************/
 
   get id_unit() {

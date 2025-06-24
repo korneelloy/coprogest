@@ -27,7 +27,7 @@ router.post('/', unitUnitGroupController.postOne);
 // Update a unit / unit group relation by ID
 router.put('/:id_unit/:id_unit_group', unitUnitGroupController.updateOne);
 
-// Delete a all unit / unit group relations by Unit ID
+// Delete a unit / unit group relations by Unit ID
 router.delete('/deleteByUnit/:id_unit', unitUnitGroupController.deleteAllByUnit);
 
 // Delete a unit / unit group relation by ID
