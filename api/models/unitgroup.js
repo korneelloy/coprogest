@@ -68,15 +68,10 @@ module.exports = class Unitgroup extends BaseClass {
   }
 
   set special_shares(value) {
-    if (typeof value !== "boolean") {
-      const error = new Error('Special shares should be a boolean value');
+    if (value !== 0 && value !== 1) {
+      const error = new Error('Invalid special_shares');
       error.statusCode = 400;
       throw error;
-    }
-    if (value === 0) {
-      value = false;
-    } else if (value === 1) {
-      value = true;
     }
     this._special_shares = value;
   }

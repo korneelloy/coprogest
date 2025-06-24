@@ -87,7 +87,7 @@ module.exports = class AgResolution extends BaseClass {
   }
   
   set budget(value) {
-    if (typeof value !== 'boolean') {
+    if (value !== 0 && value !== 1) {
       const error = new Error('Invalid budget');
       error.statusCode = 400;
       throw error;
@@ -100,7 +100,7 @@ module.exports = class AgResolution extends BaseClass {
   }
   
   set id_ag_minutes(value) {
-    if (!isValidUUIDv4(value)) {
+    if (!isValidUUIDv4(value) && value !== null) {
       const error = new Error('Invalid id ag minutes');
       error.statusCode = 400;
       throw error;

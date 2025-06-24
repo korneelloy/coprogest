@@ -1,5 +1,3 @@
-import { Timestamp } from "rxjs";
-
 export interface AgNotice {
   id: string;
   title: string;
