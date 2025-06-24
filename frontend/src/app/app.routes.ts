@@ -36,6 +36,11 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./unit-groups/unit-groups-module').then(m => m.UnitGroupsModule),
   },
+  {
+    path: 'agnotices',
+    loadChildren: () =>
+      import('./ag-notices/ag-notices-module').then(m => m.AgNoticesModule),
+  },
   { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '**', redirectTo: '' },
 ];

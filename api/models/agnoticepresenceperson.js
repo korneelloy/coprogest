@@ -4,7 +4,7 @@
  */
 
 const db = require('../util/database');
-const { isValidUUIDv4, isStringMax20, isStringMax50 } = require('../util/validation');
+const { isValidUUIDv4, isStringMax20, isNullOrStringMax50 } = require('../util/validation');
 
 
 module.exports = class AgNoticePresencePerson  {
@@ -70,7 +70,7 @@ module.exports = class AgNoticePresencePerson  {
   }
  
   set represented_by(value) {
-    if (!isStringMax50(value)) {
+    if (!isNullOrStringMax50(value)) {
       const error = new Error('Invalid represented_by status');
       error.statusCode = 400;
       throw error;

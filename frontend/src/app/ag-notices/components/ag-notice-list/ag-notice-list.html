@@ -1,0 +1,35 @@
+<h2><strong>Liste des convocations d'AG</strong></h2>
+<hr>
+
+<div *ngIf="createdMessage" class="success-message">
+  {{ createdMessage }}
+</div>
+
+<div *ngIf="deletedMessage" class="success-message">
+  {{ deletedMessage }}
+</div>
+
+<ul *ngIf="agnotices$ | async as agnotices; else loading">
+  <li *ngFor="let agnotice of agnotices" class="space-y-4 listitems">
+    <strong>{{ agnotice.title }}</strong><br>
+    <div>Date: {{ agnotice.ag_date | date:'short' }}</div>
+    <div>Lieu: {{ agnotice.place }}</div>
+
+    <button (click)="seeDetails(agnotice.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+      Voir les details
+    </button><br>
+    <hr>
+  </li>
+</ul>
+
+<div class="m-4">
+
+  <a routerLink="/agnotices/new"
+    class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+    Créer une nouvelle convocation
+  </a>
+</div>
+
+<ng-template #loading>
+  <p>Loading documents...</p>
+</ng-template>
