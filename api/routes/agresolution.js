@@ -10,6 +10,9 @@ const router = express.Router();
 // Get all ag resolutions
 router.get('/', agResolutionController.getAll);
 
+// Get all ag resolutions by ag notice
+router.get('/getbyagnotice/:id_ag_notice', agResolutionController.getByAgNotice);
+
 // Get a single ag resolution by ID
 router.get('/:id', agResolutionController.getOne);
 
