@@ -2,27 +2,42 @@
 <hr>
 
 <form [formGroup]="personForm" (ngSubmit)="onSubmit()">
-  <div>
+  <div class="mb-4">
     <label>Email: </label>
-    <input type="email" formControlName="email" placeholder="Email" readonly class="bg-gray-100 text-gray-600 cursor-not-allowed" />
-    <div *ngIf="personForm.get('email')?.invalid && personForm.get('email')?.touched">
+    <input 
+      type="email" 
+      formControlName="email" 
+      placeholder="Email" 
+      readonly 
+      class="bg-gray-100 text-gray-600 cursor-not-allowed w-full px-2 py-1 rounded"
+    />
+    <div *ngIf="personForm.get('email')?.invalid && personForm.get('email')?.touched" class="text-sm text-red-600 mt-1">
       <small *ngIf="personForm.get('email')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="personForm.get('email')?.errors?.['pattern']">* Ce champ doit correspondre à un mail valide.</small>
     </div>
   </div>
 
-  <div>
+  <div class="mb-4">
     <label>Mot de passe: </label>
-    <input type="password" formControlName="password" placeholder="Password123!" />
-    <div *ngIf="personForm.get('password')?.invalid && personForm.get('password')?.touched">
+    <input 
+      type="password" 
+      formControlName="password" 
+      placeholder="Password123!" 
+      class="w-full px-2 py-1 rounded border border-gray-300"
+    />
+    <div *ngIf="personForm.get('password')?.invalid && personForm.get('password')?.touched" class="text-sm text-red-600 mt-1">
       <small *ngIf="personForm.get('password')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
-      <small *ngIf="personForm.get('password')?.errors?.['pattern']">* Le mot de passe doit contenir au minimum 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.</small>
-
+      <small *ngIf="personForm.get('password')?.errors?.['pattern']">
+        * Le mot de passe doit contenir au minimum 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.
+      </small>
     </div>
   </div>
 
-  <button type="submit" [disabled]="personForm.invalid" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+  <button 
+    type="submit" 
+    [disabled]="personForm.invalid" 
+    class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4"
+  >
     Modifier mon mot de passe
   </button>
 </form>
-

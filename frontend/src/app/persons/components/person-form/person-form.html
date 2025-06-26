@@ -2,66 +2,66 @@
 <hr>
 
 <form [formGroup]="personForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label>Email: </label>
-    <input formControlName="email" placeholder="Email" />
-    <div *ngIf="personForm.get('email')?.invalid && personForm.get('email')?.touched">
+  <div class="mb-4">
+    <label class="block mb-1">Email:</label>
+    <input formControlName="email" placeholder="Email" class="w-full px-3 py-2 border rounded-md" />
+    <div *ngIf="personForm.get('email')?.invalid && personForm.get('email')?.touched" class="text-red-600 text-sm mt-1">
       <small *ngIf="personForm.get('email')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="personForm.get('email')?.errors?.['pattern']">* Ce champ doit correspondre à un mail valide.</small>
     </div>
   </div>
 
-  <div *ngIf="isEditMode">
-    <label>Prénom: </label>
-    <input type="first_name" formControlName="first_name" placeholder="Jean" />
-    <div *ngIf="personForm.get('first_name')?.invalid && personForm.get('first_name')?.touched">
+  <div *ngIf="isEditMode" class="mb-4">
+    <label class="block mb-1">Prénom:</label>
+    <input type="text" formControlName="first_name" placeholder="Jean" class="w-full px-3 py-2 border rounded-md" />
+    <div *ngIf="personForm.get('first_name')?.invalid && personForm.get('first_name')?.touched" class="text-red-600 text-sm mt-1">
       <small *ngIf="personForm.get('first_name')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
     </div>
   </div>
 
-  <div *ngIf="isEditMode">
-    <label>Nom de famille: </label>
-    <input type="last_name" formControlName="last_name" placeholder="Dupont" />
-    <div *ngIf="personForm.get('last_name')?.invalid && personForm.get('last_name')?.touched">
+  <div *ngIf="isEditMode" class="mb-4">
+    <label class="block mb-1">Nom de famille:</label>
+    <input type="text" formControlName="last_name" placeholder="Dupont" class="w-full px-3 py-2 border rounded-md" />
+    <div *ngIf="personForm.get('last_name')?.invalid && personForm.get('last_name')?.touched" class="text-red-600 text-sm mt-1">
       <small *ngIf="personForm.get('last_name')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
     </div>
   </div>
 
-  <div *ngIf="isEditMode">
-    <label>Téléphone: </label>
-    <input type="telephone" formControlName="telephone" placeholder="0612345678" />
-    <div *ngIf="personForm.get('telephone')?.invalid && personForm.get('telephone')?.touched">
+  <div *ngIf="isEditMode" class="mb-4">
+    <label class="block mb-1">Téléphone:</label>
+    <input type="tel" formControlName="telephone" placeholder="0612345678" class="w-full px-3 py-2 border rounded-md" />
+    <div *ngIf="personForm.get('telephone')?.invalid && personForm.get('telephone')?.touched" class="text-red-600 text-sm mt-1">
       <small *ngIf="personForm.get('telephone')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
     </div>
   </div>
 
-  <div *ngIf="isEditMode">
-    <label>N° + rue: </label>
-    <input type="street" formControlName="street" placeholder="6 rue Jules Vernes" />
-    <div *ngIf="personForm.get('street')?.invalid && personForm.get('street')?.touched">
+  <div *ngIf="isEditMode" class="mb-4">
+    <label class="block mb-1">N° + rue:</label>
+    <input type="text" formControlName="street" placeholder="6 rue Jules Vernes" class="w-full px-3 py-2 border rounded-md" />
+    <div *ngIf="personForm.get('street')?.invalid && personForm.get('street')?.touched" class="text-red-600 text-sm mt-1">
       <small *ngIf="personForm.get('street')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
     </div>
   </div>
 
-  <div *ngIf="isEditMode">
-    <label>Code postale: </label>
-    <input type="postal_code" formControlName="postal_code" placeholder="33000" />
-    <div *ngIf="personForm.get('postal_code')?.invalid && personForm.get('postal_code')?.touched">
+  <div *ngIf="isEditMode" class="mb-4">
+    <label class="block mb-1">Code postale:</label>
+    <input type="text" formControlName="postal_code" placeholder="33000" class="w-full px-3 py-2 border rounded-md" />
+    <div *ngIf="personForm.get('postal_code')?.invalid && personForm.get('postal_code')?.touched" class="text-red-600 text-sm mt-1">
       <small *ngIf="personForm.get('postal_code')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
     </div>
   </div>
 
-  <div *ngIf="isEditMode">
-    <label>Ville: </label>
-    <input type="city" formControlName="city" placeholder="Bordeaux" />
-    <div *ngIf="personForm.get('city')?.invalid && personForm.get('city')?.touched">
+  <div *ngIf="isEditMode" class="mb-4">
+    <label class="block mb-1">Ville:</label>
+    <input type="text" formControlName="city" placeholder="Bordeaux" class="w-full px-3 py-2 border rounded-md" />
+    <div *ngIf="personForm.get('city')?.invalid && personForm.get('city')?.touched" class="text-red-600 text-sm mt-1">
       <small *ngIf="personForm.get('city')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
     </div>
   </div>
 
-  <div>
-    <label for="role">Role</label>
-    <select id="role" formControlName="id_role" required>
+  <div class="mb-4">
+    <label for="role" class="block mb-1">Role</label>
+    <select id="role" formControlName="id_role" required class="w-full px-3 py-2 border rounded-md">
       <option value="" disabled>Choisissez un role</option>
       <option *ngFor="let role of roles" [value]="role.id">
         {{ role.name }}
@@ -69,9 +69,7 @@
     </select>    
   </div>
   
-
-  <button type="submit" [disabled]="personForm.invalid" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+  <button type="submit" [disabled]="personForm.invalid" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
     {{ isEditMode ? 'Mettre à jour' : 'Créer' }} le copropriétaire
   </button>
 </form>
-

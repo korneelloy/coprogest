@@ -1,28 +1,29 @@
-<h2><strong>Détails d'une convocation</strong></h2>
-<hr>
+<h2 class="text-xl font-bold mb-2">
+  Détails d'une convocation
+</h2>
+<hr class="mb-4">
 
-<div *ngIf="updatedMessage" class="success-message">
+<div *ngIf="updatedMessage" class="text-green-600 font-medium mb-4">
   {{ updatedMessage }}
 </div>
 
 <div *ngIf="agNotice$ | async as agNotice; else loading">
-  <div>
-    <div class="space-y-4">
+  <div class="space-y-4">
+    <div>
       <strong>{{ agNotice.title }}</strong><br>
       <div>Date: {{ agNotice.ag_date | date:'short' }}</div>
       <div>Lieu: {{ agNotice.place }}</div>
+    </div>
 
+    <div>
       <strong>Résolutions associées</strong>
       <ul *ngIf="agResolutions$ | async as agResolutions">
         <ng-container *ngIf="agResolutions.length > 0; else noResolutions">
-          <li *ngFor="let agResolution of agResolutions" class="space-y-4 listitems">
-            <strong>{{ agResolution.title }}</strong><br>
+          <li *ngFor="let agResolution of agResolutions" class="space-y-2 border-b border-gray-300 pb-4">
+            <strong >{{ agResolution.title }}</strong><br>
             <div>Texte: {{ agResolution.resolution_text }}</div>
-
             <div>Majorité requise: article {{ agResolution.required_majority }}</div>
             <div>Budget: {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</div>
-
-            <hr>
           </li>
         </ng-container>
       </ul>
@@ -32,12 +33,13 @@
       </ng-template>
     </div>
 
-
-      <button (click)="change(agNotice.id)" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-        Modifier la convocation
-      </button><br>
-    </div>
+    <button 
+      (click)="change(agNotice.id)" 
+      class="whitespace-nowrap flex-1 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200">
+      Modifier la convocation
+    </button>
   </div>
+</div>
 
 <ng-template #loading>
   <p>Loading unit...</p>

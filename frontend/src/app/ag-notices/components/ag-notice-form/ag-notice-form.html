@@ -1,11 +1,14 @@
-<h2><strong>Formulaire pour convocation AG</strong></h2>
-<hr />
+<h2 class="text-xl font-bold mb-2">
+  Formulaire pour convocation AG
+</h2>
+<hr class="mb-4" />
 
-<form [formGroup]="agNoticeForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="agNoticeForm" (ngSubmit)="onSubmit()" class="space-y-6">
   <div>
-    <label>Titre: </label>
-    <input formControlName="title" placeholder="AG du 5 juin 2025" />
-    <div *ngIf="agNoticeForm.get('title')?.invalid && agNoticeForm.get('title')?.touched">
+    <label class="block font-medium mb-1">Titre:</label>
+    <input formControlName="title" placeholder="AG du 5 juin 2025"
+      class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+    <div class="text-sm text-red-600 mt-1" *ngIf="agNoticeForm.get('title')?.invalid && agNoticeForm.get('title')?.touched">
       <small *ngIf="agNoticeForm.get('title')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="agNoticeForm.get('title')?.errors?.['minlength']">* Minimum 2 caractères.</small>
       <small *ngIf="agNoticeForm.get('title')?.errors?.['maxlength']">* Maximum 50 caractères.</small>
@@ -13,9 +16,10 @@
   </div>
 
   <div>
-    <label>Lieu: </label>
-    <input formControlName="place" placeholder="Chez M. Dupont" />
-    <div *ngIf="agNoticeForm.get('place')?.invalid && agNoticeForm.get('place')?.touched">
+    <label class="block font-medium mb-1">Lieu:</label>
+    <input formControlName="place" placeholder="Chez M. Dupont"
+      class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+    <div class="text-sm text-red-600 mt-1" *ngIf="agNoticeForm.get('place')?.invalid && agNoticeForm.get('place')?.touched">
       <small *ngIf="agNoticeForm.get('place')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="agNoticeForm.get('place')?.errors?.['minlength']">* Minimum 2 caractères.</small>
       <small *ngIf="agNoticeForm.get('place')?.errors?.['maxlength']">* Maximum 255 caractères.</small>
@@ -23,48 +27,49 @@
   </div>
 
   <div>
-    <label>Date: </label>
-    <input formControlName="ag_date" type="date" />
-    <div *ngIf="agNoticeForm.get('ag_date')?.invalid && agNoticeForm.get('ag_date')?.touched">
-      <small *ngIf="agNoticeForm.get('ag_date')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
-    </div>
-  </div>
-
-  <div>
-    <label>Heure: </label>
-    <input formControlName="ag_time" type="time" />
-    <div *ngIf="agNoticeForm.get('ag_time')?.invalid && agNoticeForm.get('ag_time')?.touched">
+    <label class="block font-medium mb-1">Date:</label>
+    <input formControlName="ag_date" type="date"
+      class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+    <div class="text-sm text-red-600 mt-1" *ngIf="agNoticeForm.get('ag_date')?.invalid && agNoticeForm.get('ag_date')?.touched">
       <small>* Ce champ ne peut pas être vide.</small>
     </div>
   </div>
 
-  <button
-    type="submit"
-    [disabled]="agNoticeForm.invalid"
-    class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+  <div>
+    <label class="block font-medium mb-1">Heure:</label>
+    <input formControlName="ag_time" type="time"
+      class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+    <div class="text-sm text-red-600 mt-1" *ngIf="agNoticeForm.get('ag_time')?.invalid && agNoticeForm.get('ag_time')?.touched">
+      <small>* Ce champ ne peut pas être vide.</small>
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="agNoticeForm.invalid"
+    class="whitespace-nowrap flex-1 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200 m-4">
     {{ isEditMode ? 'Mettre à jour' : 'Créer' }} la convocation
   </button>
-  <br>
 
-  <strong>Résolutions associées</strong>
-  <ul *ngIf="agResolutions$ | async as agResolutions">
-    <ng-container *ngIf="agResolutions.length > 0; else noResolutions">
-      <li *ngFor="let agResolution of agResolutions" class="space-y-4 listitems">
-        <strong>{{ agResolution.title }}</strong><br>
-        <div>Texte: {{ agResolution.resolution_text }}</div>
-        <div>Majorité requise: article {{ agResolution.required_majority }}</div>
-        <div>Budget: {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</div>
-        <div>
-          <a [routerLink]="['/agresolutions', agResolution.id, 'edit']" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-            Modifier la résolution
-          </a>
-        </div>
-        <hr>
-      </li>
-    </ng-container>
-  </ul>
+  <div>
+    <strong>Résolutions associées</strong>
+    <ul *ngIf="agResolutions$ | async as agResolutions" class="mt-4 space-y-4">
+      <ng-container *ngIf="agResolutions.length > 0; else noResolutions">
+        <li *ngFor="let agResolution of agResolutions" class="border-b border-gray-300 pb-4 space-y-2">
+          <strong>{{ agResolution.title }}</strong><br>
+          <div>Texte: {{ agResolution.resolution_text }}</div>
+          <div>Majorité requise: article {{ agResolution.required_majority }}</div>
+          <div>Budget: {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</div>
+          <div>
+            <a [routerLink]="['/agresolutions', agResolution.id, 'edit']"
+              class="inline-block bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200">
+              Modifier la résolution
+            </a>
+          </div>
+        </li>
+      </ng-container>
+    </ul>
 
-  <ng-template #noResolutions>
-    <p>Aucune résolution associée.</p>
-  </ng-template>  
+    <ng-template #noResolutions>
+      <p>Aucune résolution associée.</p>
+    </ng-template>
+  </div>
 </form>

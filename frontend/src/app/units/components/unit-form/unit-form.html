@@ -45,29 +45,9 @@
     </div>
   </div>
 
-  <div>mis a jour des groupes > voir groupes</div>
-<!--
- 
-  <div>
-    <div>Groupes: </div>
-    <ul>
-      <li *ngFor="let unitGroup of unitGroups">
-        <label>
-          <input 
-            type="checkbox" 
-            [value]="unitGroup.id"
-            [checked]="selectedUnitGroupIds.includes(unitGroup.id)"
-            class="groups"
-          />
-          {{ unitGroup.name }}
-        </label>
-      </li>
-    </ul>
-  </div>
--->
+  <div>mis à jour des groupes > voir groupes</div>
 
-
-  <button type="submit" [disabled]="unitForm.invalid" class="whitespace-nowrap flex-1 text-black hover:text-indigo-600 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+  <button type="submit" [disabled]="unitForm.invalid" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
     {{ isEditMode ? 'Mettre à jour' : 'Créer' }} le lot
   </button>
 </form>
