@@ -90,7 +90,4 @@ export class AgNoticeForm implements OnInit {
       });
     }
   }
-  changeResolution(id: string): void {
-    this.router.navigate(['/agresolutions', id, 'edit']);
-  }
 }

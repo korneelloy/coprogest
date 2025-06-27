@@ -10,7 +10,6 @@ exports.login = async (req, res) => {
 
   try {
     const person = await Person.getUserByEmail(email);
-    console.log(person);
 
     if (!person) {
       return res.status(401).json({ message: 'Invalid email or password' });

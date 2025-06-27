@@ -117,46 +117,6 @@ export class UnitGroupForm implements OnInit {
     }
   }
 
-
-/**  
-  onSubmit(): void {
-
-    const units = document.getElementsByClassName('units');
-    const checkedUnits = [];
-    
-    for (let i = 0; i < units.length; i++) {
-      if (units[i].checked) {
-        checkedUnits.push(units[i].value);
-      }
-    }
-    
-    console.log(checkedUnits);
-    
-    if (this.unitGroupForm.invalid) return;
-
-    const formData = this.unitGroupForm.value;
-
-    if(formData.special_shares === 0) {
-      formData.special_shares = false;
-    } else {
-      formData.special_shares = true;
-    }
-    console.log(formData);
-    
-    if (this.isEditMode) {
-      this.unitGroupService.update(this.unitGroupId!, formData).subscribe(() => {
-        this.router.navigate(['/unitgroups', this.unitGroupId], { queryParams: { updated: 'true' } });
-      });
-      
-    } else {
-      this.unitGroupService.create(formData).subscribe(() => {
-        this.router.navigate(['/unitgroups'], { queryParams: { created: 'true' } });
-      });
-    }
-  }
-
-   */
-
   changeMembers(unitGroupId: string) {
     this.router.navigate(['/unitunitgroups', unitGroupId, 'edit']);
   }

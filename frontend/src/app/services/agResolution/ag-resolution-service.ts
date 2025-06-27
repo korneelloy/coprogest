@@ -38,7 +38,7 @@ export class AgResolutionService {
     return this.http
       .get<AgResolution>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
-        tap(() => console.log(`Fetched ag notice id=${id}`)),
+        tap(() => console.log(`Fetched ag resolution id=${id}`)),
         catchError(this.handleError)
       );
   }

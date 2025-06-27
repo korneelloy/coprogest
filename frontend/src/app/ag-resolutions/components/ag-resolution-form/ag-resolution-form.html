@@ -3,7 +3,7 @@
 </h2>
 <hr class="mb-4" />
 
-<form [formGroup]="agResolutionForm" (ngSubmit)="onSubmit()" class="space-y-6">
+<form *ngIf="formReady" [formGroup]="agResolutionForm" (ngSubmit)="onSubmit()" class="space-y-6">
   <div>
     <label class="block font-medium mb-1">Titre: </label>
     <input formControlName="title" placeholder="Choix d'un nouveau syndic"
@@ -20,7 +20,7 @@
     <textarea 
       formControlName="resolution_text" 
       placeholder="Après présentation du diagnostic technique de l’immeuble par le cabinet d’architecture DUPRÉ, il est proposé aux copropriétaires ..." 
-      style="width: 100%; min-height: 20px; overflow:hidden;"
+      style="width: 100%; min-height: 200px; overflow:hidden;"
       #description
       (input)="description.style.height = 'auto'; description.style.height = description.scrollHeight + 'px';"
       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
@@ -28,10 +28,100 @@
     <div *ngIf="agResolutionForm.get('resolution_text')?.invalid && agResolutionForm.get('resolution_text')?.touched" class="text-sm text-red-600 mt-1">
       <small *ngIf="agResolutionForm.get('resolution_text')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="agResolutionForm.get('resolution_text')?.errors?.['minlength']">* Minimum 2 caractères.</small>
-      <small *ngIf="agResolutionForm.get('resolution_text')?.errors?.['maxlength']">* Maximum 255 caractères.</small>
     </div>
   </div>
 
+  <div>
+    <label class="block font-medium mb-1">Majorité requise: </label>
+    <select id="required_majority" formControlName="required_majority" required class="w-full px-3 py-2 border rounded-md">
+      <option value="" disabled>Choisissez une majorité</option>
+      <option value="24">Article 24</option>
+      <option value="25">Article 25</option>
+      <option value="25-1">Article 25-1</option>
+      <option value="26">Article 26</option>
+      <option value="unanimity">Unanimité</option>
+      <option value="no_vote">Résolution sans vote</option>
+    </select>    
+  </div>
+
+  <div>
+    <label class="block font-medium mb-1">Budget: </label>
+    <select id="budget" formControlName="budget" required class="w-full px-3 py-2 border rounded-md">
+      <option value="" disabled>Cette résolution est-elle liée à un budget? </option>
+      <option value="0">Non</option>
+      <option value="1">Oui</option>
+    </select>    
+  </div>
+
+
+  <div *ngIf="agResolutionForm.get('budget')!.value == '1'" class="border border-gray-300 rounded-md p-4 mt-4">
+    <h3 class="text-lg font-semibold mb-4">Informations sur le budget</h3>
+  
+    <div class="mb-4">
+      <label class="block font-medium mb-1">Montant du budget (euros)</label>
+      <input
+        type="number"
+        formControlName="budget_amount"
+        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
+      />
+      <small *ngIf="agResolutionForm.get('budget_amount')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+
+    </div>
+  
+
+    <div class="mb-4">
+      <label class="block font-medium mb-1">Type de budget</label>
+      <select id="budget_type" formControlName="budget_type"  class="w-full px-3 py-2 border rounded-md">
+        <option value="" disabled>Choisissez le type de budget</option>
+        <option value="operating">Budget opérationnel</option>
+        <option value="exceptional">Budget exceptionelle</option>
+      </select>    
+    </div>
+
+    <div class="mb-4" *ngIf="agResolutionForm.get('budget_type')?.value === 'operating'">
+      <label class="block font-medium mb-1">Date début budget opérationnel</label>
+      <input
+        type="date"
+        formControlName="operating_budget_start"
+        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
+      />
+    </div>
+  
+    <div class="mb-4" *ngIf="agResolutionForm.get('budget_type')?.value === 'operating'">
+      <label class="block font-medium mb-1">Date fin budget opérationnel</label>
+      <input
+        type="date"
+        formControlName="operating_budget_end"
+        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
+      />
+    </div>
+  
+    <div class="mb-4">
+      <label>Nombre d’échéances</label>
+      <select formControlName="nb_of_instalments" class="w-full px-3 py-2 border rounded-md">
+        <option [value]="0">0 - En attente de réception de la facture avant tout appel de fonds</option>
+        <option *ngFor="let n of installmentOptions" [value]="n">{{ n }}</option>
+      </select>
+    </div>
+       
+    <div class="mb-4 flex items-center space-x-2">
+      <input type="checkbox" formControlName="budget_recup_tenant" id="budget_recup_tenant" class="h-4 w-4" />
+      <label for="budget_recup_tenant" class="font-medium">  Charge récupérable </label>
+    </div>
+  
+
+    <div class="mb-4">
+      <label for="budgetCategory" class="block mb-1">Catégorie</label>
+      <select id="budgetCategory" formControlName="id_budget_category"  class="w-full border border-gray-300 rounded-md px-3 py-2">
+        <option value="" disabled>Choisissez une catégorie</option>
+        <option *ngFor="let cat of budgetCategory" [value]="cat.id">
+          {{ cat.name }}
+        </option>
+      </select>
+      </div>
+  </div>
+
+  
   <button
     type="submit"
     [disabled]="agResolutionForm.invalid"

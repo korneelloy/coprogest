@@ -143,17 +143,6 @@ async post() {
    * @returns {Promise<Object>}
    */
   async update() {
-    console.log(this.special_shares);
-    
-    /**
-     * let specialShares = 1;
-    if(this.special_shares === false) {
-      specialShares = 0;
-    }
-     */
-    
-    
-
     const [result] = await db.execute(
       `UPDATE unit_group
         SET name = ?, description = ?, special_shares = ?
@@ -166,7 +155,6 @@ async post() {
       error.statusCode = 404;
       throw error;
     }
-    console.log(this.selectedUnits)
     if (Array.isArray(this.selectedUnits)) {
       await db.execute(
         `DELETE FROM unit_unit_group WHERE id_unit_group = ?`,
