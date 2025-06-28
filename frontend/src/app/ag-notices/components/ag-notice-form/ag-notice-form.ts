@@ -51,15 +51,18 @@ export class AgNoticeForm implements OnInit {
 
       this.agNoticeService.fetchById(this.agNoticeId!).subscribe((agNotice: AgNotice) => {
         const dateObj = new Date(agNotice.ag_date);
+        const pad = (n: number) => n.toString().padStart(2, '0');
 
-        const formattedDate = dateObj.toISOString().split('T')[0]; // YYYY-MM-DD
-        const formattedTime = dateObj.toISOString().split('T')[1].slice(0, 5); // HH:mm
+        const datePart = `${dateObj.getFullYear()}-${pad(dateObj.getMonth() + 1)}-${pad(dateObj.getDate())}`;
+        const timePart = `${pad(dateObj.getHours())}:${pad(dateObj.getMinutes())}`;
+
+
 
         this.agNoticeForm.patchValue({
           title: agNotice.title,
           place: agNotice.place,
-          ag_date: formattedDate,
-          ag_time: formattedTime
+          ag_date: datePart,
+          ag_time: timePart
         });
       });
     }
@@ -70,13 +73,11 @@ export class AgNoticeForm implements OnInit {
 
     const formData = this.agNoticeForm.value;
 
-    // Combine date and time to ISO format
     const combinedDateTimeStr = `${formData.ag_date}T${formData.ag_time}:00`;
-    const isoDate = new Date(combinedDateTimeStr).toISOString();
 
     const finalData: AgNotice = {
       ...formData,
-      ag_date: isoDate,
+      ag_date: combinedDateTimeStr,
       ag_time: formData.ag_time
     };
 
