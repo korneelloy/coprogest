@@ -22,6 +22,7 @@ import { AgResolutionService } from '../../../services/agResolution/ag-resolutio
 export class AgNoticeDetail implements OnInit {
   agNotice$!: Observable<AgNotice>;
   updatedMessage: string | null = null;
+
   agResolutions$!: Observable<AgResolution[]>;
 
   constructor(
@@ -37,6 +38,11 @@ export class AgNoticeDetail implements OnInit {
       this.route.queryParamMap.subscribe(params => {
         if (params.get('updated') === 'true') {
           this.updatedMessage = "La convocation a été mise à jour avec succès.";
+          setTimeout(() => this.updatedMessage = null, 5000);
+        }
+
+        if (params.get('updatedResolution') === 'true') {
+          this.updatedMessage = "La résolution a été mise à jour avec succès.";
           setTimeout(() => this.updatedMessage = null, 5000);
         }
       });      

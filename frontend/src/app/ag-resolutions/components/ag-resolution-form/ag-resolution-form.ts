@@ -112,15 +112,20 @@ export class AgResolutionForm implements OnInit {
     formValue.id_ag_notice = this.id_ag_notice;
     formValue.id_ag_minutes = this.id_ag_minutes;
 
+    formValue.operating_budget_start = this.parseDateOrNull(formValue.operating_budget_start);
+    formValue.operating_budget_end = this.parseDateOrNull(formValue.operating_budget_end);
+
 
     if (this.isEditMode) {
+      console.log('Submitting data:', formValue);
+
       this.agResolutionService.update(this.agResolutionId!, formValue).subscribe(() => {
-        this.router.navigate(['/agresolutions', this.agResolutionId], { queryParams: { updated: 'true' } });
+        this.router.navigate(['/agnotices', this.id_ag_notice], { queryParams: { updatedResolution: 'true' } });
       });
       
     } else {
       this.agResolutionService.create(formValue).subscribe(() => {
-        this.router.navigate(['/agresolutions'], { queryParams: { created: 'true' } });
+        this.router.navigate(['/agnotices', this.id_ag_notice], { queryParams: { createdResolution: 'true' } });
       });
     }
   }
@@ -138,6 +143,13 @@ export class AgResolutionForm implements OnInit {
     const month = (d.getMonth() + 1).toString().padStart(2, '0');
     const day = d.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  private parseDateOrNull(dateStr: string): string | null {
+    if (!dateStr) return null;
+  
+    const date = new Date(dateStr);
+    return isNaN(date.getTime()) ? null : date.toISOString().split('T')[0];
   }
 
   private updateBudgetValidators(): void {
