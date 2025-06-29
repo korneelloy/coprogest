@@ -48,9 +48,19 @@
     class="whitespace-nowrap flex-1 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200 m-4">
     {{ isEditMode ? 'Mettre à jour' : 'Créer' }} la convocation
   </button>
+  
 
   <div>
     <strong>Résolutions associées</strong>
+
+    <span class="m-4 space-4">
+      <a [routerLink]="['/agresolutions/new', agNoticeId]"
+        class="inline-block bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200">
+        Rajouter une résolution
+      </a>
+    </span>
+
+
     <ul *ngIf="agResolutions$ | async as agResolutions" class="mt-4 space-y-4">
       <ng-container *ngIf="agResolutions.length > 0; else noResolutions">
         <li *ngFor="let agResolution of agResolutions" class="border-b border-gray-300 pb-4 space-y-2">

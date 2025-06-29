@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,28 +12,38 @@ import { AgResolutionService } from '../../../services/agResolution/ag-resolutio
 import { BudgetCategory } from '../../../model/budgetcategory';
 import { BudgetCategoryService } from '../../../services/budget-category/budget-category-service';
 
+import { UnitGroup } from '../../../model/unitgroup';
+import { UnitGroupService } from '../../../services/unit-groups/unit-group-service';
+import { CallDateForm } from '../../../call-dates/components/call-date-form/call-date-form';
+import { CallDatesModule } from '../../../call-dates/call-dates-module';
+
 
 
 @Component({
   selector: 'app-ag-resolution-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule, CallDatesModule, CallDateForm ],
   templateUrl: './ag-resolution-form.html',
   styleUrl: './ag-resolution-form.scss'
 })
 
 export class AgResolutionForm implements OnInit {
+  @ViewChild(CallDateForm) callDateFormComponent!: CallDateForm;
+
   agResolutionForm: FormGroup;
-  isEditMode = false;
-  agResolutionId: string | null = null;
+  isEditMode= false;
+  idAgResolution: string | null = null;
   installmentOptions = Array.from({ length: 30 }, (_, i) => i + 1);
   budgetCategory: BudgetCategory[] = [];
+  unitGroups: UnitGroup[] = [];
+
   id_unit_group: string = '';
   id_ag_notice: string = '';
   id_ag_minutes: string = '';
 
   formReady = false;
 
+  nbOfInstalments = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -41,11 +51,13 @@ export class AgResolutionForm implements OnInit {
     private router: Router,
     private agResolutionService: AgResolutionService,
     private budgetCategoryService: BudgetCategoryService,
+    private unitGroupService: UnitGroupService,
   ) {
     this.agResolutionForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       resolution_text:  ['', [Validators.required]],
       required_majority:  ['', [Validators.required]],
+      id_unit_group: ['', [Validators.required]],
       budget:  ['', [Validators.required]],  // Oui/Non budget lié
       operating_budget_start: [''],
       operating_budget_end: [''],
@@ -54,29 +66,41 @@ export class AgResolutionForm implements OnInit {
       budget_type: [''],
       id_budget_category: [''],
       budget_amount: ['']
-      
     });
   }
 
   ngOnInit(): void {
-    this.agResolutionId = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = !!this.agResolutionId;
+    this.idAgResolution = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.idAgResolution;
 
     this.agResolutionForm.get('budget')?.valueChanges.subscribe((value) => {
       this.updateBudgetValidators();
     });
+    
+    this.agResolutionForm.get('budget_type')?.valueChanges.subscribe((value) => {
+      this.updateOpBudgetDatesValidators();
+    });
 
+    this.agResolutionForm.get('nb_of_instalments')?.valueChanges.subscribe((value) => {
+      const parsed = Number(value);
+      this.nbOfInstalments = !isNaN(parsed) && parsed > 0 ? parsed : 0;
+    });
+    
     this.budgetCategoryService.fetchAll().subscribe((data: BudgetCategory[]) => {
       this.budgetCategory = data;
     });
-    
 
+    this.unitGroupService.fetchAll().subscribe((datas: UnitGroup[]) => {
+      this.unitGroups = datas;
+    });
+    
     if (this.isEditMode) {
-      this.agResolutionService.fetchById(this.agResolutionId!).subscribe((agResolution: AgResolution) => {
+      this.agResolutionService.fetchById(this.idAgResolution!).subscribe((agResolution: AgResolution) => {
         this.agResolutionForm.patchValue({
           title: agResolution.title,
           resolution_text: agResolution.resolution_text,
           required_majority: agResolution.required_majority,
+          id_unit_group: agResolution.id_unit_group,
           budget: agResolution.budget,
           budget_amount: agResolution.budget_amount,
           budget_type: agResolution.budget_type,
@@ -88,42 +112,48 @@ export class AgResolutionForm implements OnInit {
         });
 
         this.updateBudgetValidators();
+        this.updateOpBudgetDatesValidators();
         
-        this.id_unit_group = agResolution.id_unit_group;
         this.id_ag_notice = agResolution.id_ag_notice;
         this.id_ag_minutes = agResolution.id_ag_minutes;
         this.formReady = true;
     });
     } else {
       this.formReady = true;
+      this.id_ag_notice = this.route.snapshot.paramMap.get('idagnotice') ?? '';
     }
   }  
 
   onSubmit(): void {
     if (this.agResolutionForm.invalid) return;
-  
+
+    this.callDateFormComponent.submit();
+
     const formValue = this.agResolutionForm.value;
 
     formValue.budget = Number(formValue.budget);
     formValue.nb_of_instalments = Number(formValue.nb_of_instalments);
     formValue.budget_recup_tenant = Number(formValue.budget_recup_tenant);
 
-    formValue.id_unit_group = this.id_unit_group;
     formValue.id_ag_notice = this.id_ag_notice;
     formValue.id_ag_minutes = this.id_ag_minutes;
 
     formValue.operating_budget_start = this.parseDateOrNull(formValue.operating_budget_start);
     formValue.operating_budget_end = this.parseDateOrNull(formValue.operating_budget_end);
 
+    Object.keys(formValue).forEach(key => {
+      if (formValue[key] === '') {
+        formValue[key] = null;
+      }
+    });
 
     if (this.isEditMode) {
-      console.log('Submitting data:', formValue);
-
-      this.agResolutionService.update(this.agResolutionId!, formValue).subscribe(() => {
+      this.agResolutionService.update(this.idAgResolution!, formValue).subscribe(() => {
         this.router.navigate(['/agnotices', this.id_ag_notice], { queryParams: { updatedResolution: 'true' } });
       });
       
     } else {
+
       this.agResolutionService.create(formValue).subscribe(() => {
         this.router.navigate(['/agnotices', this.id_ag_notice], { queryParams: { createdResolution: 'true' } });
       });
@@ -169,5 +199,22 @@ export class AgResolutionForm implements OnInit {
       });
     }
   }
+
+  private updateOpBudgetDatesValidators(): void {
+    const budgetTypeValue = this.agResolutionForm.get('budget_type')?.value;
   
+    const controlsToToggle = ['operating_budget_start', 'operating_budget_end'];
+  
+    if (budgetTypeValue === 'operating') {
+      controlsToToggle.forEach(field => {
+        this.agResolutionForm.get(field)?.setValidators([Validators.required]);
+        this.agResolutionForm.get(field)?.updateValueAndValidity();
+      });
+    } else {
+      controlsToToggle.forEach(field => {
+        this.agResolutionForm.get(field)?.clearValidators();
+        this.agResolutionForm.get(field)?.updateValueAndValidity();
+      });
+    }
+  }
 }

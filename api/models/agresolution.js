@@ -298,7 +298,7 @@ set budget_actif(value) {
     error.statusCode = 400;
     throw error;
   }
-  this._actif = value;
+  this._budget_actif = value;
 }
 
 
@@ -354,10 +354,8 @@ set id_budget_category(value) {
       call_date.id as call_date_id,
       call_date.date_call as call_date_date
     FROM ag_resolution 
-    LEFT JOIN ag_resolution_budget_call_date 
-      ON ag_resolution.id = ag_resolution_budget_call_date.id_ag_resolution
-    LEFT JOIN call_date
-      ON call_date.id = ag_resolution_budget_call_date.id_call_date
+    LEFT JOIN call_date 
+      ON ag_resolution.id = call_date.id_ag_resolution
     LEFT JOIN budget_category 
       ON budget_category.id = ag_resolution.id_budget_category
     WHERE ag_resolution.id = ?

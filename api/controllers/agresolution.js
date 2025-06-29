@@ -48,6 +48,9 @@ exports.getOne = async (req, res, next) => {
   } 
 };
 
+
+
+
 /**
  * Create a new agresolution with the provided data.
  */
@@ -58,16 +61,18 @@ exports.postOne = async (req, res, next) => {
     const resolution_text = req.body.resolution_text;
     const required_majority = req.body.required_majority;
     const budget = req.body.budget;
+
     const id_ag_minutes = req.body.id_ag_minutes;
     const id_unit_group = req.body.id_unit_group;
     const id_ag_notice = req.body.id_ag_notice;
+
     const budget_amount = req.body.budget_amount;
     const budget_type = req.body.budget_type;
     const operating_budget_start = req.body.operating_budget_start;
     const operating_budget_end = req.body.operating_budget_end;
     const nb_of_instalments = req.body.nb_of_instalments;
     const budget_recup_tenant = req.body.budget_recup_tenant;
-    const budget_actif = req.body.budget_actif;
+    const budget_actif = 0;
     const id_budget_category = req.body.id_budget_category;
 
     const agResolution = new AgResolution({
@@ -88,6 +93,9 @@ exports.postOne = async (req, res, next) => {
       budget_actif,
       id_budget_category
     });
+
+    console.log('agResolution', agResolution);
+
     
     const postResponse = await agResolution.post();
 

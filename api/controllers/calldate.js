@@ -16,6 +16,25 @@ exports.getAll = async (req, res, next) => {
   }
 };
 
+
+/**
+ * Retrieve and return all call date by one resolution.
+ */
+exports.getAllByAgResolution = async (req, res, next) => {
+  try {
+    const idAgResolution = req.params.idAgResolution;
+    const callDates = await CallDate.getAllByAgResolution(idAgResolution);
+    res.status(200).json(callDates);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
+
+
 /**
  * Retrieve and return a call date by its ID.
  */
@@ -47,6 +66,8 @@ exports.postOne = async (req, res, next) => {
     });
     
     const postResponse = await callDate.post();
+
+    console.log(postResponse);
 
     res.status(201).json(postResponse);
 
@@ -83,6 +104,24 @@ exports.updateOne = async (req, res, next) => {
     next(err);
   } 
 };
+
+
+/**
+ * Delete all call dates for one resolution.
+ */
+exports.deleteAllByAgResolution = async (req, res, next) => {
+  try {
+    const idAgResolution = req.params.idAgResolution;
+    const deleteResponse = await CallDate.deleteAllByAgResolution(idAgResolution);
+    res.status(200).json(deleteResponse);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
 
 /**
  * Delete a call date by its ID.

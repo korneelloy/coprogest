@@ -16,19 +16,19 @@ module.exports = class Invoice extends BaseClass {
    * @param {Date} invoice_date - Invoice date
    * @param {string} description - not null
    * @param {string} state - not null - enum {to be paid, contested, paid}
-   * @param {string} id_ag_resolution_budget - Link to ag resolution/budget- Foreign key - verification foreign key constraint handled in the CRUD operations
+   * @param {string} id_ag_resolution - Link to ag resolution/budget- Foreign key - verification foreign key constraint handled in the CRUD operations
    * @param {Date|null} createdAt - creation date - set in SQL code
    * @param {Date|null} updatedAt - last update - set in SQL code
    */
 
 
-  constructor({ id, amount, invoice_date, description, state, id_ag_resolution_budget, createdAt = null, updatedAt = null }) {
+  constructor({ id, amount, invoice_date, description, state, id_ag_resolution, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
     this.amount = amount;
     this.invoice_date = invoice_date;
     this.description = description;
     this.state = state;
-    this.id_ag_resolution_budget = id_ag_resolution_budget;
+    this.id_ag_resolution = id_ag_resolution;
   }
   
   /****************************getters and setters for data validation***********************************/
@@ -90,17 +90,17 @@ module.exports = class Invoice extends BaseClass {
     this._state = value;
   }
 
-  get id_ag_resolution_budget() {
-    return this._id_ag_resolution_budget;
+  get id_ag_resolution() {
+    return this._id_ag_resolution;
   }
   
-  set id_ag_resolution_budget(value) {
+  set id_ag_resolution(value) {
     if (!isValidUUIDv4(value)) {
-      const error = new Error('Invalid id_ag_resolution_budget');
+      const error = new Error('Invalid id_ag_resolution');
       error.statusCode = 400;
       throw error;
     }
-    this._id_ag_resolution_budget = value;
+    this._id_ag_resolution = value;
   }
 
   /**********************************CRUD operatings************************************/
@@ -139,9 +139,9 @@ module.exports = class Invoice extends BaseClass {
     try {
       const [result] = await db.execute(
         `INSERT INTO invoice
-          (id, amount, invoice_date, description, state, id_ag_resolution_budget)
+          (id, amount, invoice_date, description, state, id_ag_resolution)
           VALUES (?, ?, ?, ?, ?, ?)`, 
-          [this.id, this.amount, this.invoice_date, this.description, this.state, this.id_ag_resolution_budget]
+          [this.id, this.amount, this.invoice_date, this.description, this.state, this.id_ag_resolution]
         );
       
       if (result.affectedRows === 0) {
@@ -168,9 +168,9 @@ module.exports = class Invoice extends BaseClass {
     try {
       const [result] = await db.execute(
         `UPDATE invoice
-          SET amount = ?, invoice_date = ?, description = ?, state = ?, id_ag_resolution_budget = ?
+          SET amount = ?, invoice_date = ?, description = ?, state = ?, id_ag_resolution = ?
           WHERE id = ?`,
-          [this.amount, this.invoice_date, this.description, this.state, this.id_ag_resolution_budget, this.id]
+          [this.amount, this.invoice_date, this.description, this.state, this.id_ag_resolution, this.id]
         );
 
       if (result.affectedRows === 0) {

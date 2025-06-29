@@ -1,0 +1,8 @@
+<form [formGroup]="callDateForm">
+  <div formArrayName="callDates">
+    <div *ngFor="let callDateGroup of callDates.controls; let i = index" [formGroupName]="i">
+      <label for="date_call_{{i}}">Echéance {{ i + 1 }} : </label>
+      <input id="date_call_{{i}}" formControlName="date_call" type="date" />
+    </div>
+  </div>
+</form>

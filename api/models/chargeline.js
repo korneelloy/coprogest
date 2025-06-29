@@ -17,17 +17,17 @@ module.exports = class ChargeLine extends BaseClass {
    * @param {Date} state -  enum {to be sent, send, remainder, paid} - not null - DEFAULT 'to_be_sent'
    * @param {string} id_unit - UUID of the unit - not null - Foreign key - verification foreign key constraint handled in the CRUD operations
    * @param {string} id_charge_call - UUID of the charge calll - can be null - Foreign key - verification foreign key constraint handled in the CRUD operations
-   * @param {string} id_ag_resolution_budget - UUID of the id ag resolution budget - not null - Foreign key - verification foreign key constraint handled in the CRUD operations
+   * @param {string} id_ag_resolution - UUID of the id ag resolution budget - not null - Foreign key - verification foreign key constraint handled in the CRUD operations
    * @param {Date|null} createdAt - creation date - set in SQL code
    * @param {Date|null} updatedAt - last update - set in SQL code
   */
 
-  constructor({id, amount, call_date,id_unit, id_ag_resolution_budget, state = "to be sent", id_charge_call = null, createdAt = null, updatedAt = null }) {
+  constructor({id, amount, call_date,id_unit, id_ag_resolution, state = "to be sent", id_charge_call = null, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
     this.amount = amount;
     this.call_date = call_date;
     this.id_unit = id_unit;
-    this.id_ag_resolution_budget = id_ag_resolution_budget;
+    this.id_ag_resolution = id_ag_resolution;
     this.state = state;
     this.id_charge_call = id_charge_call;
   }
@@ -76,17 +76,17 @@ module.exports = class ChargeLine extends BaseClass {
   }
 
 
-  get id_ag_resolution_budget() {
-    return this._id_ag_resolution_budget;
+  get id_ag_resolution() {
+    return this._id_ag_resolution;
   }
   
-  set id_ag_resolution_budget(value) {
+  set id_ag_resolution(value) {
     if (!isValidUUIDv4(value)) {
       const error = new Error('Invalid id_person');
       error.statusCode = 400;
       throw error;
     }
-    this._id_ag_resolution_budget = value;
+    this._id_ag_resolution = value;
   }
   
   get id_charge_call() {
@@ -157,9 +157,9 @@ module.exports = class ChargeLine extends BaseClass {
     try {
       const [result] = await db.execute(
         `INSERT INTO charge_line 
-          (id, amount, call_date, id_unit, id_ag_resolution_budget, state, id_charge_call) 
+          (id, amount, call_date, id_unit, id_ag_resolution, state, id_charge_call) 
           VALUES (?, ?, ?, ?, ?, ?, ?)`, 
-          [this.id, this.amount, this.call_date, this.id_unit, this.id_ag_resolution_budget, this.state, this.id_charge_call]
+          [this.id, this.amount, this.call_date, this.id_unit, this.id_ag_resolution, this.state, this.id_charge_call]
     );
 
       if (result.affectedRows === 0) {
@@ -186,9 +186,9 @@ module.exports = class ChargeLine extends BaseClass {
     try {
       const [result] = await db.execute(
         `UPDATE charge_line
-          SET amount = ?, call_date = ?, id_unit = ?, id_ag_resolution_budget = ?, state = ?, id_charge_call = ? 
+          SET amount = ?, call_date = ?, id_unit = ?, id_ag_resolution = ?, state = ?, id_charge_call = ? 
           WHERE charge_line.id = ?`,
-          [this.amount, this.call_date, this.id_unit, this.id_ag_resolution_budget, this.state, this.id_charge_call, this.id]
+          [this.amount, this.call_date, this.id_unit, this.id_ag_resolution, this.state, this.id_charge_call, this.id]
         );
 
       if (result.affectedRows === 0) {

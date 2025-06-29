@@ -61,7 +61,10 @@ CREATE TABLE call_date(
    date_call DATE NOT NULL,
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+   id_ag_resolution VARCHAR(36)  NOT NULL,
    PRIMARY KEY(id)
+   FOREIGN KEY(id_ag_resolution) REFERENCES ag_resolution(id) ON DELETE RESTRICT ON UPDATE CASCADE
+
 );
 
 CREATE TABLE person(
@@ -220,14 +223,6 @@ CREATE TABLE ag_notice_presence_person(
    PRIMARY KEY(id_person, id_ag_notice),
    FOREIGN KEY(id_person) REFERENCES person(id) ON DELETE RESTRICT ON UPDATE CASCADE,
    FOREIGN KEY(id_ag_notice) REFERENCES ag_notice(id) ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
-CREATE TABLE ag_resolution_budget_call_date(
-   id_ag_resolution VARCHAR(36) NOT NULL,
-   id_call_date CHAR(36) NOT NULL,
-   PRIMARY KEY(id_ag_resolution, id_call_date),
-   FOREIGN KEY(id_ag_resolution) REFERENCES ag_resolution(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-   FOREIGN KEY(id_call_date) REFERENCES call_date(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE ag_resolution_person(

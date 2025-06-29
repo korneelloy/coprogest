@@ -23,7 +23,6 @@ const agNoticeRoutes = require('./routes/agnotice');
 const agResolutionsRoutes = require('./routes/agresolution');
 const budgetCategoryRoutes = require('./routes/budgetcategory');
 const callDateRoutes = require('./routes/calldate');
-const agResolutionBudgetCallDateRoutes = require('./routes/agresolutionbudgetcalldate');
 const agNoticeSentPersonRoutes = require('./routes/agnoticesentperson');
 const chargeCallRoutes = require('./routes/chargecall');
 const chargePaymentRoutes = require('./routes/chargepayment');
@@ -65,7 +64,6 @@ app.use('/api/v1/agnotices', agNoticeRoutes);
 app.use('/api/v1/agresolutions', agResolutionsRoutes);
 app.use('/api/v1/budgetcategories', budgetCategoryRoutes);
 app.use('/api/v1/calldates', callDateRoutes);
-app.use('/api/v1/agresolutionbudgetcalldates', agResolutionBudgetCallDateRoutes);
 app.use('/api/v1/agnoticesentpersons', agNoticeSentPersonRoutes);
 app.use('/api/v1/chargecalls', chargeCallRoutes);
 app.use('/api/v1/chargepayments', chargePaymentRoutes);
@@ -92,7 +90,6 @@ app.use('/api/v1/agresolutions', auth, agResolutionsRoutes);
 app.use('/api/v1/agresolutionbudgets', auth, agResolutionBudgetRoutes);
 app.use('/api/v1/budgetcategories', auth, budgetCategoryRoutes);
 app.use('/api/v1/calldates', auth, callDateRoutes);
-app.use('/api/v1/agresolutionbudgetcalldates', auth, agResolutionBudgetCallDateRoutes);
 app.use('/api/v1/agnoticesentpersons', auth, agNoticeSentPersonRoutes);
  */
 

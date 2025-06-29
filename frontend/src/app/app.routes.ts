@@ -46,6 +46,11 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./ag-resolutions/ag-resolutions-module').then(m => m.AgResolutionsModule),
   },
+  {
+    path: 'calldates',
+    loadChildren: () =>
+      import('./call-dates/call-dates-module').then(m => m.CallDatesModule),
+  },
   { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '**', redirectTo: '' },
 ];

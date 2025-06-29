@@ -54,7 +54,9 @@ export class AgNoticeDetail implements OnInit {
   }
   
   change(id: string): void {
-    this.router.navigate(['/agnotices', id, 'edit']);
+    this.router.navigate(['/agnotices', id, 'edit']).then(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }
 
   seeDetailsResolution(id: string): void {
