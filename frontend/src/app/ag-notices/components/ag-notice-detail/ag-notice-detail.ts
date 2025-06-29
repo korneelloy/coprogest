@@ -25,6 +25,15 @@ export class AgNoticeDetail implements OnInit {
 
   agResolutions$!: Observable<AgResolution[]>;
 
+  requiredMajorityLabels: { [key: string]: string } = {
+    "24": 'Article 24',
+    "25": 'Article 25',
+    "25-1": 'Article 25-1',
+    "26": 'Article 26',
+    "unanimiy": 'Unanimité',
+    "no_vote": 'Sans vote',
+  };
+
   constructor(
     private route: ActivatedRoute,
     private agNoticeService: AgNoticeService,

@@ -54,7 +54,7 @@
   </button>
   
 
-  <div>
+  <div *ngIf="isEditMode">
     <strong>Résolutions associées</strong>
 
     <span class="m-4 space-4">
@@ -70,7 +70,7 @@
         <li *ngFor="let agResolution of agResolutions" class="border-b border-gray-300 pb-4 space-y-2">
           <strong>{{ agResolution.title }}</strong><br>
           <div>Texte: {{ agResolution.resolution_text }}</div>
-          <div>Majorité requise: article {{ agResolution.required_majority }}</div>
+          <div>Majorité requise: {{ requiredMajorityLabels[agResolution.required_majority] }}</div>
           <div>Budget: {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</div>
           <div>
             <a [routerLink]="['/agresolutions', agResolution.id, 'edit']"

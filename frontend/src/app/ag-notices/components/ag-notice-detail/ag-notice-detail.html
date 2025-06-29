@@ -22,7 +22,7 @@
           <li *ngFor="let agResolution of agResolutions" class="space-y-2 border-b border-gray-300 pb-4">
             <strong >{{ agResolution.title }}</strong><br>
             <div>Texte: {{ agResolution.resolution_text }}</div>
-            <div>Majorité requise: article {{ agResolution.required_majority }}</div>
+            <div>Majorité requise: {{ requiredMajorityLabels[agResolution.required_majority] }}</div>
             <div>Budget: {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</div>
           </li>
         </ng-container>
