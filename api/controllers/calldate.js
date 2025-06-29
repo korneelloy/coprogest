@@ -58,11 +58,12 @@ exports.postOne = async (req, res, next) => {
   try {
     const id = uuidv4();
     const date_call = req.body.date_call;
-
+    const id_ag_resolution = req.body.id_ag_resolution;
 
     const callDate = new CallDate({
       id,
-      date_call
+      date_call,
+      id_ag_resolution
     });
     
     const postResponse = await callDate.post();
@@ -87,10 +88,13 @@ exports.updateOne = async (req, res, next) => {
   try {
     const id = req.params.id;
     const date_call = req.body.date_call; 
+    const id_ag_resolution = req.body.id_ag_resolution;
+
 
     const callDate = new CallDate({
       id,
-      date_call
+      date_call,
+      id_ag_resolution
     });
     
     const updateResponse = await callDate.update();

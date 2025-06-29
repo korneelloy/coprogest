@@ -73,14 +73,8 @@ module.exports = class CallDate extends BaseClass {
    * @returns {Promise<Object>}
    */
   static async getAllByAgResolution(idAgResolution) {
-    const [rows] = await db.execute(`SELECT * FROM call_date WHERE id_ag_resolution = ?`, [idAgResolution]);
-
-    if (rows.length === 0) {
-      const error = new Error('No call dates for this resolution');
-      error.statusCode = 404;
-      throw error;
-    }
-    return rows[0];
+    const [allCallDatesbyRes] = await db.execute(`SELECT * FROM call_date WHERE id_ag_resolution = ?`, [idAgResolution]);
+    return allCallDatesbyRes;
   }
 
   /**

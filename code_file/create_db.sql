@@ -63,8 +63,6 @@ CREATE TABLE call_date(
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
    id_ag_resolution VARCHAR(36)  NOT NULL,
    PRIMARY KEY(id)
-   FOREIGN KEY(id_ag_resolution) REFERENCES ag_resolution(id) ON DELETE RESTRICT ON UPDATE CASCADE
-
 );
 
 CREATE TABLE person(

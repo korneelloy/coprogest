@@ -1,10 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+
 
 import { AgResolution } from '../../../model/agresolution';
 import { AgResolutionService } from '../../../services/agResolution/ag-resolution-service';
@@ -14,28 +18,28 @@ import { BudgetCategoryService } from '../../../services/budget-category/budget-
 
 import { UnitGroup } from '../../../model/unitgroup';
 import { UnitGroupService } from '../../../services/unit-groups/unit-group-service';
-import { CallDateForm } from '../../../call-dates/components/call-date-form/call-date-form';
-import { CallDatesModule } from '../../../call-dates/call-dates-module';
+
+import { CallDate } from '../../../model/call_date';
+import { CallDateService } from '../../../services/callDate/call-date-service';
 
 
 
 @Component({
   selector: 'app-ag-resolution-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule, CallDatesModule, CallDateForm ],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule, FormsModule ],
   templateUrl: './ag-resolution-form.html',
   styleUrl: './ag-resolution-form.scss'
 })
 
 export class AgResolutionForm implements OnInit {
-  @ViewChild(CallDateForm) callDateFormComponent!: CallDateForm;
-
   agResolutionForm: FormGroup;
   isEditMode= false;
   idAgResolution: string | null = null;
-  installmentOptions = Array.from({ length: 30 }, (_, i) => i + 1);
   budgetCategory: BudgetCategory[] = [];
   unitGroups: UnitGroup[] = [];
+  callDates$!: Observable<CallDate[]>;
+  
 
   id_unit_group: string = '';
   id_ag_notice: string = '';
@@ -43,7 +47,12 @@ export class AgResolutionForm implements OnInit {
 
   formReady = false;
 
-  nbOfInstalments = 0;
+  budgetReadOnly: boolean = false;
+  noDateError = false;
+
+  nbOfNewDate: number = 0;
+
+  formSubmitted = false;
 
   constructor(
     private fb: FormBuilder,
@@ -52,6 +61,7 @@ export class AgResolutionForm implements OnInit {
     private agResolutionService: AgResolutionService,
     private budgetCategoryService: BudgetCategoryService,
     private unitGroupService: UnitGroupService,
+    private callDateService: CallDateService,
   ) {
     this.agResolutionForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
@@ -80,11 +90,6 @@ export class AgResolutionForm implements OnInit {
     this.agResolutionForm.get('budget_type')?.valueChanges.subscribe((value) => {
       this.updateOpBudgetDatesValidators();
     });
-
-    this.agResolutionForm.get('nb_of_instalments')?.valueChanges.subscribe((value) => {
-      const parsed = Number(value);
-      this.nbOfInstalments = !isNaN(parsed) && parsed > 0 ? parsed : 0;
-    });
     
     this.budgetCategoryService.fetchAll().subscribe((data: BudgetCategory[]) => {
       this.budgetCategory = data;
@@ -92,6 +97,17 @@ export class AgResolutionForm implements OnInit {
 
     this.unitGroupService.fetchAll().subscribe((datas: UnitGroup[]) => {
       this.unitGroups = datas;
+    });
+
+    this.agResolutionForm.get('required_majority')!.valueChanges.subscribe(value => {
+      const budgetControl = this.agResolutionForm.get('budget');
+  
+      if (value === 'no_vote') {
+        budgetControl!.setValue(0);
+        this.budgetReadOnly = true;
+      } else {
+        this.budgetReadOnly = false;
+      }
     });
     
     if (this.isEditMode) {
@@ -111,6 +127,8 @@ export class AgResolutionForm implements OnInit {
           id_budget_category: agResolution.id_budget_category
         });
 
+        this.callDates$ = this.callDateService.fetchAllByAgResolution(this.idAgResolution!);
+
         this.updateBudgetValidators();
         this.updateOpBudgetDatesValidators();
         
@@ -126,8 +144,6 @@ export class AgResolutionForm implements OnInit {
 
   onSubmit(): void {
     if (this.agResolutionForm.invalid) return;
-
-    this.callDateFormComponent.submit();
 
     const formValue = this.agResolutionForm.value;
 
@@ -215,6 +231,84 @@ export class AgResolutionForm implements OnInit {
         this.agResolutionForm.get(field)?.clearValidators();
         this.agResolutionForm.get(field)?.updateValueAndValidity();
       });
+    }
+  }
+
+  addDate(newDate: string) {
+    const date = new Date(newDate);
+    this.nbOfNewDate++;
+
+    if (isNaN(date.getTime())) {
+      console.warn("Date invalide");
+      return;
+    }
+    
+    const newCallDate: CallDate = {
+      date_call: date.toISOString(),
+      id_ag_resolution: this.idAgResolution!,
+    };
+
+    console.log('Données envoyées au serveur:', newCallDate);
+
+  
+    this.callDateService.create(newCallDate).subscribe({
+      next: () => this.refreshCallDates(),
+      error: (err) => console.error("Erreur lors de l'ajout de la date :", err),
+    });
+  }
+
+  deleteDate(callDateId: string) {
+    this.callDateService.delete(callDateId).subscribe({
+      next: () => {
+        this.nbOfNewDate--;
+        this.refreshCallDates();
+      },
+      error: (err) => {
+        console.error('Erreur lors de la suppression :', err);
+      }
+    });
+  }
+
+  refreshCallDates() {
+    this.callDates$ = this.callDateService.fetchAllByAgResolution(this.idAgResolution!);
+  }
+  
+
+  submitForm() {
+    this.formSubmitted = true;
+
+    if (this.agResolutionForm.invalid) {
+      this.agResolutionForm.markAllAsTouched();
+      return;
+    }
+
+    const nbOfInstalments = this.agResolutionForm.get('nb_of_instalments')?.value;
+
+    if (nbOfInstalments === 1 || nbOfInstalments === "1") {
+      if (this.isEditMode) {
+        this.callDates$.pipe(take(1)).subscribe(callDates => {
+          if (!callDates || callDates.length === 0) {
+            this.noDateError = true;
+            return;
+          } else {
+            this.noDateError = false;
+            this.onSubmit();
+          }
+        });
+      } else {
+        if (!this.nbOfNewDate || this.nbOfNewDate === 0) {
+          this.noDateError = true;
+          return;
+        } else {
+
+          this.noDateError = false;
+          this.onSubmit();
+        }
+      }
+
+    } else {
+      this.noDateError = false;
+      this.onSubmit();
     }
   }
 }

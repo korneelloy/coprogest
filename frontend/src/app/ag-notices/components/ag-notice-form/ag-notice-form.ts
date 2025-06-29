@@ -25,7 +25,9 @@ export class AgNoticeForm implements OnInit {
   isEditMode = false;
   agNoticeId: string | null = null;
   agResolutions$!: Observable<AgResolution[]>;
-  
+
+  deletedMessage: string | null = null;
+ 
 
   constructor(
     private fb: FormBuilder,
@@ -47,6 +49,12 @@ export class AgNoticeForm implements OnInit {
     this.isEditMode = !!this.agNoticeId;
 
     if (this.isEditMode) {
+      this.route.queryParams.subscribe(params => {
+        if (params['deleted'] === 'true') {
+          this.deletedMessage = "La résolution a été supprimée avec succès.";
+        }
+      });
+
       this.agResolutions$ = this.agResolutionService.fetchAllByAgNotice(this.agNoticeId!);
 
       this.agNoticeService.fetchById(this.agNoticeId!).subscribe((agNotice: AgNotice) => {
@@ -55,9 +63,6 @@ export class AgNoticeForm implements OnInit {
 
         const datePart = `${dateObj.getFullYear()}-${pad(dateObj.getMonth() + 1)}-${pad(dateObj.getDate())}`;
         const timePart = `${pad(dateObj.getHours())}:${pad(dateObj.getMinutes())}`;
-
-
-
         this.agNoticeForm.patchValue({
           title: agNotice.title,
           place: agNotice.place,
@@ -91,4 +96,17 @@ export class AgNoticeForm implements OnInit {
       });
     }
   }
+
+  deletion(id: string): void {
+    const confirmed = confirm("Êtes-vous sûr de vouloir supprimer la résolution ? Attention, action irréversible !");
+    
+    if (confirmed) {
+      this.agResolutionService.delete(id).subscribe(() => {
+        const url = new URL(window.location.href);
+        url.searchParams.set('deleted', 'true');
+        window.location.href = url.toString();
+      });
+    }
+  }
+
 }
