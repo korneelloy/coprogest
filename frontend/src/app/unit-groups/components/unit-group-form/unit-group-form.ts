@@ -34,8 +34,6 @@ export class UnitGroupForm implements OnInit {
 
   updatedSelectedUnitIds: string[] = [];
 
-
-
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -56,12 +54,16 @@ export class UnitGroupForm implements OnInit {
       this.units = data;
     });
 
+    /**
+     * 
+    
     this.unitUnitGroupService.fetchAll().subscribe((data: UnitUnitGroup[]) => {
       this.unitUnitGroups = data;
       for (const unitUnitGroup of this.unitUnitGroups) {
         document.getElementById('adj_shares-'+unitUnitGroup.id_unit)?.setAttribute("value", "eeee" );
       }  
     });
+     */
 
 
     this.unitGroupId = this.route.snapshot.paramMap.get('id');
