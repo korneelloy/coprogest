@@ -103,41 +103,38 @@ module.exports = class Unitgroup extends BaseClass {
     return rows[0];
   }
   
-  /**
+    /**
    * Insert the current unitgroup into the database.
    * @returns {Promise<Object>}
    */
-
-  /**
- * Insert the current unitgroup into the database.
- * @returns {Promise<Object>}
- */
-async post() {
-  const [result] = await db.execute(
-    `INSERT INTO unit_group 
-      (id, name, description, special_shares) 
-      VALUES (?, ?, ?, ?)`, 
-    [this.id, this.name, this.description, this.special_shares]
-  );
-  
-  if (result.affectedRows === 0) {
-    const error = new Error('Insert failed: no rows affected.');
-    error.statusCode = 500;
-    throw error;
-  }
-
-  if (Array.isArray(this.selectedUnits)) {
-    for (const unit of this.selectedUnits) {
-      await db.execute(
-        `INSERT INTO unit_unit_group (id_unit, id_unit_group, adjusted_shares) VALUES (?, ?, ?)`,
-        [unit[0], this.id, unit[1]]
-      );
+  async post() {
+    try {
+      const [result] = await db.execute(
+        `INSERT INTO unit_group 
+        (id, name, description, special_shares) 
+        VALUES (?, ?, ?, ?)`, 
+      [this.id, this.name, this.description, this.special_shares]
+    );    
+    
+    if (result.affectedRows === 0) {
+      const error = new Error('Insert failed: no rows affected.');
+      error.statusCode = 500;
+      throw error;
+    }
+    return { 
+      message: 'Unit group created successfully',
+      id: this.id
+    };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+    throw err;
     }
   }
-
-  return { message: 'Unitgroup and relations created successfully' };
-}
- 
+   
   /**
    * Update the current unitgroup in the database.
    * @returns {Promise<Object>}
@@ -154,18 +151,6 @@ async post() {
       const error = new Error('Unitgroup not found');
       error.statusCode = 404;
       throw error;
-    }
-    if (Array.isArray(this.selectedUnits)) {
-      await db.execute(
-        `DELETE FROM unit_unit_group WHERE id_unit_group = ?`,
-        [this.id]
-      );        
-      for (const unit of this.selectedUnits) {
-        await db.execute(
-          `INSERT INTO unit_unit_group (id_unit, id_unit_group, adjusted_shares) VALUES (?, ?, ?)`,
-          [unit[0], this.id, unit[1]]
-        );
-      }
     }
     return { message: 'Unitgroup updated successfully' };
   }

@@ -201,8 +201,8 @@ CREATE TABLE unit_unit_group(
    id_unit_group VARCHAR(36) NOT NULL,
    adjusted_shares DECIMAL(6,2),
    PRIMARY KEY(id_unit, id_unit_group),
-   FOREIGN KEY(id_unit) REFERENCES unit(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-   FOREIGN KEY(id_unit_group) REFERENCES unit_group(id) ON DELETE RESTRICT ON UPDATE CASCADE
+   FOREIGN KEY(id_unit) REFERENCES unit(id) ON DELETE CASCADE ON UPDATE CASCADE,
+   FOREIGN KEY(id_unit_group) REFERENCES unit_group(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE ag_notice_sent_person(

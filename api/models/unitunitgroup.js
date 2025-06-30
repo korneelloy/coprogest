@@ -111,10 +111,17 @@ module.exports = class UnitUnitGroup  {
       unit_unit_group.id_unit_group,
       unit_unit_group.adjusted_shares,
       unit_unit_group.id_unit,
+      unit.id as unit_id,
       unit.name as unit_name,
-      unit.shares as unit_shares
+      unit.shares as unit_shares,
+      unit_group.id as unit_group_id,
+      unit_group.name as unit_group_name,
+      unit_group.description as unit_group_description,
+      unit_group.special_shares as unit_group_special_shares
       FROM unit_unit_group 
       LEFT JOIN unit ON unit_unit_group.id_unit = unit.id
+      LEFT JOIN unit_group ON unit_unit_group.id_unit_group = unit_group.id
+
       WHERE id_unit_group = ?;`, [id]);
     return allUnitUnitGroupsByUnitGroup;
   }
@@ -201,7 +208,7 @@ module.exports = class UnitUnitGroup  {
 
   /**
     * Delete a unit / unitgroup by ID.
-    * @param {string} id
+    * @param {string} id_unit
     * @returns {Promise<Object>}
     */
   static async deleteAllByUnit(id_unit) {
@@ -212,6 +219,20 @@ module.exports = class UnitUnitGroup  {
       throw error;
     }
     return { message: 'Unit / Unitgroups deleted successfully' };
+  }
+
+  /**
+    * Delete a unit / unitgroup by ID.
+    * @param {string} id_unit_group
+    * @returns {Promise<Object>}
+    */
+  static async deleteAllByUnitGroup(id_unit_group) {
+    console.log("id_unit_group", id_unit_group);
+    const [result] = await db.execute(`DELETE FROM unit_unit_group WHERE id_unit_group = ?`, [id_unit_group]);
+    
+    return {
+      message: `Unit / Unitgroups deleted successfully (${result.affectedRows} deleted)`,
+    };
   }
 
   /**

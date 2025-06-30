@@ -1,47 +1,58 @@
-<h2><strong>Détails d'un groupe</strong></h2>
-<hr>
+<h2 class="text-2xl font-bold mb-4 text-gray-800">Détails d'un groupe</h2>
+<hr class="mb-6 border-gray-300">
 
-<div *ngIf="updatedMessage" class="success-message">
+<!-- Message de succès -->
+<div *ngIf="updatedMessage" class="mb-4 p-3 rounded-md bg-green-100 text-green-800 shadow-sm">
   {{ updatedMessage }}
 </div>
 
+<!-- Contenu du groupe -->
 <ul *ngIf="unitGroup$ | async as unitGroup; else loading">
-  <li class="space-y-4">
-    <strong>{{ unitGroup.name }}</strong><br>
-    <div>Description: {{ unitGroup.description }}</div>
-    <div>Tantièmes spécifique: {{ unitGroup.special_shares ? 'Oui' : 'Non' }}</div>
+  <li class="space-y-6 bg-white p-6 rounded-lg shadow-md border border-gray-200">
+    <h3 class="text-xl font-semibold text-gray-900">{{ unitGroup.name }}</h3>
+    
+    <div class="text-gray-700">
+      <p><span class="font-medium">Description :</span> {{ unitGroup.description }}</p>
+      <p><span class="font-medium">Tantièmes spécifiques :</span> {{ unitGroup.special_shares ? 'Oui' : 'Non' }}</p>
+    </div>
 
     <div>
-      <div>Membres: </div>
-      <ul>
-        <li *ngFor="let unitUnitGroup of unitUnitGroups" class="space-y-4">
-          {{ unitUnitGroup.unit_name }}
+      <p class="font-medium text-gray-800 mb-2">Membres :</p>
+      <ul class="space-y-2 pl-4 border-l-2 border-orange-200">
+        <li 
+          *ngFor="let unitUnitGroup of unitUnitGroups" 
+          class="text-sm text-gray-700"
+        >
+          • <span class="font-semibold">{{ unitUnitGroup.unit_name }}</span> — 
           <span *ngIf="unitGroup.special_shares">
-            Millièmes ajustées: {{ unitUnitGroup.adjusted_shares }}
+            Millièmes ajustées : {{ unitUnitGroup.adjusted_shares }}
           </span>
           <span *ngIf="!unitGroup.special_shares">
-            Millièmes standards: {{ unitUnitGroup.unit_shares }}
+            Millièmes standards : {{ unitUnitGroup.unit_shares }}
           </span>
         </li>
       </ul>
     </div>
 
-    <button 
-      (click)="change(unitGroup.id)" 
-      class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center"
-    >
-      Changer ce groupe
-    </button><br>
+    <div class="flex gap-4 pt-4">
+      <button 
+        (click)="change(unitGroup.id)" 
+        class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center"
+      >
+        Modifier ce groupe
+      </button>
 
-    <button 
-      (click)="deletion(unitGroup.id)" 
-      class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center"
-    >
-      Supprimer ce groupe
-    </button><br>
+      <button 
+        (click)="deletion(unitGroup.id)" 
+        class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center"
+      >
+        Supprimer ce groupe
+      </button>
+    </div>
   </li>
 </ul>
 
+<!-- Chargement -->
 <ng-template #loading>
-  <p>Loading unit groupe...</p>
+  <div class="text-gray-500 italic">Chargement du groupe en cours...</div>
 </ng-template>

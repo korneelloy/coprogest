@@ -78,6 +78,15 @@ export class UnitUnitGroupService {
       );
   }
 
+  deleteAllByUnitGroup(id: string): Observable<void> {
+    return this.http
+      .delete<void>(`${this.url}/deleteByUnitGroup/${id}`, { withCredentials: true })
+      .pipe(
+        tap(() => console.log(`Deleted all unit-unit group for unitGroup id=${id}`)),
+        catchError(this.handleError)
+      );
+  }
+
   delete(id: string): Observable<void> {
     return this.http
       .delete<void>(`${this.url}/${id}`, { withCredentials: true })

@@ -137,6 +137,23 @@ exports.deleteAllByUnit = async (req, res, next) => {
   } 
 };
 
+/**
+ * Delete all unit - unitgroup by its unit ID.
+ */
+exports.deleteAllByUnitGroup = async (req, res, next) => {
+  try {
+    const id_unit_group = req.params.id_unit_group;
+    const deleteResponse = await UnitUnitGroup.deleteAllByUnitGroup(id_unit_group);
+    res.status(200).json(deleteResponse);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
+
 
 
 /**
