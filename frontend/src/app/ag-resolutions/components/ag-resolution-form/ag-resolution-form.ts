@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 
 
 import { AgResolution } from '../../../model/agresolution';
@@ -53,6 +54,8 @@ export class AgResolutionForm implements OnInit {
   nbOfNewDate: number = 0;
 
   formSubmitted = false;
+
+  tableOfDates: string[] = []
 
   constructor(
     private fb: FormBuilder,
@@ -163,19 +166,34 @@ export class AgResolutionForm implements OnInit {
       }
     });
 
+
     if (this.isEditMode) {
       this.agResolutionService.update(this.idAgResolution!, formValue).subscribe(() => {
         this.router.navigate(['/agnotices', this.id_ag_notice], { queryParams: { updatedResolution: 'true' } });
       });
       
     } else {
-
-      this.agResolutionService.create(formValue).subscribe(() => {
-        this.router.navigate(['/agnotices', this.id_ag_notice], { queryParams: { createdResolution: 'true' } });
+      this.agResolutionService.create(formValue).subscribe((createdResolution: AgResolution) => {
+        const newResolutionId = createdResolution.id;
+        if (!newResolutionId) {
+          console.error("Cannot get the Id of the created resolution");
+          return;
+        }
+        const creations = this.tableOfDates.map(tableOfDate => {     
+          const callDate: CallDate = {
+            date_call: tableOfDate,
+            id_ag_resolution: newResolutionId
+          };
+          return this.callDateService.create(callDate);
+        });
+    
+        forkJoin(creations).subscribe(() => {
+          this.router.navigate(['/agnotices', this.id_ag_notice], { queryParams: { createdResolution: 'true' } });
+        });
       });
     }
-  }
-
+  }    
+ 
   private formatDateForInput(date: string | Date): string {
     if (!date) return '';
   
@@ -243,18 +261,21 @@ export class AgResolutionForm implements OnInit {
       return;
     }
     
-    const newCallDate: CallDate = {
-      date_call: date.toISOString(),
-      id_ag_resolution: this.idAgResolution!,
-    };
-
-    console.log('Données envoyées au serveur:', newCallDate);
-
+    
+    if (this.isEditMode) {
+      const newCallDate: CallDate = {
+        date_call: date.toISOString(),
+        id_ag_resolution: this.idAgResolution!,
+      };  
+      this.callDateService.create(newCallDate).subscribe({
+        next: () => this.refreshCallDates(),
+        error: (err) => console.error("Erreur lors de l'ajout de la date :", err),
+      });
+    } else {
+      this.tableOfDates.push(date.toISOString());
+    }
   
-    this.callDateService.create(newCallDate).subscribe({
-      next: () => this.refreshCallDates(),
-      error: (err) => console.error("Erreur lors de l'ajout de la date :", err),
-    });
+    
   }
 
   deleteDate(callDateId: string) {
@@ -300,7 +321,6 @@ export class AgResolutionForm implements OnInit {
           this.noDateError = true;
           return;
         } else {
-
           this.noDateError = false;
           this.onSubmit();
         }
@@ -310,5 +330,8 @@ export class AgResolutionForm implements OnInit {
       this.noDateError = false;
       this.onSubmit();
     }
+  }
+  deleteDateinTable(i: number){
+    console.log(i);
   }
 }
