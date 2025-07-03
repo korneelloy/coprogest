@@ -68,8 +68,6 @@ exports.postOne = async (req, res, next) => {
     
     const postResponse = await callDate.post();
 
-    console.log(postResponse);
-
     res.status(201).json(postResponse);
 
   } catch(err) {

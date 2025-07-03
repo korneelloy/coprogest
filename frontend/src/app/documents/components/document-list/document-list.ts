@@ -57,7 +57,6 @@ export class DocumentList implements OnInit{
 
   filter(event: Event): void {
     const selectedId = (event.target as HTMLSelectElement).value;
-    console.log('Catégorie sélectionnée :', selectedId);
     if (selectedId == ""){
       const all = document.getElementsByClassName("listitems");
       for (const el of all) {

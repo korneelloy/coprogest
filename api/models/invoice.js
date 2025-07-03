@@ -149,7 +149,10 @@ module.exports = class Invoice extends BaseClass {
         error.statusCode = 500;
         throw error;
       }
-      return { message: 'Invoice created successfully' };
+      return { 
+        message: 'Invoice created successfully',
+        id: this.id 
+      };
     } catch (err) {
       if (err.code === 'ER_NO_REFERENCED_ROW_2') {
         const error = new Error('Foreign key constraint violated');

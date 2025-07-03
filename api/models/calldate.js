@@ -94,7 +94,10 @@ module.exports = class CallDate extends BaseClass {
       error.statusCode = 500;
       throw error;
     }
-    return { message: 'Call date created successfully' };
+    return { 
+      message: 'Call date created successfully',
+      id: this.id 
+    };
   }
 
   /**

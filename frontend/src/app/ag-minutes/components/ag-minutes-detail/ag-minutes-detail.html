@@ -1,0 +1,49 @@
+<h2 class="text-xl font-bold mb-2">
+  Détails d'un compte rendu de réunion
+</h2>
+<hr class="mb-4 border-gray-300" />
+
+<div *ngIf="updatedMessage" class="text-green-600 font-medium mb-4">
+  {{ updatedMessage }}
+</div>
+
+<div *ngIf="agMinute$ | async as agMinute; else loading">
+  <div class="space-y-6 bg-white p-4 rounded-lg shadow-md">
+    
+    <div class="space-y-1">
+      <p class="text-sm text-gray-600">Date : {{ agMinute.minutes_date| date:'short' }}</p>
+      <p class="text-sm text-gray-600">Lieu : {{ agMinute.place }}</p>
+    </div>
+
+    <div>
+      <h4 class="text-md font-semibold text-gray-800 mb-2">Résolutions associées</h4>
+      <ul *ngIf="agResolutions$ | async as agResolutions">
+        <ng-container *ngIf="agResolutions.length > 0; else noResolutions">
+          <li 
+            *ngFor="let agResolution of agResolutions"
+            class="border border-gray-200 rounded-md p-3 mb-3 shadow-sm bg-gray-50"
+          >
+            <p class="font-medium text-gray-800">{{ agResolution.title }}</p>
+            <p class="text-sm text-gray-600 mt-1">Texte : {{ agResolution.resolution_text }}</p>
+            <p class="text-sm text-gray-600">Majorité requise : {{ requiredMajorityLabels[agResolution.required_majority] }}</p>
+            <p class="text-sm text-gray-600">Budget : {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</p>
+          </li>
+        </ng-container>
+      </ul>
+
+      <ng-template #noResolutions>
+        <p class="text-sm text-gray-500 italic">Aucune résolution associée.</p>
+      </ng-template>
+    </div>
+
+    <button 
+      (click)="change(agMinute.id)" 
+      class="whitespace-nowrap flex-1 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200">
+      Modifier le compte rendu
+    </button>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p class="text-gray-500 italic">Chargement de la convocation…</p>
+</ng-template>

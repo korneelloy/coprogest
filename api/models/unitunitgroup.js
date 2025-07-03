@@ -161,7 +161,10 @@ module.exports = class UnitUnitGroup  {
         error.statusCode = 500;
         throw error;
       }
-      return { message: 'Unit Unit group created successfully' };
+      return { 
+        message: 'Unit Unit group created successfully' ,
+        id: this.id
+      };
     } catch (err) {
       if (err.code === 'ER_NO_REFERENCED_ROW_2') {
         const error = new Error('Foreign key constraint violated');
@@ -227,7 +230,6 @@ module.exports = class UnitUnitGroup  {
     * @returns {Promise<Object>}
     */
   static async deleteAllByUnitGroup(id_unit_group) {
-    console.log("id_unit_group", id_unit_group);
     const [result] = await db.execute(`DELETE FROM unit_unit_group WHERE id_unit_group = ?`, [id_unit_group]);
     
     return {

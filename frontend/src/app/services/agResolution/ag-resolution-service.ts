@@ -34,6 +34,27 @@ export class AgResolutionService {
       );
   }
 
+  fetchAllByAgMinutes(id_ag_minutes: string): Observable<AgResolution[]> {
+    return this.http
+      .get<AgResolution[]>(`${this.url}/getbyagminutes/${id_ag_minutes}`, { withCredentials: true })
+      .pipe(
+        tap(() => console.log('Fetched ag resolutions by ag minutes')),
+        catchError(this.handleError)
+      );
+  }
+
+
+  fetchAllNoticesWithoutMinutes(): Observable<AgResolution[]> {
+    return this.http
+      .get<AgResolution[]>(`${this.url}/fetchAllNoticesWithoutMinutes/`, { withCredentials: true })
+      .pipe(
+        tap(() => console.log('Fetched ag notices without ag minutes')),
+        catchError(this.handleError)
+      );
+  }
+
+  
+
   fetchById(id: string): Observable<AgResolution> {
     return this.http
       .get<AgResolution>(`${this.url}/${id}`, { withCredentials: true })
@@ -61,6 +82,14 @@ export class AgResolutionService {
       );
   }
 
+  updateMinutesLink(id: string, id_ag_minutes: string): Observable<AgResolution> {
+    return this.http
+      .patch<AgResolution>(`${this.url}/${id}`, {id_ag_minutes : id_ag_minutes}, { withCredentials: true })
+      .pipe(
+        tap(() => console.log(`Updated ag resolution id=${id}`)),
+        catchError(this.handleError)
+      );
+  }
   delete(id: string): Observable<void> {
     return this.http
       .delete<void>(`${this.url}/${id}`, { withCredentials: true })

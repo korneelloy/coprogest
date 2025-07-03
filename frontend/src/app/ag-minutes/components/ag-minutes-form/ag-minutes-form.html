@@ -1,0 +1,89 @@
+<h2 class="text-xl font-bold mb-2">
+  Formulaire pour compte rendu de la réunion d'AG
+</h2>
+<hr class="mb-4" />
+
+<div *ngIf="deletedMessage" class="bg-green-100 text-green-800 px-4 py-2 rounded-md mb-4">
+  {{ deletedMessage }}
+</div>
+
+<form [formGroup]="agMinutesForm" (ngSubmit)="onSubmit()" class="space-y-6">
+  <div *ngIf="isEditMode">
+    <div>
+      <label class="block font-medium mb-1">Lieu:</label>
+      <input formControlName="place" placeholder="Chez M. Dupont"
+        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+      <div class="text-sm text-red-600 mt-1" *ngIf="agMinutesForm.get('place')?.invalid && agMinutesForm.get('place')?.touched">
+        <small *ngIf="agMinutesForm.get('place')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+        <small *ngIf="agMinutesForm.get('place')?.errors?.['minlength']">* Minimum 2 caractères.</small>
+        <small *ngIf="agMinutesForm.get('place')?.errors?.['maxlength']">* Maximum 255 caractères.</small>
+      </div>
+    </div>
+
+    <div>
+      <label class="block font-medium mb-1">Date:</label>
+      <input formControlName="ag_date" type="date"
+        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+      <div class="text-sm text-red-600 mt-1" *ngIf="agMinutesForm.get('ag_date')?.invalid && agMinutesForm.get('ag_date')?.touched">
+        <small>* Ce champ ne peut pas être vide.</small>
+      </div>
+    </div>
+
+    <div>
+      <label class="block font-medium mb-1">Heure:</label>
+      <input formControlName="ag_time" type="time"
+        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+      <div class="text-sm text-red-600 mt-1" *ngIf="agMinutesForm.get('ag_time')?.invalid && agMinutesForm.get('ag_time')?.touched">
+        <small>* Ce champ ne peut pas être vide.</small>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isEditMode && allNoticesWithoutMinutes">
+    <div class="mb-4">
+      <label for="allNoticesWithoutMinutes" class="block mb-1">Choix de la convocation</label>
+      <select id="allNoticesWithoutMinutes" formControlName="notice_id" class="w-full border border-gray-300 rounded-md px-3 py-2">
+        <option value="" disabled>Choisissez une convocation</option>
+        <option *ngFor="let notice of allNoticesWithoutMinutes" [value]="notice.ag_notice_id">
+          {{ notice.ag_notice_title }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="!isEditMode && !allNoticesWithoutMinutes">
+  <div class="mb-4">
+    <div>Création impossible : chaque convocation est déjà liée à un autre compte rendu.</div>
+    <div>Vous souhaitez créer une convocation? C'est par 
+      <a [routerLink]="['/agnotices/new']" 
+      class="text-sm text-blue-600 font-medium hover:underline hover:text-orange-400 transition-colors duration-200"
+        >ici</a> . 
+    </div> 
+  </div>
+</div>
+
+  <button type="submit" [disabled]="agMinutesForm.invalid"
+    class="whitespace-nowrap flex-1 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200 m-4">
+    {{ isEditMode ? 'Mettre à jour' : 'Créer' }} le compte rendu
+  </button>
+    
+  <div *ngIf="isEditMode">
+    <strong>Résolutions associées</strong>
+  <ul *ngIf="agResolutions$ | async as agResolutions" class="mt-4 space-y-4">
+    <ng-container *ngIf="agResolutions.length > 0; else noResolutions">
+      <li *ngFor="let agResolution of agResolutions" class="border-b border-gray-300 pb-4 space-y-2">
+        <strong>{{ agResolution.title }}</strong><br>
+        <div>Texte: {{ agResolution.resolution_text }}</div>
+        <div>Majorité requise: {{ requiredMajorityLabels[agResolution.required_majority] }}</div>
+        <div>Budget: {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</div>
+      </li>
+    </ng-container>
+  </ul>
+
+  <ng-template #noResolutions>
+    <p>Aucune résolution associée.</p>
+  </ng-template>
+  </div>
+</form>
+
+

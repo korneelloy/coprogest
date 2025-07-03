@@ -99,7 +99,10 @@ module.exports = class ChargeCall extends BaseClass {
         error.statusCode = 500;
         throw error;
       }
-      return { message: 'Charge call created successfully' };
+      return { 
+        message: 'Charge call created successfully',
+        id: this.id 
+      };
     } catch (err) {
       if (err.code === 'ER_NO_REFERENCED_ROW_2') {
         const error = new Error('Foreign key constraint violated');

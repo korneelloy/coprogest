@@ -108,7 +108,10 @@ module.exports = class AgResolutionPerson  {
         error.statusCode = 500;
         throw error;
       }
-      return { message: 'ag_resolution / person created successfully' };
+      return {
+        message: 'ag_resolution / person created successfully' ,
+        id: this.id
+      };
     } catch (err) {
       if (err.code === 'ER_NO_REFERENCED_ROW_2') {
         const error = new Error('Foreign key constraint violated');

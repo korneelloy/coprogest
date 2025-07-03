@@ -331,12 +331,39 @@ set id_budget_category(value) {
   }
 
   /**
+     * Fetch ag notices (via ag resolution) without id_ag_minute
+     * @returns {Promise<Object[]>}
+     */
+  static async getAllNoticesWithoutMinutes() {
+    const [agResolutions] = await db.execute(`
+      SELECT DISTINCT 
+        ag_notice.title as ag_notice_title,
+        ag_notice.id as ag_notice_id
+      FROM ag_resolution
+      JOIN ag_notice 
+        ON ag_resolution.id_ag_notice = ag_notice.id
+      WHERE id_ag_minutes IS NULL
+      ;`);
+    return agResolutions;
+  }
+
+  /**
      * Fetch all ag resolutions by ag notice ID.
      * @param {string} id_ag_notice
      * @returns {Promise<Object>}
      */
   static async getByAgNotice(id_ag_notice) {
     const [agResolutions] = await db.execute(`SELECT * FROM ag_resolution WHERE id_ag_notice = ?`, [id_ag_notice]);
+    return agResolutions;
+  }
+
+   /**
+       * Fetch all ag resolutions by ag minutes ID.
+       * @param {string} id_ag_minutes
+       * @returns {Promise<Object>}
+       */
+   static async getByAgMinutes(id_ag_minutes) {
+    const [agResolutions] = await db.execute(`SELECT * FROM ag_resolution WHERE id_ag_minutes = ?`, [id_ag_minutes]);
     return agResolutions;
   }
 
@@ -498,6 +525,42 @@ set id_budget_category(value) {
       throw err;
     }
   }
+
+
+  
+
+  /**
+   * Update the ag resolution in the database.
+   * @returns {Promise<Object>}
+   */
+
+  static async patchAgMin(id, id_ag_minutes) {
+    try {
+      const [result] = await db.execute(
+        `UPDATE ag_resolution
+          SET id_ag_minutes = ? 
+          WHERE id = ?`,
+          [ id_ag_minutes,
+            id
+          ]
+        );
+
+      if (result.affectedRows === 0) {
+        const error = new Error('Ag resolution not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      return { message: 'Ag resolution updated successfully' };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
+    }
+  }
+
 
   /**
    * Delete a ag resolution by ID.

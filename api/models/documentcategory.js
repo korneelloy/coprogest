@@ -87,7 +87,10 @@ module.exports = class DocumentCategory extends BaseClass {
       error.statusCode = 500;
       throw error;
     }
-    return { message: 'Document category created successfully' };
+    return { 
+      message: 'Document category created successfully' ,
+      id: this.id
+    };
   }
   
   /**

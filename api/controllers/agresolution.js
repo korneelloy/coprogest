@@ -16,14 +16,31 @@ exports.getAll = async (req, res, next) => {
   }
 };
 
+
 /**
- * Retrieve and return a agresolution by ag notice.
+ * Get all ag resolutions/notice without minutes
+ */
+exports.getAllNoticesWithoutMinutes = async (req, res, next) => {
+  try {
+    const agResWithoutMinutes = await AgResolution.getAllNoticesWithoutMinutes();
+    res.status(200).json(agResWithoutMinutes);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+
+/**
+ * Retrieve and return a agresolutions by ag notice.
  */
 exports.getByAgNotice = async (req, res, next) => {
   try {
     const id_ag_notice = req.params.id_ag_notice;
-    const agResolution = await AgResolution.getByAgNotice(id_ag_notice);
-    res.status(200).json(agResolution);
+    const agResolutions = await AgResolution.getByAgNotice(id_ag_notice);
+    res.status(200).json(agResolutions);
   } catch(err) {
     if(!err.statusCode) {
       err.statusCode = 500;
@@ -31,6 +48,26 @@ exports.getByAgNotice = async (req, res, next) => {
     next(err);
   } 
 };
+
+
+/**
+ * Retrieve and return a agresolutions by ag minutes.
+ */
+exports.getByAgMinutes = async (req, res, next) => {
+  try {
+    const id_ag_minutes = req.params.id_ag_minutes;
+    const agResolutions = await AgResolution.getByAgMinutes(id_ag_minutes);
+    res.status(200).json(agResolutions);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
+
+
 
 /**
  * Retrieve and return a agresolution by its ID.
@@ -93,9 +130,6 @@ exports.postOne = async (req, res, next) => {
       budget_actif,
       id_budget_category
     });
-
-    console.log('agResolution', agResolution);
-
     
     const postResponse = await agResolution.post();
 
@@ -162,6 +196,25 @@ exports.updateOne = async (req, res, next) => {
     next(err);
   } 
 };
+
+/**
+ * Update the id_ag_minutes of an agresolution identified by its ID.
+ */
+exports.patchAgMin = async (req, res, next) => {
+  try {
+    const updateResponse = await AgResolution.patchAgMin(req.params.id, req.body.id_ag_minutes);
+    res.status(200).json(updateResponse);
+
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
+
+
 
 /**
  * Delete a agresolution by its ID.

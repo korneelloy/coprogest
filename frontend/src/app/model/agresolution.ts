@@ -19,5 +19,7 @@ export interface AgResolution {
   id_budget_category: string;
   budget_category_name?: string;
   call_date_date?: Date;
-  call_date_id?: string
+  call_date_id?: string;
+  ag_notice_title?: string;
+  ag_notice_id?: string;
 }

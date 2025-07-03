@@ -332,6 +332,6 @@ export class AgResolutionForm implements OnInit {
     }
   }
   deleteDateinTable(i: number){
-    console.log(i);
+    this.tableOfDates.splice(i, 1);
   }
 }
