@@ -30,7 +30,7 @@ const chargeLineRoutes = require('./routes/chargeline');
 const agMinuteRoutes = require('./routes/agminute');
 const invoicePaymentRoutes = require('./routes/invoicepayment');
 const agResolutionPersonRoutes = require('./routes/agresolutionperson');
-const agNoticePresencePersonRoutes = require('./routes/agnoticepresenceperson');
+const agMinutesPresencePersonRoutes = require('./routes/agminutespresenceperson');
 const invoiceRoutes = require('./routes/invoice');
 
 
@@ -71,7 +71,7 @@ app.use('/api/v1/chargelines', chargeLineRoutes);
 app.use('/api/v1/agminutes', agMinuteRoutes);
 app.use('/api/v1/invoicepayments', invoicePaymentRoutes);
 app.use('/api/v1/agresolutionpersons', agResolutionPersonRoutes);
-app.use('/api/v1/agnoticepresencepersons', agNoticePresencePersonRoutes);
+app.use('/api/v1/agminutespresencepersons', agMinutesPresencePersonRoutes);
 app.use('/api/v1/invoices', invoiceRoutes);
 
 /**

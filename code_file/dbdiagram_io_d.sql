@@ -191,13 +191,13 @@ Table ag_notice_sent_person{
    FOREIGN KEY(id_ag_notice) REFERENCES ag_notice(id) 
 }
 
-Table ag_notice_presence_person{
+Table ag_minutes_presence_person{
    id_person varchar [not null]
-   id_ag_notice varchar [not null]
+   id_ag_minutes varchar [not null]
    presence varchar [not null]
    represented_by varchar
    FOREIGN KEY(id_person) REFERENCES person(id)
-   FOREIGN KEY(id_ag_notice) REFERENCES ag_notice(id)
+   FOREIGN KEY(id_ag_minutes) REFERENCES ag_minutes(id)
 }
 
 Table ag_resolution_person{

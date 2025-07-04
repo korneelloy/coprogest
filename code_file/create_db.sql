@@ -213,6 +213,9 @@ CREATE TABLE ag_notice_sent_person(
    FOREIGN KEY(id_ag_notice) REFERENCES ag_notice(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+/*
+
+wrong:
 CREATE TABLE ag_notice_presence_person(
    id_person VARCHAR(36) NOT NULL,
    id_ag_notice VARCHAR(36) NOT NULL,
@@ -221,6 +224,18 @@ CREATE TABLE ag_notice_presence_person(
    PRIMARY KEY(id_person, id_ag_notice),
    FOREIGN KEY(id_person) REFERENCES person(id) ON DELETE RESTRICT ON UPDATE CASCADE,
    FOREIGN KEY(id_ag_notice) REFERENCES ag_notice(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+correction:
+*/
+
+CREATE TABLE ag_minutes_presence_person(
+   id_person VARCHAR(36) NOT NULL,
+   id_ag_minutes VARCHAR(36) NOT NULL,
+   presence VARCHAR(20) NOT NULL,
+   represented_by VARCHAR(50),
+   PRIMARY KEY(id_person, id_ag_minutes),
+   FOREIGN KEY(id_person) REFERENCES person(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+   FOREIGN KEY(id_ag_minutes) REFERENCES ag_minutes(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE ag_resolution_person(
