@@ -16,6 +16,23 @@ exports.getAll = async (req, res, next) => {
 };
 
 /**
+ * Retrieve and return all agresolution/person for on eresolution.
+ */
+exports.getAllByAgResolution = async (req, res, next) => {
+  try {
+    const id_ag_resolution = req.params.id_ag_resolution;
+    const all = await AgResolutionPerson.getAllByAgResolution(id_ag_resolution);
+    res.status(200).json(all);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+
+/**
  * Retrieve and return a agresolution/person by its ID.
  */
 exports.getOne = async (req, res, next) => {
@@ -79,6 +96,23 @@ exports.updateOne = async (req, res, next) => {
 
     res.status(200).json(updateResponse);
 
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
+
+/**
+ * Delete all agresolution/person by its resolution ID.
+ */
+exports.deleteAllByAgResolution = async (req, res, next) => {
+  try {
+    const id_ag_resolution = req.params.id_ag_resolution;
+    const deleteResponse = await AgResolutionPerson.deleteAllByAgResolution(id_ag_resolution);
+    res.status(200).json(deleteResponse);
   } catch(err) {
     if(!err.statusCode) {
       err.statusCode = 500;

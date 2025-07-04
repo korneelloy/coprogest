@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 import { forkJoin } from 'rxjs';
 
 
@@ -18,15 +19,16 @@ import { AgNoticeService } from '../../../services/agnotice/ag-notice-service';
 import { Person } from '../../../model/person';
 import { PersonService } from '../../../services/person/person-service';
 
-
 import { AgMinutesPresencePerson } from '../../../model/agminutespresenceperson';
 import { AgminutespresencepersonService } from '../../../services/agminutespresenceperson/agminutespresenceperson-service';
 
+import { AgResolutionPerson } from '../../../model/agresolutionperson';
+import { AgResolutionPersonService } from '../../../services/agResolutionPerson/ag-resolution-person-service';
 
 @Component({
   selector: 'app-ag-minutes-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule, FormsModule],
   templateUrl: './ag-minutes-form.html',
   styleUrl: './ag-minutes-form.scss'
 })
@@ -38,6 +40,13 @@ export class AgMinutesForm implements OnInit {
   allNoticesWithoutMinutes: AgResolution[] = [];
   persons$!: Observable<Person[]>;
   persons: Person[] = [];
+  
+
+  votes$!: Observable<AgResolutionPerson[]>;
+  votes: AgResolutionPerson[] = [];
+
+  selectedVotes: { [personId: string]: string } = {};
+
 
   presence: string = "";
   
@@ -63,7 +72,8 @@ export class AgMinutesForm implements OnInit {
     private agResolutionService: AgResolutionService,
     private agNoticeService : AgNoticeService,
     private personService: PersonService,
-    private agminutespresencepersonService: AgminutespresencepersonService
+    private agminutespresencepersonService: AgminutespresencepersonService,
+    private agResolutionPersonService: AgResolutionPersonService,
   ) {
     this.agMinutesForm = this.fb.group({
       ag_date: [''],
@@ -77,8 +87,16 @@ export class AgMinutesForm implements OnInit {
   ngOnInit(): void {
     this.agMinutesId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.agMinutesId;
+
     this.persons$ = this.personService.fetchAll();
     this.persons$.subscribe(data => this.persons = data);
+
+    this.votes$ = this.agResolutionPersonService.fetchAll();
+    this.votes$.subscribe(data => this.votes = data);
+
+    this.votes.forEach(vote => {
+      this.selectedVotes[vote.id_person] = vote.vote;
+    });
 
 
     if (!this.isEditMode){
@@ -106,7 +124,7 @@ export class AgMinutesForm implements OnInit {
           this.selectedPersonsIdOnly.push(presence.id_person);
         });
       });
-      
+           
       
       this.agMinutesForm.get('ag_date')?.setValidators([Validators.required]);
       this.agMinutesForm.get('ag_time')?.setValidators([Validators.required]);
@@ -117,6 +135,40 @@ export class AgMinutesForm implements OnInit {
       ])
       
       this.agResolutions$ = this.agResolutionService.fetchAllByAgMinutes(this.agMinutesId!);
+
+
+      /**
+       * 
+       *       
+       * this.agResolutions$ = this.agResolutionService.fetchAllByAgMinutes(this.agMinutesId!);
+       
+      
+      do for each reasilution 
+
+      this.agResolutionPersonService.fetchAllByAgResolution(id).subscribe((agResolutionPerson: AgResolutionPerson[]) => {
+      
+      }     
+
+      this.agResolutions$ = this.agResolutionService
+        .fetchAllByAgMinutes(this.agMinutesId!)
+        .pipe(
+          switchMap((resolutions: AgResolution[]) => {
+            const resolutionWithVotes$ = resolutions.map(resolution =>
+              this.agResolutionPersonService
+                .fetchAllByAgResolution(resolution.id)
+                .pipe(
+                  map((votes: AgResolutionPerson[]) => ({
+                    ...resolution,
+                    votes 
+                  }))
+                )
+            );
+
+            return forkJoin(resolutionWithVotes$);
+          })
+        );
+      */
+
 
       this.agMinutesService.fetchById(this.agMinutesId!).subscribe((agMinutes: AgMinutes) => {
         const dateObj = new Date(agMinutes.minutes_date);
@@ -256,5 +308,15 @@ export class AgMinutesForm implements OnInit {
       } 
     }
     return ("Nom de ce copropriétaire non disponible");
+  }
+
+  getvote(personId: string): string {
+    const found = this.votes.find(p => p.id_person === personId);
+    if (found) {
+      if (found.vote){
+        return (found.vote);
+      }
+    }
+    return ("Vote non disponible");
   }
 }

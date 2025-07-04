@@ -137,7 +137,22 @@
         <div>Budget: {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</div>
         <ul *ngIf="selectedPersonsIdOnly" class="mt-4 space-y-4">
           <li *ngFor="let personId of selectedPersonsIdOnly" class="border-b border-gray-300 pb-4 space-y-2">
-            {{ getperson(personId) }}
+            <label class="block font-medium mb-1">{{ getperson(personId) }}:</label>
+
+            <select
+              id="vote"
+              required
+              class="w-full px-3 py-2 border rounded-md"
+              [(ngModel)]="selectedVotes[personId]"
+              name="vote-{{ personId }}"
+            >
+              <option value="" disabled>Choisissez le vote</option>
+              <option value="abstention">Abstention</option>
+              <option value="for">Pour</option>
+              <option value="against">Contre</option>
+            </select>
+            
+
           </li>
          </ul>
       </li>

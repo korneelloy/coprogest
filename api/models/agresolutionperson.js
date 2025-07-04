@@ -74,6 +74,17 @@ module.exports = class AgResolutionPerson  {
     return all;
   }
 
+/**
+   * Fetch all ag_resolution / persons from the database.
+   * @returns {Promise<Object[]>}
+   */
+  static async getAllByAgResolution(id_ag_resolution) {
+    const [all] = await db.execute(`SELECT * FROM ag_resolution_person WHERE id_ag_resolution = ?`, [id_ag_resolution]);
+    return all;
+  }
+
+  
+
    /**
    * Fetch a ag_resolution / person  by ID.
    * @param {string} id_ag_resolution
@@ -155,6 +166,21 @@ module.exports = class AgResolutionPerson  {
       throw err;
     }
   }
+
+  /**
+     * Delete all ag_resolution / person by resolution ID.
+     * @param {string} id_ag_resolution
+     * @returns {Promise<Object>}
+     */
+    static async deleteAllByAgResolution(id_ag_resolution) {
+      const [result] = await db.execute(`DELETE FROM ag_resolution_person WHERE id_ag_resolution = ?`, [id_ag_resolution]);
+      if (result.affectedRows === 0) {
+        const error = new Error('ag_resolution / person not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      return { message: 'ag_resolution / person deleted successfully' };
+    }
 
   /**
      * Delete a ag_resolution / person by ID.
