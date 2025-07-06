@@ -40,6 +40,7 @@ export class AgMinutesForm implements OnInit {
   allNoticesWithoutMinutes: AgResolution[] = [];
   persons$!: Observable<Person[]>;
   persons: Person[] = [];
+  uniquePersons: Person[] = [];
   
 
   votes$!: Observable<AgResolutionPerson[]>;
@@ -54,6 +55,7 @@ export class AgMinutesForm implements OnInit {
   selectedPersonsIdOnly: string[] = [];
 
   deletedMessage: string | null = null;
+  updatedMessage: string | null = null;
  
   requiredMajorityLabels: { [key: string]: string } = {
     "24": 'Article 24',
@@ -63,6 +65,9 @@ export class AgMinutesForm implements OnInit {
     "unanimiy": 'Unanimité',
     "no_vote": 'Sans vote',
   };
+
+  formValidation = { valid: true, message: '' }; // default value
+
 
   constructor(
     private fb: FormBuilder,
@@ -80,24 +85,107 @@ export class AgMinutesForm implements OnInit {
       ag_time: [''],
       place: [''],
       notice_id: [''],
-      persons:['']
+      uniquePersons:['']
     });
   }
 
   ngOnInit(): void {
+    
     this.agMinutesId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.agMinutesId;
 
-    this.persons$ = this.personService.fetchAll();
-    this.persons$.subscribe(data => this.persons = data);
+    if (this.agMinutesId) {
+      this.route.queryParamMap.subscribe(params => {
+        if (params.get('updated') === 'true') {
+          this.updatedMessage = "Le compte rendu a été mise à jour avec succès.";
+          setTimeout(() => {
+            this.updatedMessage = null;
+            this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: { updated: null },
+              queryParamsHandling: 'merge'
+            });
+          }, 5000);
+        }
+      });      
+    }
 
-    this.votes$ = this.agResolutionPersonService.fetchAll();
-    this.votes$.subscribe(data => this.votes = data);
+    /** everybody with at least one unit */
+    this.persons$ = this.personService.getAllWithUnitInfo();
 
-    this.votes.forEach(vote => {
-      this.selectedVotes[vote.id_person] = vote.vote;
+    /**list of unique persons */
+    this.persons$.subscribe(data => {
+      this.uniquePersons = data;
+      this.uniquePersons = this.uniquePersons.filter(
+        (person, index, self) =>
+          index === self.findIndex(p => p.id === person.id)
+      );
+    });
+   
+
+    /**
+     * Create a persons array with:
+     * Level 1: An array of all persons who own at least one unit
+     * Level 2: For each person, an array of all units they own
+     * Level 3: For each unit, an array of all unit groups the unit belongs to
+     * 
+     */
+
+    this.persons$.subscribe(data => {
+      const personMap = new Map<string, any>();
+    
+      for (const row of data) {
+        // Create person if not already present
+        if (!personMap.has(row.id)) {
+          personMap.set(row.id, {
+            id: row.id,
+            email: row.email,
+            first_name: row.first_name,
+            last_name: row.last_name,
+            units: []
+          });
+        }
+    
+        const person = personMap.get(row.id);
+    
+        // Check if unit already added to this person
+        let unit = person.units.find((u: any) => u.id === row.unit_id);
+        if (!unit) {
+          unit = {
+            id: row.unit_id,
+            name: row.unit_name,
+            shares: row.unit_shares,
+            unit_groups: []
+          };
+          person.units.push(unit);
+        }
+    
+        // Add unit group if present and not already added
+        if (row.unit_group_name) {
+          const exists = unit.unit_groups.some((g: any) => g.name === row.unit_group_name);
+          if (!exists) {
+            unit.unit_groups.push({
+              name: row.unit_group_name,
+              id: row.unit_group_id,
+              special_shares: row.unit_group_special_shares,
+              adjusted_shares: row.unit_unit_group_adjusted_shares
+            });
+          }
+        }
+      }
+    
+      this.persons = Array.from(personMap.values());
     });
 
+
+    this.votes$ = this.agResolutionPersonService.fetchAll();
+    this.votes$.subscribe(data => {
+      this.votes = data;
+
+      this.votes.forEach(vote => {
+        this.selectedVotes[vote.id_person] = vote.vote;
+      });
+    });
 
     if (!this.isEditMode){
       this.agResolutionService.fetchAllNoticesWithoutMinutes().subscribe((data: AgResolution[]) => {
@@ -183,6 +271,7 @@ export class AgMinutesForm implements OnInit {
         });
       });
     }
+    this.updateFormValidation();
   }
 
   onSubmit(): void {
@@ -209,9 +298,14 @@ export class AgMinutesForm implements OnInit {
           // Step 3: Wait for all creations to complete
           forkJoin(creations).subscribe(() => {
             // Step 4: Navigate after all is done
-            this.router.navigate(['/agminutes', this.agMinutesId], {
+            this.router.navigate(['/agminutes', this.agMinutesId, 'edit'], {
               queryParams: { updated: 'true' }
-            });
+            })
+              .then(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' }); 
+              });
+            
+
           });
         });
       });    
@@ -296,6 +390,7 @@ export class AgMinutesForm implements OnInit {
       this.selectedPersonsOnly.push(newPresence);    
       this.selectedPersonsIdOnly.push(personId);
     }
+    this.updateFormValidation(); 
   }
 
   getperson(personId: string): string {
@@ -319,4 +414,96 @@ export class AgMinutesForm implements OnInit {
     }
     return ("Vote non disponible");
   }
+
+
+  registerVote(agResolutionId: string){
+    const elements = document.getElementsByClassName("vote-" + agResolutionId);
+
+    for (let i = 0; i < elements.length; i++) {
+        const select = elements[i] as HTMLSelectElement;
+        console.log(select.id); 
+        console.log(select.value);
+    }
+  }
+
+
+    /** 
+  checkPersonUnitsByGroup(personId: string, unitGroupId: string) {
+  
+    tourner sur person, tourner sur unit et lister les units qui correspondent a id_unit_group
+    si pas de correspondance: ne pas afficher
+
+    Create a persons array with:
+     * Level 1: An array of all persons who own at least one unit
+     * Level 2: For each person, an array of all units they own
+     * Level 3: For each unit, an array of all unit groups the unit belongs to
+     * 
+
+    const person = this.persons.find(p => p.id === personId);
+    
+  
+    if (!person) {
+      console.log('Person not found');
+      return [];
+    }
+  
+    const matchingUnits = person.unit_id!.filter(unit => {
+      return unit.unit_groups.some(group => group.id === unitGroupId);
+    });
+  
+    return matchingUnits;
+  }
+        */ 
+
+  checkPersonUnitsByGroup(personId: string, unitGroupId: string) {
+    const person = this.persons.find(p => p.id === personId);
+  
+    if (!person) {
+      console.warn('Person not found');
+      return [];
+    }
+    // Return all units that contain the requested unit group
+    const matchingUnits = person.units!.filter(unit =>
+      unit.unit_groups!.some(group => group.id === unitGroupId)
+    );  
+    return matchingUnits;
+  }
+
+  shouldDisplayPerson(personId: string, groupId: string): boolean {
+    const units = this.checkPersonUnitsByGroup(personId, groupId);
+    return units.some(unit =>
+      unit.unit_groups?.some(group =>
+        group.id === groupId &&
+        (!group.special_shares || +group.adjusted_shares > 0)
+      )
+    );
+  }
+  
+  updateFormValidation(): void {
+    for (const id of this.selectedPersonsIdOnly) {
+      const presence = this.getPresenceValue(id);
+      if (!presence) {
+        this.formValidation = {
+          valid: false,
+          message: 'Veuillez sélectionner un statut de présence pour toutes les personnes cochées.'
+        };
+        return;
+      }
+      if (presence === 'represented') {
+        const representedBy = this.getRepresentedValue(id);
+        if (!representedBy || representedBy.trim() === '') {
+          this.formValidation = {
+            valid: false,
+            message: 'Veuillez remplir le champ "Représenté par" pour les personnes représentées.'
+          };
+          return;
+        }
+      }
+    }
+  
+    this.formValidation = { valid: true, message: '' };
+  }
+  
+  
+  
 }

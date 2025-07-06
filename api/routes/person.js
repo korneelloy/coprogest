@@ -15,6 +15,10 @@ router.get('/me', auth, personController.getConnectedPerson);
 // Get all persons
 router.get('/', personController.getAll);
 
+// Get all persons with unit info
+router.get('/withunitinfo', personController.getAllWithUnitInfo);
+
+
 // Get a single person by ID
 router.get('/:id', personController.getOne);
 

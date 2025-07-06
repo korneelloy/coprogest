@@ -234,6 +234,35 @@ module.exports = class Person extends BaseClass {
     return rows[0];
   }
 
+  /**
+     * Fetch all persons with unit info (if no units connected, excluded)
+     * @returns {Promise<Object>}
+     */
+  static async getAllWithUnitInfo() {
+    const [all] = await db.execute(`SELECT 
+      person.id,
+      person.email,
+      person.first_name,
+      person.last_name,
+      
+      unit.id as unit_id,
+      unit.name as unit_name,
+      unit.shares as unit_shares,
+
+      unit_unit_group.adjusted_shares as unit_unit_group_adjusted_shares,
+
+      unit_group.id as unit_group_id,
+      unit_group.name as unit_group_name,
+      unit_group.special_shares as unit_group_special_shares
+      
+      FROM person
+      JOIN unit ON unit.id_person = person.id
+      JOIN unit_unit_group on unit.id = unit_unit_group.id_unit
+      LEFT JOIN unit_group on unit_group.id = unit_unit_group.id_unit_group
+      `
+    );  
+    return all;
+  }
 
     /**
    * Fetch a person by email (be carefull password included!!!).

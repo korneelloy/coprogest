@@ -93,7 +93,23 @@ module.exports = class Unitgroup extends BaseClass {
    * @returns {Promise<Object>}
    */
   static async get(id) {
-    const [rows] = await db.execute(`SELECT * FROM unit_group WHERE id = ?`, [id]);
+    const [rows] = await db.execute(`SELECT 
+      unit_group.*,
+      unit_unit_group.adjusted_shares as unit_unit_group_adjusted_shares,
+      unit.id as unit_id,
+      unit.name as unit_name,
+      unit.shares as unit_shares,
+      unit.id_person as unit_id_person
+
+      FROM unit_group 
+
+      LEFT JOIN unit_unit_group
+        ON unit_group.id = unit_unit_group.id_unit_group
+
+      LEFT JOIN unit
+        ON unit_unit_group.id_unit = unit.id
+
+      WHERE unit_group.id = ?`, [id]);
    
     if (rows.length === 0) {
       const error = new Error('Unitgroup not found');

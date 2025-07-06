@@ -46,7 +46,6 @@ export class AgMinutesDetail implements OnInit {
       this.route.queryParamMap.subscribe(params => {
         if (params.get('updated') === 'true') {
           this.updatedMessage = "Le compte rendu a été mise à jour avec succès.";
-          setTimeout(() => this.updatedMessage = null, 5000);
         }
       });      
 
