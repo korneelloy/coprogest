@@ -12,6 +12,7 @@ import { AgNoticeService } from '../../../services/agnotice/ag-notice-service';
 import { AgResolution } from '../../../model/agresolution';
 import { AgResolutionService } from '../../../services/agResolution/ag-resolution-service';
 
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-ag-notice-detail',
@@ -22,13 +23,24 @@ import { AgResolutionService } from '../../../services/agResolution/ag-resolutio
 export class AgNoticeDetail implements OnInit {
   agNotice$!: Observable<AgNotice>;
   updatedMessage: string | null = null;
+
   agResolutions$!: Observable<AgResolution[]>;
+
+  requiredMajorityLabels: { [key: string]: string } = {
+    "24": 'Article 24',
+    "25": 'Article 25',
+    "25-1": 'Article 25-1',
+    "26": 'Article 26',
+    "unanimiy": 'Unanimité',
+    "no_vote": 'Sans vote',
+  };
 
   constructor(
     private route: ActivatedRoute,
     private agNoticeService: AgNoticeService,
     private router: Router,
-    private agResolutionService: AgResolutionService
+    private agResolutionService: AgResolutionService,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +49,11 @@ export class AgNoticeDetail implements OnInit {
       this.route.queryParamMap.subscribe(params => {
         if (params.get('updated') === 'true') {
           this.updatedMessage = "La convocation a été mise à jour avec succès.";
+          setTimeout(() => this.updatedMessage = null, 5000);
+        }
+
+        if (params.get('updatedResolution') === 'true') {
+          this.updatedMessage = "La résolution a été mise à jour avec succès.";
           setTimeout(() => this.updatedMessage = null, 5000);
         }
       });      
@@ -48,10 +65,26 @@ export class AgNoticeDetail implements OnInit {
   }
   
   change(id: string): void {
-    this.router.navigate(['/agnotices', id, 'edit']);
+    this.router.navigate(['/agnotices', id, 'edit']).then(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }
 
   seeDetailsResolution(id: string): void {
     this.router.navigate(['/agresolutions', id]);
+  }
+  generateWord(agNoticeId: string): void {
+    this.http.get(`http://localhost:3000/api/v1/agnotices/generateconvocations/${agNoticeId}`, {
+      responseType: 'blob'
+    }).subscribe(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `convocation-${agNoticeId}.docx`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }, error => {
+      console.error("Erreur lors de la génération du document", error);
+    });
   }
 }

@@ -6,9 +6,13 @@
 const express = require('express');
 const agNoticeController = require('../controllers/agnotice');
 const router = express.Router();
+const docxController = require('../controllers/docxconvocation');
 
 // Get all ag notices
 router.get('/', agNoticeController.getAll);
+
+// Route to generate a Word (.docx) file for a specific AG notice
+router.get('/generateconvocations/:id', docxController.generateConvocation);
 
 // Get a single ag notice by ID
 router.get('/:id', agNoticeController.getOne);
