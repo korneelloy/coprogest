@@ -43,7 +43,7 @@ exports.postOne = async (req, res, next) => {
     const state = req.body.state;    
     const id_unit = req.body.id_unit;
     const id_charge_call = req.body.id_charge_call;
-    const id_ag_resolution_budget = req.body.id_ag_resolution_budget;
+    const id_ag_resolution = req.body.id_ag_resolution;
 
     const chargeLine = new ChargeLine({
       id,
@@ -52,7 +52,7 @@ exports.postOne = async (req, res, next) => {
       state,
       id_unit,
       id_charge_call,
-      id_ag_resolution_budget
+      id_ag_resolution
     });
     
     const postResponse = await chargeLine.post();
@@ -79,7 +79,7 @@ exports.updateOne = async (req, res, next) => {
     const state = req.body.state;    
     const id_unit = req.body.id_unit;
     const id_charge_call = req.body.id_charge_call;
-    const id_ag_resolution_budget = req.body.id_ag_resolution_budget;
+    const id_ag_resolution = req.body.id_ag_resolution;
 
     const chargeLine = new ChargeLine({
       id,
@@ -88,7 +88,7 @@ exports.updateOne = async (req, res, next) => {
       state,
       id_unit,
       id_charge_call,
-      id_ag_resolution_budget
+      id_ag_resolution
     });
     
     const updateResponse = await chargeLine.update();

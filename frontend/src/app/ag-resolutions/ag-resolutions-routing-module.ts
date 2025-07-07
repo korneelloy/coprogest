@@ -4,7 +4,8 @@ import { AgResolutionForm } from './components/ag-resolution-form/ag-resolution-
 
 
 const routes: Routes = [
-  { path: ':id/edit', component: AgResolutionForm }
+  { path: ':id/edit', component: AgResolutionForm },
+  { path: 'new/:idagnotice', component: AgResolutionForm },
 ];
 
 @NgModule({

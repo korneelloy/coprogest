@@ -30,6 +30,9 @@ router.put('/:id_unit/:id_unit_group', unitUnitGroupController.updateOne);
 // Delete a unit / unit group relations by Unit ID
 router.delete('/deleteByUnit/:id_unit', unitUnitGroupController.deleteAllByUnit);
 
+// Delete a all unit / unit group relations by Unit Group ID
+router.delete('/deleteByUnitGroup/:id_unit_group', unitUnitGroupController.deleteAllByUnitGroup);
+
 // Delete a unit / unit group relation by ID
 router.delete('/:id_unit/:id_unit_group', unitUnitGroupController.deleteOne);
 

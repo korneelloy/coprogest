@@ -106,7 +106,10 @@ module.exports = class AgMinute extends BaseClass {
       error.statusCode = 500;
       throw error;
     }
-    return { message: 'Ag minutes created successfully' };
+    return { 
+      message: 'Ag minutes created successfully',
+      id: this.id 
+    };
   }
   
   /**

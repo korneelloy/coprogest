@@ -128,7 +128,10 @@ module.exports = class AgNotice extends BaseClass {
         throw error;
       }
 
-      return { message: 'Ag notice created successfully' };
+      return { 
+        message: 'Ag notice created successfully',
+        id: this.id 
+      };
 
     } catch (err) {
       if (err.code === 'ER_DUP_ENTRY') {

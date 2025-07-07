@@ -83,17 +83,61 @@ module.exports = class Unitgroup extends BaseClass {
    * @returns {Promise<Object[]>}
    */
   static async fetchAll() {
-    const [allUnitGroups] = await db.execute(`SELECT * FROM unit_group;`);
+    const [allUnitGroups] = await db.execute(`SELECT 
+      unit_group.*,
+
+      unit_unit_group.adjusted_shares as adjusted_shares,
+      
+      unit.id as unit_id,
+      unit.name as unit_name,
+      unit.shares as unit_shares,
+      unit.id_person as unit_id_person
+
+      FROM unit_group 
+
+      LEFT JOIN unit_unit_group
+        ON unit_group.id = unit_unit_group.id_unit_group
+
+      LEFT JOIN unit
+        ON unit_unit_group.id_unit = unit.id
+      
+      ;`);
     return allUnitGroups;
   }
 
+
+  /**
+   * Fetch all unqiue unitgroups from the database.
+   * @returns {Promise<Object[]>}
+   */
+  static async getAllUnique() {
+    const [allUnitGroups] = await db.execute(`SELECT * FROM unit_group;`);
+    return allUnitGroups;
+  }
+  
   /**
    * Fetch a unitgroup by ID.
    * @param {string} id
    * @returns {Promise<Object>}
    */
   static async get(id) {
-    const [rows] = await db.execute(`SELECT * FROM unit_group WHERE id = ?`, [id]);
+    const [rows] = await db.execute(`SELECT 
+      unit_group.*,
+      unit_unit_group.adjusted_shares as adjusted_shares,
+      unit.id as unit_id,
+      unit.name as unit_name,
+      unit.shares as unit_shares,
+      unit.id_person as unit_id_person
+
+      FROM unit_group 
+
+      LEFT JOIN unit_unit_group
+        ON unit_group.id = unit_unit_group.id_unit_group
+
+      LEFT JOIN unit
+        ON unit_unit_group.id_unit = unit.id
+
+      WHERE unit_group.id = ?`, [id]);
    
     if (rows.length === 0) {
       const error = new Error('Unitgroup not found');
@@ -103,57 +147,43 @@ module.exports = class Unitgroup extends BaseClass {
     return rows[0];
   }
   
-  /**
+    /**
    * Insert the current unitgroup into the database.
    * @returns {Promise<Object>}
    */
-
-  /**
- * Insert the current unitgroup into the database.
- * @returns {Promise<Object>}
- */
-async post() {
-  const [result] = await db.execute(
-    `INSERT INTO unit_group 
-      (id, name, description, special_shares) 
-      VALUES (?, ?, ?, ?)`, 
-    [this.id, this.name, this.description, this.special_shares]
-  );
-  
-  if (result.affectedRows === 0) {
-    const error = new Error('Insert failed: no rows affected.');
-    error.statusCode = 500;
-    throw error;
-  }
-
-  if (Array.isArray(this.selectedUnits)) {
-    for (const unit of this.selectedUnits) {
-      await db.execute(
-        `INSERT INTO unit_unit_group (id_unit, id_unit_group, adjusted_shares) VALUES (?, ?, ?)`,
-        [unit[0], this.id, unit[1]]
-      );
+  async post() {
+    try {
+      const [result] = await db.execute(
+        `INSERT INTO unit_group 
+        (id, name, description, special_shares) 
+        VALUES (?, ?, ?, ?)`, 
+      [this.id, this.name, this.description, this.special_shares]
+    );    
+    
+    if (result.affectedRows === 0) {
+      const error = new Error('Insert failed: no rows affected.');
+      error.statusCode = 500;
+      throw error;
+    }
+    return { 
+      message: 'Unit group created successfully',
+      id: this.id
+    };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+    throw err;
     }
   }
-
-  return { message: 'Unitgroup and relations created successfully' };
-}
- 
+   
   /**
    * Update the current unitgroup in the database.
    * @returns {Promise<Object>}
    */
   async update() {
-    console.log(this.special_shares);
-    
-    /**
-     * let specialShares = 1;
-    if(this.special_shares === false) {
-      specialShares = 0;
-    }
-     */
-    
-    
-
     const [result] = await db.execute(
       `UPDATE unit_group
         SET name = ?, description = ?, special_shares = ?
@@ -165,19 +195,6 @@ async post() {
       const error = new Error('Unitgroup not found');
       error.statusCode = 404;
       throw error;
-    }
-    console.log(this.selectedUnits)
-    if (Array.isArray(this.selectedUnits)) {
-      await db.execute(
-        `DELETE FROM unit_unit_group WHERE id_unit_group = ?`,
-        [this.id]
-      );        
-      for (const unit of this.selectedUnits) {
-        await db.execute(
-          `INSERT INTO unit_unit_group (id_unit, id_unit_group, adjusted_shares) VALUES (?, ?, ?)`,
-          [unit[0], this.id, unit[1]]
-        );
-      }
     }
     return { message: 'Unitgroup updated successfully' };
   }

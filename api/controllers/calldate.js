@@ -16,6 +16,25 @@ exports.getAll = async (req, res, next) => {
   }
 };
 
+
+/**
+ * Retrieve and return all call date by one resolution.
+ */
+exports.getAllByAgResolution = async (req, res, next) => {
+  try {
+    const idAgResolution = req.params.idAgResolution;
+    const callDates = await CallDate.getAllByAgResolution(idAgResolution);
+    res.status(200).json(callDates);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
+
+
 /**
  * Retrieve and return a call date by its ID.
  */
@@ -39,11 +58,12 @@ exports.postOne = async (req, res, next) => {
   try {
     const id = uuidv4();
     const date_call = req.body.date_call;
-
+    const id_ag_resolution = req.body.id_ag_resolution;
 
     const callDate = new CallDate({
       id,
-      date_call
+      date_call,
+      id_ag_resolution
     });
     
     const postResponse = await callDate.post();
@@ -66,10 +86,13 @@ exports.updateOne = async (req, res, next) => {
   try {
     const id = req.params.id;
     const date_call = req.body.date_call; 
+    const id_ag_resolution = req.body.id_ag_resolution;
+
 
     const callDate = new CallDate({
       id,
-      date_call
+      date_call,
+      id_ag_resolution
     });
     
     const updateResponse = await callDate.update();
@@ -83,6 +106,24 @@ exports.updateOne = async (req, res, next) => {
     next(err);
   } 
 };
+
+
+/**
+ * Delete all call dates for one resolution.
+ */
+exports.deleteAllByAgResolution = async (req, res, next) => {
+  try {
+    const idAgResolution = req.params.idAgResolution;
+    const deleteResponse = await CallDate.deleteAllByAgResolution(idAgResolution);
+    res.status(200).json(deleteResponse);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
 
 /**
  * Delete a call date by its ID.

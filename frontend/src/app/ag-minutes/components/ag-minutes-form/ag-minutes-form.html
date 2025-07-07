@@ -1,0 +1,256 @@
+<h2 class="text-xl font-bold mb-2">
+  Formulaire pour compte rendu de la réunion d'AG
+</h2>
+<hr class="mb-4" />
+
+<div *ngIf="deletedMessage" class="bg-green-100 text-green-800 px-4 py-2 rounded-md mb-4">
+  {{ deletedMessage }}
+</div>
+
+<div *ngIf="updatedMessage" class="bg-green-100 text-green-800 px-4 py-2 rounded-md mb-4">
+  {{ updatedMessage }}
+</div>
+
+
+<form [formGroup]="agMinutesForm" (ngSubmit)="onSubmit()" class="space-y-6">
+  <div *ngIf="isEditMode">
+    <div>
+      <label class="block text-sm font-semibold mb-1">Lieu:</label>
+      <input formControlName="place" placeholder="Chez M. Dupont"
+        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+      <div class="text-sm text-yellow-600 mt-1"
+        *ngIf="agMinutesForm.get('place')?.invalid && agMinutesForm.get('place')?.touched">
+        <small *ngIf="agMinutesForm.get('place')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+        <small *ngIf="agMinutesForm.get('place')?.errors?.['minlength']">* Minimum 2 caractères.</small>
+        <small *ngIf="agMinutesForm.get('place')?.errors?.['maxlength']">* Maximum 255 caractères.</small>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-semibold mb-1">Date:</label>
+      <input formControlName="ag_date" type="date"
+        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+      <div class="text-sm text-yellow-600 mt-1"
+        *ngIf="agMinutesForm.get('ag_date')?.invalid && agMinutesForm.get('ag_date')?.touched">
+        <small>* Ce champ ne peut pas être vide.</small>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-semibold mb-1">Heure:</label>
+      <input formControlName="ag_time" type="time"
+        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+      <div class="text-sm text-yellow-600 mt-1"
+        *ngIf="agMinutesForm.get('ag_time')?.invalid && agMinutesForm.get('ag_time')?.touched">
+        <small>* Ce champ ne peut pas être vide.</small>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isEditMode && allNoticesWithoutMinutes">
+    <div class="mb-4">
+      <label for="allNoticesWithoutMinutes" class="block text-sm font-semibold mb-1">Choix de la convocation</label>
+      <select id="allNoticesWithoutMinutes" formControlName="notice_id"
+        class="w-full border border-gray-300 rounded-md px-3 py-2">
+        <option value="" disabled>Choisissez une convocation</option>
+        <option *ngFor="let notice of allNoticesWithoutMinutes" [value]="notice.ag_notice_id">
+          {{ notice.ag_notice_title }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="!isEditMode && !allNoticesWithoutMinutes">
+    <div class="mb-4 text-sm">
+      <div>Création impossible : chaque convocation est déjà liée à un autre compte rendu.</div>
+      <div>Vous souhaitez créer une convocation? C'est par
+        <a [routerLink]="['/agnotices/new']"
+          class="text-blue-600 font-medium hover:underline hover:text-orange-400 transition-colors duration-200">ici</a>
+        .
+      </div>
+    </div>
+  </div>
+</form>
+
+  <!-- présence -->
+  <div *ngIf="isEditMode">
+    <label class="block text-sm font-semibold mb-1">Présences : </label>
+    <div *ngIf="uniquePersons; else loading" class="space-y-4">
+      <div *ngFor="let person of uniquePersons; let i = index" 
+           class="grid grid-cols-[220px_240px_280px] items-center gap-x-2">
+        <!-- Checkbox + name -->
+        <label class="flex items-center space-x-2 h-10">
+          <input type="checkbox"
+            [value]="person.id"
+            [checked]="selectedPersonsIdOnly.includes(person.id)"
+            (change)="updateList(person.id)"
+            class="h-5 w-5 text-orange-500 border-gray-300 rounded focus:ring-orange-400"
+            [id]="'list-' + person.id" />
+          <span class="text-sm truncate leading-[2.5rem]" title="{{ person.first_name && person.last_name ? person.first_name + ' ' + person.last_name : person.email }}">
+            {{ person.first_name && person.last_name ? person.first_name + ' ' + person.last_name : person.email }}
+          </span>
+        </label>
+  
+        <!-- Presence select -->
+        <div *ngIf="selectedPersonsIdOnly.includes(person.id)" class="flex items-center gap-3">
+          <label [for]="'presence-' + person.id" class="text-sm text-gray-600 mr-3 whitespace-nowrap">Présence : </label>
+          <select
+            name="presence"
+            [id]="'presence-' + person.id"
+            [value]="getPresenceValue(person.id)"
+            class="w-full h-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            (change)="updateList(person.id)">
+            <option value="present">Présent</option>
+            <option value="absent">Absent</option>
+            <option value="represented">Représenté</option>
+          </select>
+        </div>
+  
+        <!-- Represented_by par input -->
+        <div *ngIf="selectedPersonsIdOnly.includes(person.id) && getPresenceValue(person.id) === 'represented'" class="flex items-center gap-3">
+          <label [for]="'representedby-' + person.id"class="text-sm text-gray-600 mr-3 whitespace-nowrap">Représenté par :</label>
+          <input type="text"
+            name="representedby"
+            [id]="'representedby-' + person.id"
+            [value]="getRepresentedValue(person.id)"
+            class="w-full h-10 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            (change)="updateList(person.id)" />
+        </div>
+      </div>
+    </div>
+  
+    <ng-template #loading>
+      <p class="text-sm text-gray-500">Loading persons...</p>
+    </ng-template>
+  </div>
+  
+ <div class="mt-6">
+  <button
+  (click)="submitForm()"
+  [disabled]="!formValidation.valid"
+    class="whitespace-nowrap flex-1 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200 m-4">
+    Enregistrer les modifications
+  </button>
+  <div *ngIf="!formValidation.valid" class="text-sm text-yellow-600 ml-4 mt-2">
+    {{ formValidation.message }}
+  </div>
+  <div *ngIf="agMinutesForm.dirty || presenceChange" class="text-sm text-yellow-600 ml-4 mt-2">
+    Veuillez enregistrer les modifications avant de poursuivre.
+  </div>
+</div>
+  
+<ng-container *ngIf="!agMinutesForm.dirty && !presenceChange">
+  <div *ngIf="isEditMode">
+    <strong class="text-md font-semibold">Résolutions associées</strong>
+    <ul *ngIf="agResolutions$ | async as agResolutions" class="mt-4 space-y-4">
+      <ng-container *ngIf="agResolutions.length > 0; else noResolutions">
+        <li *ngFor="let agResolution of agResolutions; let i = index"  class="border rounded-md bg-gray-50 p-4 space-y-4">
+          <h2 class="text-xl font-bold text-orange-400 mt-6 mb-2">
+            Résolution n°{{ i + 1 }} : {{ agResolution.title }}
+          </h2>
+          <div class="grid grid-cols-[180px_1fr] gap-y-2 text-sm">
+            <div class="font-medium">Texte</div>
+            <div>{{ agResolution.resolution_text }}</div>
+          
+            <div class="font-medium">Budget</div>
+            <div>{{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</div>
+          
+            <ng-container *ngIf="agResolution.budget">
+              <div class="font-medium">Montant</div>
+              <div>{{ agResolution.budget_amount }} euros</div>
+          
+              <div class="font-medium">Appel de fond ?</div>
+              <div>{{ agResolution.nb_of_instalments === 1 ? 'Oui' : 'Pas avant facture' }}</div>
+            </ng-container>
+          
+            <div class="font-medium">Majorité requise</div>
+            <div>{{ requiredMajorityLabels[agResolution.required_majority] }}</div>
+          
+            <div class="font-medium">Groupe</div>
+            <div>
+              {{ getGroupName(agResolution.id_unit_group) }} - avec au total {{ getShares(agResolution.id_unit_group) }} tantièmes
+            </div>
+          </div>
+          <div *ngIf="agResolution.status">
+            <span [ngClass]="{
+              'text-green-600': agResolution.status === 'accepted',
+              'text-yellow-600': agResolution.status === 'rejected',
+              'text-gray-500': !agResolution.status
+            }">
+            {{ formatStatus(agResolution.status) }}
+            </span>
+          </div>
+
+          
+          <div class="font-medium">Votes : </div>
+          <ul *ngIf="selectedPersonsIdOnly && agResolution.required_majority !== 'no_vote'" class="mt-4 pl-4 space-y-4">
+            <ng-container *ngFor="let personId of selectedPersonsIdOnly">
+              <ng-container *ngIf="shouldDisplayPerson(personId, agResolution.id_unit_group) && checkPersonUnitsByGroup(personId, agResolution.id_unit_group) as units">
+                <li personId class="bg-white p-3 rounded-md shadow-sm space-y-1">                  
+                  <div class="grid grid-cols-[220px_240px] items-center gap-x-2">
+                    <label for="vote-{{agResolution.id}}-{{personId}}" class="text-sm font-medium whitespace-nowrap">
+                      {{ getperson(personId) }}:
+                    </label>
+
+                    <select *ngIf="!agResolution.status"
+                      id="vote_{{agResolution.id}}_{{personId}}"
+                      required
+                      name="vote-{{ personId }}"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 vote-{{agResolution.id}}">
+                      <option value="" disabled [selected]="!getSelectedVote(agResolution.id, personId)">Choisissez le vote</option>
+                      <option value="abstention" [selected]="getSelectedVote(agResolution.id, personId) === 'abstention'">Abstention</option>
+                      <option value="for" [selected]="getSelectedVote(agResolution.id, personId) === 'for'">Pour</option>
+                      <option value="against" [selected]="getSelectedVote(agResolution.id, personId) === 'against'">Contre</option>
+                    </select>
+
+                    <span *ngIf="agResolution.status"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100">
+                      {{ formatVote(getSelectedVote(agResolution.id, personId)) }}
+                    </span>
+                  </div>
+          
+                  <span class="text-xs font-normal block">
+                    <ng-container *ngFor="let unit of checkPersonUnitsByGroup(personId, agResolution.id_unit_group)">
+                      <ng-container *ngFor="let group of unit.unit_groups ?? []">
+                        <ng-container *ngIf="group?.id === agResolution.id_unit_group">
+                          <span *ngIf="+(group?.special_shares ?? 0) > 0">
+                            (représentant {{ unit.name }} – {{ group.adjusted_shares }} tantièmes (spécifiques))
+                          </span>
+                          <span *ngIf="+(group?.special_shares ?? 0) === 0">
+                            (représentant {{ unit.name }} – {{ unit.shares }} tantièmes)
+                          </span>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </span>
+                </li>
+              </ng-container>
+            </ng-container>
+          </ul>
+          
+          <button type="button" (click)="registerVote(agResolution.id, agResolution.id_unit_group, agResolution.required_majority)"
+            *ngIf="selectedPersonsIdOnly && agResolution.required_majority !== 'no_vote' &&!agResolution.status"
+            class="whitespace-nowrap flex-1 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200 m-4"
+            >
+            Enregistrer le vote
+          </button>
+          <p *ngIf="incompleteVotesMessages[agResolution.id]" class="text-yellow-600 text-sm mt-2">
+            {{ incompleteVotesMessages[agResolution.id] }}
+          </p>
+          <span *ngIf="voteMessage[agResolution.id]" class="text-green-600 mt-2 text-sm">
+            {{ voteMessage[agResolution.id] }}
+          </span>
+          
+          <span *ngIf="voteError[agResolution.id]" class="text-yellow-600 mt-2 text-sm">
+            {{ voteError[agResolution.id] }}
+          </span>
+        </li>
+      </ng-container>
+    </ul>
+
+    <ng-template #noResolutions>
+      <p class="text-sm text-gray-500">Aucune résolution associée.</p>
+    </ng-template>
+  </div>
+</ng-container>
+

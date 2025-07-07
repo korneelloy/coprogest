@@ -42,7 +42,7 @@ exports.postOne = async (req, res, next) => {
     const invoice_date = req.body.invoice_date;
     const description = req.body.description;
     const state = req.body.state;
-    const id_ag_resolution_budget = req.body.id_ag_resolution_budget;
+    const id_ag_resolution = req.body.id_ag_resolution;
 
     const invoice = new Invoice({
       id,
@@ -50,7 +50,7 @@ exports.postOne = async (req, res, next) => {
       invoice_date,
       description,
       state,
-      id_ag_resolution_budget
+      id_ag_resolution
     });
     const postResponse = await invoice.post();
 
@@ -75,7 +75,7 @@ exports.updateOne = async (req, res, next) => {
     const invoice_date = req.body.invoice_date;
     const description = req.body.description;
     const state = req.body.state;
-    const id_ag_resolution_budget = req.body.id_ag_resolution_budget;
+    const id_ag_resolution = req.body.id_ag_resolution;
 
 
     const invoice = new Invoice({
@@ -84,7 +84,7 @@ exports.updateOne = async (req, res, next) => {
       invoice_date,
       description,
       state,
-      id_ag_resolution_budget
+      id_ag_resolution
     });
 
     const updateResponse = await invoice.update();

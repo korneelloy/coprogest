@@ -89,7 +89,10 @@ module.exports = class BudgetCategory extends BaseClass {
         throw error;
       }
 
-      return { message: 'Budget category created successfully' };
+      return { 
+        message: 'Budget category created successfully' ,
+        id: this.id
+      };
 
     } catch (err) {
       if (err.code === 'ER_DUP_ENTRY') {

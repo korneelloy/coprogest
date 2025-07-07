@@ -13,6 +13,13 @@ router.get('/', agResolutionController.getAll);
 // Get all ag resolutions by ag notice
 router.get('/getbyagnotice/:id_ag_notice', agResolutionController.getByAgNotice);
 
+// Get all ag resolutions by ag minutes
+router.get('/getbyagminutes/:id_ag_minutes', agResolutionController.getByAgMinutes);
+
+// Get all ag resolutions/notice without minutes
+router.get('/fetchAllNoticesWithoutMinutes', agResolutionController.getAllNoticesWithoutMinutes);
+
+
 // Get a single ag resolution by ID
 router.get('/:id', agResolutionController.getOne);
 
@@ -22,7 +29,15 @@ router.post('/', agResolutionController.postOne);
 // Update a ag resolution by ID
 router.put('/:id', agResolutionController.updateOne);
 
+// Update a ag/id_ag_minutes  by ID
+router.patch('/agmin/:id', agResolutionController.patchAgMin);
+
+// Update the status
+router.patch('/status/:id/:status', agResolutionController.patchStatus);
+
 // Delete a ag resolution by ID
 router.delete('/:id', agResolutionController.deleteOne);
+
+
 
 module.exports = router;

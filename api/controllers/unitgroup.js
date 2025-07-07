@@ -17,6 +17,21 @@ exports.getAll = async (req, res, next) => {
 };
 
 /**
+ * Retrieve and return all unique unitgroups.
+ */
+exports.getAllUnique = async (req, res, next) => {
+  try {
+    const allUnitGroups = await Unitgroup.getAllUnique();
+    res.status(200).json(allUnitGroups);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+/**
  * Retrieve and return a unitgroup by its ID.
  */
 exports.getOne = async (req, res, next) => {

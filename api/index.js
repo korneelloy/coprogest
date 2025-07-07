@@ -21,10 +21,8 @@ const unitRoutes = require('./routes/unit');
 const unitUnitGroupRoutes = require('./routes/unitunitgroup');
 const agNoticeRoutes = require('./routes/agnotice');
 const agResolutionsRoutes = require('./routes/agresolution');
-const agResolutionBudgetRoutes = require('./routes/agresolutionbudget');
 const budgetCategoryRoutes = require('./routes/budgetcategory');
 const callDateRoutes = require('./routes/calldate');
-const agResolutionBudgetCallDateRoutes = require('./routes/agresolutionbudgetcalldate');
 const agNoticeSentPersonRoutes = require('./routes/agnoticesentperson');
 const chargeCallRoutes = require('./routes/chargecall');
 const chargePaymentRoutes = require('./routes/chargepayment');
@@ -32,7 +30,7 @@ const chargeLineRoutes = require('./routes/chargeline');
 const agMinuteRoutes = require('./routes/agminute');
 const invoicePaymentRoutes = require('./routes/invoicepayment');
 const agResolutionPersonRoutes = require('./routes/agresolutionperson');
-const agNoticePresencePersonRoutes = require('./routes/agnoticepresenceperson');
+const agMinutesPresencePersonRoutes = require('./routes/agminutespresenceperson');
 const invoiceRoutes = require('./routes/invoice');
 
 
@@ -64,10 +62,8 @@ app.use('/api/v1/units', unitRoutes);
 app.use('/api/v1/unitunitgroups', unitUnitGroupRoutes);
 app.use('/api/v1/agnotices', agNoticeRoutes);
 app.use('/api/v1/agresolutions', agResolutionsRoutes);
-app.use('/api/v1/agresolutionbudgets', agResolutionBudgetRoutes);
 app.use('/api/v1/budgetcategories', budgetCategoryRoutes);
 app.use('/api/v1/calldates', callDateRoutes);
-app.use('/api/v1/agresolutionbudgetcalldates', agResolutionBudgetCallDateRoutes);
 app.use('/api/v1/agnoticesentpersons', agNoticeSentPersonRoutes);
 app.use('/api/v1/chargecalls', chargeCallRoutes);
 app.use('/api/v1/chargepayments', chargePaymentRoutes);
@@ -75,7 +71,7 @@ app.use('/api/v1/chargelines', chargeLineRoutes);
 app.use('/api/v1/agminutes', agMinuteRoutes);
 app.use('/api/v1/invoicepayments', invoicePaymentRoutes);
 app.use('/api/v1/agresolutionpersons', agResolutionPersonRoutes);
-app.use('/api/v1/agnoticepresencepersons', agNoticePresencePersonRoutes);
+app.use('/api/v1/agminutespresencepersons', agMinutesPresencePersonRoutes);
 app.use('/api/v1/invoices', invoiceRoutes);
 
 /**
@@ -94,7 +90,6 @@ app.use('/api/v1/agresolutions', auth, agResolutionsRoutes);
 app.use('/api/v1/agresolutionbudgets', auth, agResolutionBudgetRoutes);
 app.use('/api/v1/budgetcategories', auth, budgetCategoryRoutes);
 app.use('/api/v1/calldates', auth, callDateRoutes);
-app.use('/api/v1/agresolutionbudgetcalldates', auth, agResolutionBudgetCallDateRoutes);
 app.use('/api/v1/agnoticesentpersons', auth, agNoticeSentPersonRoutes);
  */
 

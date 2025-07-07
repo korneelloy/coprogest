@@ -25,6 +25,16 @@ export class PersonService {
       );
   }
 
+  getAllWithUnitInfo(): Observable<Person[]> {
+    return this.http
+      .get<Person[]>(`${this.url}/withunitinfo`, { withCredentials: true })
+      .pipe(
+        tap(() => console.log('Fetched persons')),
+        catchError(this.handleError)
+      );
+  }
+  
+
   fetchById(id: string): Observable<Person> {
     return this.http
       .get<Person>(`${this.url}/${id}`, { withCredentials: true })

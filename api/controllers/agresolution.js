@@ -16,15 +16,31 @@ exports.getAll = async (req, res, next) => {
   }
 };
 
+
 /**
- * Retrieve and return a agresolution by ag notice.
+ * Get all ag resolutions/notice without minutes
+ */
+exports.getAllNoticesWithoutMinutes = async (req, res, next) => {
+  try {
+    const agResWithoutMinutes = await AgResolution.getAllNoticesWithoutMinutes();
+    res.status(200).json(agResWithoutMinutes);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+
+/**
+ * Retrieve and return a agresolutions by ag notice.
  */
 exports.getByAgNotice = async (req, res, next) => {
   try {
     const id_ag_notice = req.params.id_ag_notice;
-    console.log(id_ag_notice);
-    const agResolution = await AgResolution.getByAgNotice(id_ag_notice);
-    res.status(200).json(agResolution);
+    const agResolutions = await AgResolution.getByAgNotice(id_ag_notice);
+    res.status(200).json(agResolutions);
   } catch(err) {
     if(!err.statusCode) {
       err.statusCode = 500;
@@ -32,6 +48,26 @@ exports.getByAgNotice = async (req, res, next) => {
     next(err);
   } 
 };
+
+
+/**
+ * Retrieve and return a agresolutions by ag minutes.
+ */
+exports.getByAgMinutes = async (req, res, next) => {
+  try {
+    const id_ag_minutes = req.params.id_ag_minutes;
+    const agResolutions = await AgResolution.getByAgMinutes(id_ag_minutes);
+    res.status(200).json(agResolutions);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
+
+
 
 /**
  * Retrieve and return a agresolution by its ID.
@@ -49,6 +85,9 @@ exports.getOne = async (req, res, next) => {
   } 
 };
 
+
+
+
 /**
  * Create a new agresolution with the provided data.
  */
@@ -59,9 +98,19 @@ exports.postOne = async (req, res, next) => {
     const resolution_text = req.body.resolution_text;
     const required_majority = req.body.required_majority;
     const budget = req.body.budget;
+
     const id_ag_minutes = req.body.id_ag_minutes;
     const id_unit_group = req.body.id_unit_group;
     const id_ag_notice = req.body.id_ag_notice;
+
+    const budget_amount = req.body.budget_amount;
+    const budget_type = req.body.budget_type;
+    const operating_budget_start = req.body.operating_budget_start;
+    const operating_budget_end = req.body.operating_budget_end;
+    const nb_of_instalments = req.body.nb_of_instalments;
+    const budget_recup_tenant = req.body.budget_recup_tenant;
+    const budget_actif = 0;
+    const id_budget_category = req.body.id_budget_category;
 
     const agResolution = new AgResolution({
       id,
@@ -71,7 +120,15 @@ exports.postOne = async (req, res, next) => {
       budget,
       id_ag_minutes,
       id_unit_group,
-      id_ag_notice
+      id_ag_notice,
+      budget_amount,
+      budget_type,
+      operating_budget_start,
+      operating_budget_end,
+      nb_of_instalments,
+      budget_recup_tenant,
+      budget_actif,
+      id_budget_category
     });
     
     const postResponse = await agResolution.post();
@@ -100,6 +157,14 @@ exports.updateOne = async (req, res, next) => {
     const id_ag_minutes = req.body.id_ag_minutes;
     const id_unit_group = req.body.id_unit_group;
     const id_ag_notice = req.body.id_ag_notice;
+    const budget_amount = req.body.budget_amount;
+    const budget_type = req.body.budget_type;
+    const operating_budget_start = req.body.operating_budget_start;
+    const operating_budget_end = req.body.operating_budget_end;
+    const nb_of_instalments = req.body.nb_of_instalments;
+    const budget_recup_tenant = req.body.budget_recup_tenant;
+    const budget_actif = req.body.budget_actif;
+    const id_budget_category = req.body.id_budget_category;
 
     const agResolution = new AgResolution({
       id,
@@ -109,7 +174,15 @@ exports.updateOne = async (req, res, next) => {
       budget,
       id_ag_minutes,
       id_unit_group,
-      id_ag_notice
+      id_ag_notice,
+      budget_amount,
+      budget_type,
+      operating_budget_start,
+      operating_budget_end,
+      nb_of_instalments,
+      budget_recup_tenant,
+      budget_actif,
+      id_budget_category
     });
     
     const updateResponse = await agResolution.update();
@@ -123,6 +196,41 @@ exports.updateOne = async (req, res, next) => {
     next(err);
   } 
 };
+
+/**
+ * Update the id_ag_minutes of an agresolution identified by its ID.
+ */
+exports.patchAgMin = async (req, res, next) => {
+  try {
+    const updateResponse = await AgResolution.patchAgMin(req.params.id, req.body.id_ag_minutes);
+    res.status(200).json(updateResponse);
+
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
+
+/**
+ * Update the status of an agresolution identified by its ID.
+ */
+exports.patchStatus = async (req, res, next) => {
+  try {
+    const updateResponse = await AgResolution.patchStatus(req.params.id, req.params.status);
+    res.status(200).json(updateResponse);
+
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
+
 
 /**
  * Delete a agresolution by its ID.

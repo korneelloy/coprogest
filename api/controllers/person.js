@@ -40,6 +40,21 @@ exports.getAll = async (req, res, next) => {
 };
 
 /**
+ * Retrieve and return all persons.
+ */
+exports.getAllWithUnitInfo = async (req, res, next) => {
+  try {
+    const allPersons = await Person.getAllWithUnitInfo();
+    res.status(200).json(allPersons);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+/**
  * Retrieve and return a person by its ID.
  */
 exports.getOne = async (req, res, next) => {

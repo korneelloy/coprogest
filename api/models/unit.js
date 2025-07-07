@@ -170,7 +170,10 @@ module.exports = class Unit extends BaseClass {
         error.statusCode = 500;
         throw error;
       }
-      return { message: 'Unit created successfully' };
+      return { 
+        message: 'Unit created successfully' ,
+        id: this.id
+      };
     } catch (err) {
       if (err.code === 'ER_NO_REFERENCED_ROW_2') {
         const error = new Error('Foreign key constraint violated');

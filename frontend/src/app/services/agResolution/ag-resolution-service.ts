@@ -34,11 +34,32 @@ export class AgResolutionService {
       );
   }
 
+  fetchAllByAgMinutes(id_ag_minutes: string): Observable<AgResolution[]> {
+    return this.http
+      .get<AgResolution[]>(`${this.url}/getbyagminutes/${id_ag_minutes}`, { withCredentials: true })
+      .pipe(
+        tap(() => console.log('Fetched ag resolutions by ag minutes')),
+        catchError(this.handleError)
+      );
+  }
+
+
+  fetchAllNoticesWithoutMinutes(): Observable<AgResolution[]> {
+    return this.http
+      .get<AgResolution[]>(`${this.url}/fetchAllNoticesWithoutMinutes/`, { withCredentials: true })
+      .pipe(
+        tap(() => console.log('Fetched ag notices without ag minutes')),
+        catchError(this.handleError)
+      );
+  }
+
+  
+
   fetchById(id: string): Observable<AgResolution> {
     return this.http
       .get<AgResolution>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
-        tap(() => console.log(`Fetched ag notice id=${id}`)),
+        tap(() => console.log(`Fetched ag resolution id=${id}`)),
         catchError(this.handleError)
       );
   }
@@ -52,9 +73,28 @@ export class AgResolutionService {
       );
   }
 
+
   update(id: string, agResolution: AgResolution): Observable<AgResolution> {
     return this.http
       .put<AgResolution>(`${this.url}/${id}`, agResolution, { withCredentials: true })
+      .pipe(
+        tap(() => console.log(`Updated ag resolution id=${id}`)),
+        catchError(this.handleError)
+      );
+  }
+
+  updateMinutesLink(id: string, id_ag_minutes: string): Observable<AgResolution> {
+    return this.http
+      .patch<AgResolution>(`${this.url}/agmin/${id}`, {id_ag_minutes : id_ag_minutes}, { withCredentials: true })
+      .pipe(
+        tap(() => console.log(`Updated ag resolution id=${id}`)),
+        catchError(this.handleError)
+      );
+  }
+
+  updateStatus(id: string, status: string): Observable<AgResolution> {
+    return this.http
+      .patch<AgResolution>(`${this.url}/status/${id}/${status}`, {}, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Updated ag resolution id=${id}`)),
         catchError(this.handleError)

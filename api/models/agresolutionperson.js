@@ -74,6 +74,17 @@ module.exports = class AgResolutionPerson  {
     return all;
   }
 
+/**
+   * Fetch all ag_resolution / persons from the database.
+   * @returns {Promise<Object[]>}
+   */
+  static async getAllByAgResolution(id_ag_resolution) {
+    const [all] = await db.execute(`SELECT * FROM ag_resolution_person WHERE id_ag_resolution = ?`, [id_ag_resolution]);
+    return all;
+  }
+
+  
+
    /**
    * Fetch a ag_resolution / person  by ID.
    * @param {string} id_ag_resolution
@@ -108,7 +119,10 @@ module.exports = class AgResolutionPerson  {
         error.statusCode = 500;
         throw error;
       }
-      return { message: 'ag_resolution / person created successfully' };
+      return {
+        message: 'ag_resolution / person created successfully' ,
+        id: this.id_ag_resolution
+      };
     } catch (err) {
       if (err.code === 'ER_NO_REFERENCED_ROW_2') {
         const error = new Error('Foreign key constraint violated');
@@ -152,6 +166,18 @@ module.exports = class AgResolutionPerson  {
       throw err;
     }
   }
+
+  /**
+     * Delete all ag_resolution / person by resolution ID.
+     * @param {string} id_ag_resolution
+     * @returns {Promise<Object>}
+     */
+    static async deleteAllByAgResolution(id_ag_resolution) {
+      const [result] = await db.execute(`DELETE FROM ag_resolution_person WHERE id_ag_resolution = ?`, [id_ag_resolution]);
+      return {
+        message: `Votes deleted successfully (${result.affectedRows} deleted)`,
+      };
+    }
 
   /**
      * Delete a ag_resolution / person by ID.

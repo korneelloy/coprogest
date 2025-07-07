@@ -1,37 +1,57 @@
-<h2><strong>Formulaire pour password reset</strong></h2>
-<hr>
+<h2 class="text-xl font-bold mb-2">
+  Formulaire pour password reset
+</h2>
+<hr class="mb-4 border-gray-300" />
 
-<form [formGroup]="personForm" (ngSubmit)="onSubmit()">
-  <div class="mb-4">
-    <label>Email: </label>
+<form [formGroup]="personForm" (ngSubmit)="onSubmit()" class="space-y-6 bg-white p-4 rounded-lg shadow-md">
+
+  <div>
+    <label class="block font-medium mb-1">Email :</label>
     <input 
       type="email" 
       formControlName="email" 
       placeholder="Email" 
       readonly 
-      class="bg-gray-100 text-gray-600 cursor-not-allowed w-full px-2 py-1 rounded"
+      class="bg-gray-100 text-gray-600 cursor-not-allowed w-full px-3 py-2 rounded border border-gray-300"
     />
-    <div *ngIf="personForm.get('email')?.invalid && personForm.get('email')?.touched" class="text-sm text-red-600 mt-1">
+    <div *ngIf="personForm.get('email')?.invalid && personForm.get('email')?.touched" class="text-sm text-yellow-600	 mt-1">
       <small *ngIf="personForm.get('email')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="personForm.get('email')?.errors?.['pattern']">* Ce champ doit correspondre à un mail valide.</small>
     </div>
   </div>
 
-  <div class="mb-4">
-    <label>Mot de passe: </label>
+  <div>
+    <label class="block font-medium mb-1">Mot de passe :</label>
     <input 
       type="password" 
       formControlName="password" 
       placeholder="Password123!" 
-      class="w-full px-2 py-1 rounded border border-gray-300"
+      class="w-full px-3 py-2 rounded border border-gray-300"
     />
-    <div *ngIf="personForm.get('password')?.invalid && personForm.get('password')?.touched" class="text-sm text-red-600 mt-1">
+    <div *ngIf="personForm.get('password')?.invalid && personForm.get('password')?.touched" class="text-sm text-yellow-600	 mt-1">
       <small *ngIf="personForm.get('password')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="personForm.get('password')?.errors?.['pattern']">
         * Le mot de passe doit contenir au minimum 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.
       </small>
     </div>
   </div>
+
+  <div>
+    <label class="block font-medium mb-1">Confirmez le mot de passe :</label>
+    <input 
+      type="password" 
+      formControlName="confirmPassword" 
+      placeholder="Retapez le mot de passe" 
+      class="w-full px-3 py-2 rounded border border-gray-300"
+    />
+    <div *ngIf="personForm.get('confirmPassword')?.invalid && personForm.get('confirmPassword')?.touched" class="text-sm text-yellow-600	 mt-1">
+      <small *ngIf="personForm.get('confirmPassword')?.errors?.['required']">* Ce champ est requis.</small>
+    </div>
+    <div *ngIf="personForm.errors?.['mismatch'] && personForm.get('confirmPassword')?.touched" class="text-sm text-yellow-600	 mt-1">
+      * Les mots de passe ne correspondent pas.
+    </div>
+  </div>
+  
 
   <button 
     type="submit" 

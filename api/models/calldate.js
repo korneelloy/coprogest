@@ -15,10 +15,13 @@ module.exports = class CallDate extends BaseClass {
    * @param {string} date_call - date of charge call - not null
    * @param {Date|null} createdAt - creation date - set in SQL code
    * @param {Date|null} updatedAt - last update - set in SQL code
+   * @param {string|null} id_ag_resolution - Link to ag resolution - Foreign key - verification foreign key constraint handled in the CRUD operations - not null
+
    */
-  constructor({ id, date_call, createdAt = null, updatedAt = null }) {
+  constructor({ id, date_call, id_ag_resolution, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
     this.date_call = date_call;
+    this.id_ag_resolution = id_ag_resolution;
   }
 
   /****************************getters and setters for data validation***********************************/
@@ -65,15 +68,25 @@ module.exports = class CallDate extends BaseClass {
   }
 
   /**
+   * Fetch all call dates by resolution.
+   * @param {string} idAgResolution
+   * @returns {Promise<Object>}
+   */
+  static async getAllByAgResolution(idAgResolution) {
+    const [allCallDatesbyRes] = await db.execute(`SELECT * FROM call_date WHERE id_ag_resolution = ?`, [idAgResolution]);
+    return allCallDatesbyRes;
+  }
+
+  /**
   * Insert the current call date into the database.
   * @returns {Promise<Object>}
   */
   async post() {
     const [result] = await db.execute(
       `INSERT INTO call_date 
-          (id, date_call) 
-          VALUES (?, ?)`,
-      [this.id, this.date_call]
+          (id, date_call, id_ag_resolution) 
+          VALUES (?, ?, ?)`,
+      [this.id, this.date_call, this.id_ag_resolution]
     );
 
     if (result.affectedRows === 0) {
@@ -81,7 +94,10 @@ module.exports = class CallDate extends BaseClass {
       error.statusCode = 500;
       throw error;
     }
-    return { message: 'Call date created successfully' };
+    return { 
+      message: 'Call date created successfully',
+      id: this.id 
+    };
   }
 
   /**
@@ -91,9 +107,11 @@ module.exports = class CallDate extends BaseClass {
   async update() {
     const [result] = await db.execute(
       `UPDATE call_date
-          SET date_call = ?
+          SET 
+            date_call = ?,
+            id_ag_resolution = ?
           WHERE id = ?`,
-      [this.date_call, this.id]
+      [this.date_call, this.id_ag_resolution , this.id]
     );
 
     if (result.affectedRows === 0) {
@@ -102,6 +120,21 @@ module.exports = class CallDate extends BaseClass {
       throw error;
     }
     return { message: 'Call date updated successfully' };
+  }
+
+  /**
+     * Delete a call date by ID.
+     * @param {string} idAgResolution
+     * @returns {Promise<Object>}
+     */
+  static async deleteAllByAgResolution(idAgResolution) {
+    const [result] = await db.execute('DELETE FROM call_date WHERE id_ag_resolution = ?', [idAgResolution]);
+    if (result.affectedRows === 0) {
+      const error = new Error('No call dates for this resolution');
+      error.statusCode = 404;
+      throw error;
+    }
+    return { message: 'Call dates deleted successfully' };
   }
 
   /**
