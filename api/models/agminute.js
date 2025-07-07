@@ -69,7 +69,7 @@ module.exports = class AgMinute extends BaseClass {
    * @returns {Promise<Object[]>}
    */
   static async fetchAll() {
-    const [allAgMinutes] = await db.execute(`SELECT * FROM ag_minutes`);
+    const [allAgMinutes] = await db.execute(`SELECT * FROM ag_minutes ORDER BY minutes_date DESC`);
     return allAgMinutes;
   }
 

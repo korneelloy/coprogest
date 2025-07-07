@@ -130,10 +130,11 @@ export class AgMinutesForm implements OnInit {
 
   ngOnInit(): void {
     
+    /** check if id > edit or create */
     this.agMinutesId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.agMinutesId;
 
-
+    /** handling of message update succes ag minutes */
     if (this.agMinutesId) {
       this.route.queryParamMap.subscribe(params => {
         if (params.get('updated') === 'true') {

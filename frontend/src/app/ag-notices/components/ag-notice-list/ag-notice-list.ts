@@ -39,5 +39,9 @@ export class AgNoticeList implements OnInit{
   seeDetails(id: string): void {
     this.router.navigate(['/agnotices', id]);  
   }
+
+  editNotice(id: string): void {
+    this.router.navigate(['/agnotices', id, 'edit']);  
+  }
 }
 
