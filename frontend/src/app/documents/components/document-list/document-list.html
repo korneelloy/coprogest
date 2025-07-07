@@ -20,18 +20,34 @@
 </div>
 <hr class="mt-4">
 
-<ul *ngIf="documents$ | async as documents; else loading">
-  <li *ngFor="let document of documents" class="space-y-4 {{ document.id_document_category }} listitems">
-    <strong>{{ document.name }}</strong><br>
-    <div>Catégorie: {{ document.category_name }}</div>
-    <div>Description: {{ document.description }}</div>
+<ul
+  *ngIf="documents$ | async as documents; else loading"
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+>
+  <li
+    *ngFor="let document of documents"
+    class="p-4 bg-white border rounded shadow-sm space-y-3 listitems {{ document.id_document_category }}"
+  >
+    <div class="text-gray-800 text-sm font-medium">{{ document.name }}</div>
+    <div class="text-sm text-gray-600">Catégorie : {{ document.category_name }}</div>
+    <div class="text-sm text-gray-600">Description : {{ document.description }}</div>
 
-    <button (click)="seeDetails(document.id)" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-      Voir les details
-    </button><br>
-    <hr>
+    <button
+      (click)="seeDetails(document.id)"
+      class="w-full text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+    >
+      Voir les détails
+    </button>
+
+    <button
+      (click)="editDocument(document.id)"
+      class="w-full text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+    >
+      Modifier ce document
+    </button>
   </li>
 </ul>
+
 
 <div class="m-4">
 

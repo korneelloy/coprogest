@@ -1,4 +1,4 @@
-INSERT INTO person (id, email, password, first_name, last_name, street, postal_code, city, telephone, id_role) VALUESAdd commentMore actions
+INSERT INTO person (id, email, password, first_name, last_name, street, postal_code, city, telephone, id_role) VALUES
 ('38522c35-d231-49f7-9db3-83c9d7084fe4', 'manager@gmail.com', '$2b$10$IzgzYkKv9bWLk1XaMNkLa.CbPQhsLY9dTATV.FXmpAp0sTw3j1ds6', 'Ann', 'TheManager', '12 rue de la République', '75001', 'Paris', '06 12 34 56 78', '9663d291-1a31-40a0-b5b1-7f73140bd5cc'),
 ('38522c35-d231-49f7-9db3-83c9d7084fe5', 'assitant@gmail.com', '$2b$10$IzgzYkKv9bWLk1XaMNkLa.CbPQhsLY9dTATV.FXmpAp0sTw3j1ds6', 'John', 'TheAssistant', '12 rue de la République', '75001', 'Paris', '06 12 34 56 78', '0641e7ea-d13d-46a3-86c2-6dcba6cd320c'),
 ('38522c35-d231-49f7-9db3-83c9d7084fe6', 'coowner@gmail.com', '$2b$10$IzgzYkKv9bWLk1XaMNkLa.CbPQhsLY9dTATV.FXmpAp0sTw3j1ds6', 'Cloe', 'TheSimpleCoOwner', '12 rue de la République', '75001', 'Paris', '06 12 34 56 78', '5041878f-2523-41d0-97b1-cd05bc60f1b8'),
@@ -38,11 +38,17 @@ INSERT INTO unit_group (id, name, description, special_shares) VALUES
 
 INSERT INTO ag_notice (id, title, place, ag_date) VALUES
 ('3ae8b1cd-e2c2-4685-b1b0-f387de61b588', 'AG janvier 2024', 'Chez M Martin, appartement 10', '2024-01-04 17:00:00'),
-('3ae8b1cd-e2c2-4685-b1b0-f387de61b589', 'AG janvier 2023', 'Chez Mme Leroy, appartement 2', '2023-01-16 15:00:00');
+('3ae8b1cd-e2c2-4685-b1b0-f387de61b589', 'AG janvier 2023', 'Chez Mme Leroy, appartement 2', '2023-01-16 15:00:00'),
 
-INSERT INTO ag_minutes (id, minutes_date, place) VALUES
-('da07f297-6f0a-41a8-9df7-d2cd3ed48983', '2024-01-04 17:00:00', 'Chez M Martin, appartement 10'),
-('da07f297-6f0a-41a8-9df7-d2cd3ed48984', '2023-01-16 15:00:00', 'Chez M Leroy, appartement 2');
+('3ae8b1cd-e2c2-4685-b1b0-f387de61b590', 'AG juillet 2025', 'Salle commune, rez-de-chaussée', '2025-07-02 18:30:00'),
+('3ae8b1cd-e2c2-4685-b1b0-f387de61b591', 'AG septembre 2024', 'Chez Mme Dubois, appartement 4', '2024-09-10 19:00:00'),
+('3ae8b1cd-e2c2-4685-b1b0-f387de61b592', 'AG juin 2022', 'Chez M. Morel, appartement 7', '2022-06-28 18:00:00'),
+('3ae8b1cd-e2c2-4685-b1b0-f387de61b593', 'AG mars 2021', 'Chez Mme Petit, appartement 1', '2021-03-15 14:00:00'),
+('3ae8b1cd-e2c2-4685-b1b0-f387de61b594', 'AG novembre 2023', 'Salle polyvalente du quartier', '2023-11-20 18:00:00'),
+('3ae8b1cd-e2c2-4685-b1b0-f387de61b595', 'AG avril 2024', 'Chez M. Lefèvre, appartement 3', '2024-04-08 17:30:00'),
+('3ae8b1cd-e2c2-4685-b1b0-f387de61b596', 'AG mai 2022', 'Chez Mme Garnier, appartement 5', '2022-05-19 16:00:00'),
+('3ae8b1cd-e2c2-4685-b1b0-f387de61b597', 'AG octobre 2021', 'Chez M. Bernard, appartement 6', '2021-10-05 18:00:00');
+
 
 
 INSERT INTO charge_call (id, charge_call_date, id_person) VALUES
@@ -79,9 +85,6 @@ INSERT INTO budget_category (id, name) VALUES
 ('41730a00-f81e-48d8-9b3a-4ae9fcb187ed', 'entretien'),
 ('41730a00-f81e-48d8-9b3a-4ae9fcb187ee', 'nettoyage');
 
-
-INSERT INTO call_dates (id, date_call) VALUES
-('f7723c4f-9cfa-40b3-92cf-6aa0deec8815', '2025-04-10');
 
 INSERT INTO ag_resolution (id, title, resolution_text, required_majority, budget, id_ag_minutes, id_unit_group, id_ag_notice) VALUES
 ('5d088a30-d1f4-4f8f-81e5-15cb4531ddc3', 'Réfection de la cage d escalier', 'Les copropriétaire descident de rénover la cage d escalier etc', '24', true, null, '8884093a-92c9-4347-a34d-0457a6a2d2bc', '3ae8b1cd-e2c2-4685-b1b0-f387de61b588');
@@ -151,8 +154,149 @@ VALUES (
   Les contrats sont disponibles en annexe de la convocation.',
   '25',
   false,
-  'da07f297-6f0a-41a8-9df7-d2cd3ed48983',
+  null,
   '8884093a-92c9-4347-a34d-0457a6a2d2bc',
   '3ae8b1cd-e2c2-4685-b1b0-f387de61b588'
 );
+
+INSERT INTO ag_resolution (id, title, resolution_text, required_majority, budget, id_ag_minutes, id_unit_group, id_ag_notice)
+VALUES (
+  '90f94a2d-748b-49ae-94c5-5cf885ca0e47',
+  'Réfection cage d’escalier A',
+  'Des travaux de peinture et remplacement de luminaires sont proposés pour améliorer l’esthétique et la sécurité de la cage A. Coût estimé : 5 600 € TTC.',
+  '25',
+  true,
+  null,
+  '8884093a-92c9-4347-a34d-0457a6a2d2be',
+  '3ae8b1cd-e2c2-4685-b1b0-f387de61b592'
+);
+
+INSERT INTO ag_resolution (id, title, resolution_text, required_majority, budget, id_ag_minutes, id_unit_group, id_ag_notice)
+VALUES (
+  '27e03eaf-c86f-4ebf-8a6d-29c763c5869f',
+  'détecteurs de fumée',
+  'Il est proposé d’équiper les couloirs et cages d’escaliers de détecteurs de fumée pour respecter les normes de sécurité incendie.',
+  '24',
+  true,
+  null,
+  '8884093a-92c9-4347-a34d-0457a6a2d2bc',
+  '3ae8b1cd-e2c2-4685-b1b0-f387de61b592'
+);
+
+INSERT INTO ag_resolution (id, title, resolution_text, required_majority, budget, id_ag_minutes, id_unit_group, id_ag_notice)
+VALUES (
+  'f9e86e06-7e53-4381-8e70-bbfedb289ded',
+  'Isolation des combles',
+  'Une étude thermique a mis en lumière de fortes déperditions au niveau des combles. Le devis pour les travaux d’isolation s’élève à 12 800 € TTC.',
+  '25',
+  true,
+  null,
+  '8884093a-92c9-4347-a34d-0457a6a2d2bc',
+  '3ae8b1cd-e2c2-4685-b1b0-f387de61b593'
+);
+
+INSERT INTO ag_resolution (id, title, resolution_text, required_majority, budget, id_ag_minutes, id_unit_group, id_ag_notice)
+VALUES (
+  '0ba5077f-fb1f-4ee5-99e8-4496d2fdfbd1',
+  'Installation de panneaux photovoltaïques',
+  'Proposition d’installer des panneaux solaires sur le toit pour réduire la facture d’électricité des parties communes. Subventions envisageables. Budget prévisionnel : 18 000 € TTC.',
+  '26',
+  true,
+  null,
+  '8884093a-92c9-4347-a34d-0457a6a2d2bc',
+  '3ae8b1cd-e2c2-4685-b1b0-f387de61b594'
+);
+
+
+INSERT INTO ag_resolution (id, title, resolution_text, required_majority, budget, id_ag_minutes, id_unit_group, id_ag_notice)
+VALUES (
+  'c3a7b1cb-bb95-4a1f-8592-90a8d3748c6e',
+  'Mise en accessibilité de l’entrée',
+  'Afin de se conformer aux règles d’accessibilité, il est proposé d’installer une rampe d’accès et d’élargir les portes. Coût estimé : 9 700 € TTC.',
+  '25',
+  true,
+  null,
+  '8884093a-92c9-4347-a34d-0457a6a2d2bd',
+  '3ae8b1cd-e2c2-4685-b1b0-f387de61b595'
+);
+INSERT INTO ag_resolution (id, title, resolution_text, required_majority, budget, id_ag_minutes, id_unit_group, id_ag_notice)
+VALUES (
+  'ff60c390-f4c1-4db3-87c2-cfc9e3e6b12f',
+  'Suppression d’un arbre dangereux dans la cour',
+  'Un arbre présente un risque de chute. Le devis pour son abattage est de 1 500 € TTC. Le vote porte sur cette intervention urgente.',
+  '24',
+  true,
+  null,
+  '8884093a-92c9-4347-a34d-0457a6a2d2bc',
+  '3ae8b1cd-e2c2-4685-b1b0-f387de61b596'
+);
+
+INSERT INTO ag_resolution (id, title, resolution_text, required_majority, budget, id_ag_minutes, id_unit_group, id_ag_notice)
+VALUES (
+  'e3535f79-1db3-4e45-bbb6-1663de1c1dc5',
+  'règlement intérieur',
+  'Le conseil syndical propose d’adopter un règlement intérieur visant à clarifier l’usage des parties communes, le tri des déchets et le respect du voisinage.',
+  '24',
+  false,
+  null,
+  '8884093a-92c9-4347-a34d-0457a6a2d2bc',
+  '3ae8b1cd-e2c2-4685-b1b0-f387de61b597'
+);
+
+
+
+INSERT INTO document (id, name, description, url, id_document_category) VALUES
+('a1e7d5c1-1111-4b1a-aaa1-000000000001', 'Facture Eau Janvier', 'Facture mensuelle pour la consommation d eau', 'https://example.com/docs/eau-janvier.pdf', '274b6eb5-00ef-4a2e-a0a7-682c3e7d2105'),
+('a1e7d5c1-1111-4b1a-aaa1-000000000002', 'Facture Eau Février', 'Facture mensuelle pour la consommation d eau', 'https://example.com/docs/eau-fevrier.pdf',  '274b6eb5-00ef-4a2e-a0a7-682c3e7d2105'),
+('a1e7d5c1-1111-4b1a-aaa1-000000000003', 'Facture EDF Janvier', 'Facture électricité de janvier', 'https://example.com/docs/edf-janvier.pdf',  '274b6eb5-00ef-4a2e-a0a7-682c3e7d2105'),
+('a1e7d5c1-1111-4b1a-aaa1-000000000004', 'Facture EDF Février', 'Facture électricité de février', 'https://example.com/docs/edf-fevrier.pdf',  '274b6eb5-00ef-4a2e-a0a7-682c3e7d2105'),
+('a1e7d5c1-1111-4b1a-aaa1-000000000005', 'Contrat Entretien Chaudière', 'Contrat annuel pour l entretien de la chaudière collective', 'https://example.com/docs/entretien-chaudiere.pdf',  '274b6eb5-00ef-4a2e-a0a7-682c3e7d2107'),
+('a1e7d5c1-1111-4b1a-aaa1-000000000006', 'Rapport Entretien Ascenseur', 'Rapport de maintenance semestriel', 'https://example.com/docs/ascenseur.pdf',  '274b6eb5-00ef-4a2e-a0a7-682c3e7d2107'),
+('a1e7d5c1-1111-4b1a-aaa1-000000000007', 'Planning Nettoyage Janvier', 'Planning des tâches de nettoyage pour janvier', 'https://example.com/docs/nettoyage-janvier.pdf',  '274b6eb5-00ef-4a2e-a0a7-682c3e7d2103'),
+('a1e7d5c1-1111-4b1a-aaa1-000000000008', 'Planning Nettoyage Février', 'Planning des tâches de nettoyage pour février', 'https://example.com/docs/nettoyage-fevrier.pdf',  '274b6eb5-00ef-4a2e-a0a7-682c3e7d2103'),
+('a1e7d5c1-1111-4b1a-aaa1-000000000009', 'Rapport Eau', 'Analyse qualité de l eau fournie', 'https://example.com/docs/rapport-eau.pdf',  '274b6eb5-00ef-4a2e-a0a7-682c3e7d2107'),
+('a1e7d5c1-1111-4b1a-aaa1-000000000010', 'Bilan Entretien Annuel', 'Bilan des interventions d entretien sur l année', 'https://example.com/docs/bilan-entretien.pdf',  '274b6eb5-00ef-4a2e-a0a7-682c3e7d2107');
+
+
+INSERT INTO unit_unit_group (id_unit, id_unit_group, adjusted_shares) VALUES
+-- Tous les lots dans 'Tous les appartements'
+('c12cb34b-6448-4059-91ad-6881d9bbd20c', '8884093a-92c9-4347-a34d-0457a6a2d2bc', NULL),
+('dbfd0774-0f81-4e6b-9015-cdec8a7d1ecd', '8884093a-92c9-4347-a34d-0457a6a2d2bc', NULL),
+('c9f71085-845d-46c7-809d-3453b847fbbd', '8884093a-92c9-4347-a34d-0457a6a2d2bc', NULL),
+('7f86f914-d31c-496d-a4f5-f315af1b97b0', '8884093a-92c9-4347-a34d-0457a6a2d2bc', NULL),
+('aceceac2-ae4c-4354-b08a-7720f203263d', '8884093a-92c9-4347-a34d-0457a6a2d2bc', NULL),
+('ff756164-ed9f-42b2-9f94-0e081654803b', '8884093a-92c9-4347-a34d-0457a6a2d2bc', NULL),
+('481a87e1-2f12-41d4-8ed5-edbfad94a8bb', '8884093a-92c9-4347-a34d-0457a6a2d2bc', NULL),
+('f1c436e9-e292-4b4c-92c3-134dbd87fb3c', '8884093a-92c9-4347-a34d-0457a6a2d2bc', NULL),
+('241b21e4-cca7-43eb-b016-88ef27cd41c4', '8884093a-92c9-4347-a34d-0457a6a2d2bc', NULL),
+('49e30d14-5a45-451e-9abc-e777aca94261', '8884093a-92c9-4347-a34d-0457a6a2d2bc', NULL),
+
+-- Ascenseur (appartements à partir du 2e étage)
+('c9f71085-845d-46c7-809d-3453b847fbbd', '8884093a-92c9-4347-a34d-0457a6a2d2bd', 120.00),
+('7f86f914-d31c-496d-a4f5-f315af1b97b0', '8884093a-92c9-4347-a34d-0457a6a2d2bd', 110.00),
+('481a87e1-2f12-41d4-8ed5-edbfad94a8bb', '8884093a-92c9-4347-a34d-0457a6a2d2bd', 105.00),
+('f1c436e9-e292-4b4c-92c3-134dbd87fb3c', '8884093a-92c9-4347-a34d-0457a6a2d2bd', 80.00),
+('241b21e4-cca7-43eb-b016-88ef27cd41c4', '8884093a-92c9-4347-a34d-0457a6a2d2bd', 85.00),
+('49e30d14-5a45-451e-9abc-e777aca94261', '8884093a-92c9-4347-a34d-0457a6a2d2bd', 100.00),
+
+-- Escalier A (Lots impairs)
+('c12cb34b-6448-4059-91ad-6881d9bbd20c', '8884093a-92c9-4347-a34d-0457a6a2d2be', NULL),
+('c9f71085-845d-46c7-809d-3453b847fbbd', '8884093a-92c9-4347-a34d-0457a6a2d2be', NULL),
+('aceceac2-ae4c-4354-b08a-7720f203263d', '8884093a-92c9-4347-a34d-0457a6a2d2be', NULL),
+('481a87e1-2f12-41d4-8ed5-edbfad94a8bb', '8884093a-92c9-4347-a34d-0457a6a2d2be', NULL),
+('241b21e4-cca7-43eb-b016-88ef27cd41c4', '8884093a-92c9-4347-a34d-0457a6a2d2be', NULL),
+
+-- Escalier B (Lots pairs)
+('dbfd0774-0f81-4e6b-9015-cdec8a7d1ecd', '8884093a-92c9-4347-a34d-0457a6a2d2bf', NULL),
+('7f86f914-d31c-496d-a4f5-f315af1b97b0', '8884093a-92c9-4347-a34d-0457a6a2d2bf', NULL),
+('ff756164-ed9f-42b2-9f94-0e081654803b', '8884093a-92c9-4347-a34d-0457a6a2d2bf', NULL),
+('f1c436e9-e292-4b4c-92c3-134dbd87fb3c', '8884093a-92c9-4347-a34d-0457a6a2d2bf', NULL),
+('49e30d14-5a45-451e-9abc-e777aca94261', '8884093a-92c9-4347-a34d-0457a6a2d2bf', NULL),
+
+-- Parkings (attribués à certains appartements uniquement)
+('c12cb34b-6448-4059-91ad-6881d9bbd20c', '8884093a-92c9-4347-a34d-0457a6a2d2c0', 85.00),
+('7f86f914-d31c-496d-a4f5-f315af1b97b0', '8884093a-92c9-4347-a34d-0457a6a2d2c0', 80.00),
+('ff756164-ed9f-42b2-9f94-0e081654803b', '8884093a-92c9-4347-a34d-0457a6a2d2c0', 50.00),
+('241b21e4-cca7-43eb-b016-88ef27cd41c4', '8884093a-92c9-4347-a34d-0457a6a2d2c0', 50.00);
+
 

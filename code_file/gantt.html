@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            font-weight: 400;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: orange;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .gantt-container {
+            padding: 40px;
+            overflow-x: auto;
+         
+
+        .gantt-chart {
+            min-width: 1200px;
+            position: relative;
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: 300px repeat(12, 1fr);
+            gap: 2px;
+            margin-bottom: 20px;
+        }
+
+        .timeline-header {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            color: #2d3748;
+            border-radius: 10px;
+        }
+
+        .week-header {
+            background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+            padding: 10px 5px;
+            text-align: center;
+            font-size: 0.9em;
+            font-weight: 500;
+            color: #234e52;
+            border-radius: 8px;
+        }
+
+        .sprint-row {
+            display: grid;
+            grid-template-columns: 300px repeat(12, 1fr);
+            gap: 2px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .sprint-label {
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            color: white;
+            padding: 20px;
+            font-weight: 600;
+            border-radius: 10px;
+            font-size: 0.95em;
+            line-height: 1.4;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .task-bar {
+    height: 50px;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 500;
+    font-size: 0.8em;
+    text-align: center;
+    padding: 0 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+    line-height: 1.2;
+    min-width: 0;
+}
+title{
+    color: orange;
+}
+        .task-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .task-bar:hover::before {
+            left: 100%;
+        }
+
+        .sprint-1 { background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%); }
+        .sprint-2 { background: linear-gradient(135deg, #38a169 0%, #2f855a 100%); }
+        .sprint-3 { background: linear-gradient(135deg, #d69e2e 0%, #b7791f 100%); }
+        .sprint-4 { background: linear-gradient(135deg, #dd6b20 0%, #c05621 100%); }
+        .sprint-5 { background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%); }
+        .sprint-6 { background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%); }
+        .sprint-7 { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+        .sprint-8 { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); }
+
+        .task-details {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .task-details:hover {
+            transform: translateY(-2px);
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .legend-text {
+            font-size: 0.9em;
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .milestone {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 10px;
+            height: 10px;
+            background: gold;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .gantt-container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .timeline, .sprint-row {
+                grid-template-columns: 250px repeat(12, 80px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Timeline</h1>
+        </div>
+
+        <div class="gantt-container">
+            <div class="gantt-chart">
+                <div class="timeline">
+                    <div class="timeline-header">Sprints & Tasks</div>
+                    <div class="week-header">S1<br>22/04</div>
+                    <div class="week-header">S2<br>28/04</div>
+                    <div class="week-header">S3<br>05/05</div>
+                    <div class="week-header">S4<br>12/05</div>
+                    <div class="week-header">S5<br>19/05</div>
+                    <div class="week-header">S6<br>26/05</div>
+                    <div class="week-header">S7<br>02/06</div>
+                    <div class="week-header">S8<br>09/06</div>
+                    <div class="week-header">S9<br>16/06</div>
+                    <div class="week-header">S10<br>23/06</div>
+                    <div class="week-header">S11<br>30/06</div>
+                    <div class="week-header">S12<br>07/07</div>
+                </div>
+
+                <div class="sprint-row">
+                    <div class="sprint-label">🟦 Sprint 1: </br>Team Formation & Idea Development</div>
+                    <div class="task-bar sprint-1 task-details" style="grid-column: span 2;">
+                        Define scope, risks, alignment
+                        <div class="milestone"></div>
+                    </div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                </div>
+
+                <div class="sprint-row">
+                    <div class="sprint-label">🟩 Sprint 2: </br>Project Charter Development</div>
+                    <div></div><div></div>
+                    <div class="task-bar sprint-2 task-details">Task breakdown</div>
+                    <div class="task-bar sprint-2 task-details">Detailed timeline</div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                </div>
+
+                <div class="sprint-row">
+                    <div class="sprint-label">🟨 Sprint 3: </br>Technical Specification</div>
+                    <div></div><div></div><div></div>
+                    <div class="task-bar sprint-3 task-details">Define personas, roles</div>
+                    <div class="task-bar sprint-3 task-details">UML, sequence diagrams</div>
+                    <div class="task-bar sprint-3 task-details" style="grid-column: span 2;">Tech stack, dev tools, mockups</div>
+                    <div></div><div></div><div></div><div></div><div></div>
+                </div>
+
+                <div class="sprint-row">
+                    <div class="sprint-label">🟧 Sprint 4: </br>MVP Setup</div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div class="task-bar sprint-4 task-details">Front & back</div>
+                    <div class="task-bar sprint-4 task-details">User authentication</div>
+                    <div class="task-bar sprint-4 task-details">MySQL database</div>
+                    <div></div><div></div><div></div>
+                </div>
+
+                <div class="sprint-row">
+                    <div class="sprint-label">🟥 Sprint 5:</br> AG Resolutions & Notices</div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div class="task-bar sprint-5 task-details">Resolution module</div>
+                    <div class="task-bar sprint-5 task-details">Notice module</div>
+                    <div></div><div></div><div></div>
+                </div>
+
+                <div class="sprint-row">
+                    <div class="sprint-label">🟪 Sprint 6: </br>AG Minutes & Voting</div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div class="task-bar sprint-6 task-details">Minutes module</div>
+                    <div class="task-bar sprint-6 task-details">Voting logic</div>
+                    <div></div><div></div>
+                </div>
+
+                <div class="sprint-row">
+                    <div class="sprint-label">🟫 Sprint 7: </br>Invoicing & Dashboard</div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div class="task-bar sprint-7 task-details">Invoicing</div>
+                    <div class="task-bar sprint-7 task-details">Dashboard</div>
+                    <div></div>
+                </div>
+
+                <div class="sprint-row">
+                    <div class="sprint-label">🟨 Sprint 8:</br> Wrap-up & Delivery</div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div class="task-bar sprint-8 task-details">Role-based access</div>
+                    <div class="task-bar sprint-8 task-details">Final integration & testing</div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color sprint-1"></div>
+                    <div class="legend-text">Team & Ideas</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color sprint-2"></div>
+                    <div class="legend-text">Projet Charter</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color sprint-3"></div>
+                    <div class="legend-text">Stack</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color sprint-4"></div>
+                    <div class="legend-text">MVP Setup</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color sprint-5"></div>
+                    <div class="legend-text">AG Resolutions</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color sprint-6"></div>
+                    <div class="legend-text">Minutes & Vote</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color sprint-7"></div>
+                    <div class="legend-text">Invoicing</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color sprint-8"></div>
+                    <div class="legend-text">Finalisation</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ajouter des effets interactifs
+        document.querySelectorAll('.task-details').forEach(task => {
+            task.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+                this.style.zIndex = '10';
+            });
+            
+            task.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+                this.style.zIndex = '1';
+            });
+        });
+
+        // Animation d'apparition progressive
+        document.addEventListener('DOMContentLoaded', function() {
+            const tasks = document.querySelectorAll('.task-bar');
+            tasks.forEach((task, index) => {
+                task.style.opacity = '0';
+                task.style.transform = 'translateX(-20px)';
+                
+                setTimeout(() => {
+                    task.style.transition = 'all 0.5s ease';
+                    task.style.opacity = '1';
+                    task.style.transform = 'translateX(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

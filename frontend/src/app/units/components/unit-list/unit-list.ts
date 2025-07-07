@@ -38,4 +38,8 @@ export class UnitList implements OnInit{
   seeDetails(id: string): void {
     this.router.navigate(['/units', id]);  
   }  
+
+  editUnit(id: string): void {
+    this.router.navigate(['/units', id, 'edit']);  
+  }  
 }

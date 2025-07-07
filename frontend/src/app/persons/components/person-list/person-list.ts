@@ -38,4 +38,8 @@ export class PersonList implements OnInit{
   seeDetails(id: string): void {
     this.router.navigate(['/persons', id]);  
   }
+
+  editPerson(id: string): void {
+    this.router.navigate(['/persons', id, 'edit']);  
+  }
 }
