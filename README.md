@@ -96,11 +96,6 @@ Sample users for testing (all passwords: `Password123!`):
 - **Ann TheManager:** manager@gmail.com  
 - **John TheAssistant:** assistant@gmail.com  
 - **Cloe TheCoOwner:** coowner@gmail.com  
-
-
-Ann TheManager: manager@gmail.com, password: Password123!
-John TheAssistant : assistant@gmail.com, password: Password123!
-Cloe TheSimpleCoOwner: coowner@gmail.com, password : Password123!
 ---
 
 ## Features
@@ -150,5 +145,5 @@ Manual tests were conducted using Postman and the Angular interface.
 
 ## Contact
 For any questions, contact:  
-📧 slaamri@yahoo.fr
-📧 korneel.loy@gmail.com  
+- slaamri@yahoo.fr
+- korneel.loy@gmail.com  
