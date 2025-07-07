@@ -22,4 +22,5 @@ export interface AgResolution {
   call_date_id?: string;
   ag_notice_title?: string;
   ag_notice_id?: string;
+  status?: string;
 }

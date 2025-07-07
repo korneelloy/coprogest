@@ -9,7 +9,7 @@
       placeholder="Nom du groupe"
       class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
     />
-    <div *ngIf="unitGroupForm.get('name')?.invalid && unitGroupForm.get('name')?.touched" class="text-sm text-red-600 mt-1">
+    <div *ngIf="unitGroupForm.get('name')?.invalid && unitGroupForm.get('name')?.touched" class="text-sm text-yellow-600	 mt-1">
       <small *ngIf="unitGroupForm.get('name')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="unitGroupForm.get('name')?.errors?.['minlength']">* Au moins 2 caractères requis.</small>
       <small *ngIf="unitGroupForm.get('name')?.errors?.['maxlength']">* Maximum 50 caractères autorisés.</small>

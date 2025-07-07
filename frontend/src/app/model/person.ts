@@ -19,7 +19,7 @@ export interface Person {
   unit_id?: string;
   unit_name?: string;
   unit_shares?: string;
-  unit_unit_group_adjusted_shares?: string;
+  adjusted_shares?: string;
   unit_group_id?: string;
   unit_group_name?: string; 
   unit_group_special_shares?: string;

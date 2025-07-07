@@ -16,6 +16,7 @@ module.exports = class AgResolution extends BaseClass {
    * @param {string} resolution_text - resolution_text - not null
    * @param {string} required_majority - majority needed to vote - not null - enum {24, 25, 25-1, 26, unanimity, no_vote}
    * @param {boolean} budget - budget related to this vote? - not null
+   * @param {string|null} status - enum {accepted or rejected} - nullable (null at creation)
 
    * @param {Date|null} createdAt - creation date - set in SQL code
    * @param {Date|null} updatedAt - last update - set in SQL code
@@ -40,7 +41,7 @@ module.exports = class AgResolution extends BaseClass {
    */
   constructor({
     id, title, resolution_text, required_majority, budget, 
-    id_unit_group, id_ag_notice, id_ag_minutes=null, 
+    id_unit_group, id_ag_notice, id_ag_minutes=null, status=null,
     createdAt = null, updatedAt = null,
     budget_amount = null, budget_type = null, operating_budget_start = null, operating_budget_end = null,
     nb_of_instalments = null, budget_recup_tenant = null, budget_actif = null, id_budget_category = null,
@@ -51,6 +52,7 @@ module.exports = class AgResolution extends BaseClass {
     this.resolution_text = resolution_text;
     this.required_majority = required_majority;
     this.budget = budget;
+    this.status = status;
     this.id_ag_minutes = id_ag_minutes;
     this.id_unit_group = id_unit_group;
     this.id_ag_notice = id_ag_notice;
@@ -179,6 +181,29 @@ set budget_amount(value) {
     throw error;
   }
   this._budget_amount = value;
+}
+
+get status() {
+  return this._status;
+}
+
+set status(value) {
+  if (value === null) {
+    this._status = null;
+    return;
+  }
+  if (typeof value !== 'string') {
+    const error = new Error('Status must be a string.');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  if (value !== 'accepted' && value !== 'rejected') {
+    const error = new Error('Invalid status : must be accepted or rejected.');
+    error.statusCode = 400;
+    throw error;
+  }
+  this._status = value;
 }
 
 get budget_type() {
@@ -541,6 +566,38 @@ set id_budget_category(value) {
           SET id_ag_minutes = ? 
           WHERE id = ?`,
           [ id_ag_minutes,
+            id
+          ]
+        );
+
+      if (result.affectedRows === 0) {
+        const error = new Error('Ag resolution not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      return { message: 'Ag resolution updated successfully' };
+    } catch (err) {
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        const error = new Error('Foreign key constraint violated');
+        error.statusCode = 400;
+        throw error;
+      }
+      throw err;
+    }
+  }
+
+   /**
+   * Update the status of the ag resolution in the database.
+   * @returns {Promise<Object>}
+   */
+
+   static async patchStatus(id, status) {
+    try {
+      const [result] = await db.execute(
+        `UPDATE ag_resolution
+          SET status = ? 
+          WHERE id = ?`,
+          [ status,
             id
           ]
         );

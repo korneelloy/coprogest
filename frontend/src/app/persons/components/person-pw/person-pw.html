@@ -14,7 +14,7 @@
       readonly 
       class="bg-gray-100 text-gray-600 cursor-not-allowed w-full px-3 py-2 rounded border border-gray-300"
     />
-    <div *ngIf="personForm.get('email')?.invalid && personForm.get('email')?.touched" class="text-sm text-red-600 mt-1">
+    <div *ngIf="personForm.get('email')?.invalid && personForm.get('email')?.touched" class="text-sm text-yellow-600	 mt-1">
       <small *ngIf="personForm.get('email')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="personForm.get('email')?.errors?.['pattern']">* Ce champ doit correspondre à un mail valide.</small>
     </div>
@@ -28,7 +28,7 @@
       placeholder="Password123!" 
       class="w-full px-3 py-2 rounded border border-gray-300"
     />
-    <div *ngIf="personForm.get('password')?.invalid && personForm.get('password')?.touched" class="text-sm text-red-600 mt-1">
+    <div *ngIf="personForm.get('password')?.invalid && personForm.get('password')?.touched" class="text-sm text-yellow-600	 mt-1">
       <small *ngIf="personForm.get('password')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="personForm.get('password')?.errors?.['pattern']">
         * Le mot de passe doit contenir au minimum 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.
@@ -44,10 +44,10 @@
       placeholder="Retapez le mot de passe" 
       class="w-full px-3 py-2 rounded border border-gray-300"
     />
-    <div *ngIf="personForm.get('confirmPassword')?.invalid && personForm.get('confirmPassword')?.touched" class="text-sm text-red-600 mt-1">
+    <div *ngIf="personForm.get('confirmPassword')?.invalid && personForm.get('confirmPassword')?.touched" class="text-sm text-yellow-600	 mt-1">
       <small *ngIf="personForm.get('confirmPassword')?.errors?.['required']">* Ce champ est requis.</small>
     </div>
-    <div *ngIf="personForm.errors?.['mismatch'] && personForm.get('confirmPassword')?.touched" class="text-sm text-red-600 mt-1">
+    <div *ngIf="personForm.errors?.['mismatch'] && personForm.get('confirmPassword')?.touched" class="text-sm text-yellow-600	 mt-1">
       * Les mots de passe ne correspondent pas.
     </div>
   </div>

@@ -249,7 +249,7 @@ module.exports = class Person extends BaseClass {
       unit.name as unit_name,
       unit.shares as unit_shares,
 
-      unit_unit_group.adjusted_shares as unit_unit_group_adjusted_shares,
+      unit_unit_group.adjusted_shares as adjusted_shares,
 
       unit_group.id as unit_group_id,
       unit_group.name as unit_group_name,

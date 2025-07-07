@@ -134,7 +134,7 @@ module.exports = class AgMinutesPresencePerson  {
       }
       return { 
         message: 'agminutes presence/person created successfully',
-        id: this.id 
+        id: this.id_ag_minutes 
       };
     } catch (err) {
       if (err.code === 'ER_NO_REFERENCED_ROW_2') {

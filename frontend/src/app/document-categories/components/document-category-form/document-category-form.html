@@ -7,7 +7,7 @@
   <div>
     <label class="block mb-1">Nom: </label>
     <input formControlName="name" placeholder="Nom de la catégorie" class="w-full border border-gray-300 rounded-md px-3 py-2" />
-    <div *ngIf="documentForm.get('name')?.invalid && documentForm.get('name')?.touched" class="text-sm text-red-600 mt-1">
+    <div *ngIf="documentForm.get('name')?.invalid && documentForm.get('name')?.touched" class="text-sm text-yellow-600	 mt-1">
       <small *ngIf="documentForm.get('name')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="documentForm.get('name')?.errors?.['minlength']">* Ce champ doit contenir au moins 2 caractères.</small>
       <small *ngIf="documentForm.get('name')?.errors?.['maxlength']">* Ce champ ne peut contenir plus que 50 caractères.</small>

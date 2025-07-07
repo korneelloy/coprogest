@@ -73,6 +73,7 @@ export class AgResolutionService {
       );
   }
 
+
   update(id: string, agResolution: AgResolution): Observable<AgResolution> {
     return this.http
       .put<AgResolution>(`${this.url}/${id}`, agResolution, { withCredentials: true })
@@ -84,12 +85,22 @@ export class AgResolutionService {
 
   updateMinutesLink(id: string, id_ag_minutes: string): Observable<AgResolution> {
     return this.http
-      .patch<AgResolution>(`${this.url}/${id}`, {id_ag_minutes : id_ag_minutes}, { withCredentials: true })
+      .patch<AgResolution>(`${this.url}/agmin/${id}`, {id_ag_minutes : id_ag_minutes}, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Updated ag resolution id=${id}`)),
         catchError(this.handleError)
       );
   }
+
+  updateStatus(id: string, status: string): Observable<AgResolution> {
+    return this.http
+      .patch<AgResolution>(`${this.url}/status/${id}/${status}`, {}, { withCredentials: true })
+      .pipe(
+        tap(() => console.log(`Updated ag resolution id=${id}`)),
+        catchError(this.handleError)
+      );
+  }
+
   delete(id: string): Observable<void> {
     return this.http
       .delete<void>(`${this.url}/${id}`, { withCredentials: true })

@@ -24,7 +24,7 @@
           Identifiant
         </label>
       </div>
-      <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-red-600 text-sm">
+      <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-yellow-600	 text-sm">
         <small *ngIf="loginForm.get('email')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
         <small *ngIf="loginForm.get('email')?.errors?.['pattern']">* Ce champ doit correspondre à un mail valide.</small>
       </div>
@@ -49,7 +49,7 @@
           Mot de passe
         </label>
       </div>
-      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-red-600 text-sm">
+      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-yellow-600	 text-sm">
         <small *ngIf="loginForm.get('password')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
         <small *ngIf="loginForm.get('password')?.errors?.['pattern']">
           * Le mot de passe doit contenir au minimum 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.

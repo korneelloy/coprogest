@@ -214,6 +214,22 @@ exports.patchAgMin = async (req, res, next) => {
 };
 
 
+/**
+ * Update the status of an agresolution identified by its ID.
+ */
+exports.patchStatus = async (req, res, next) => {
+  try {
+    const updateResponse = await AgResolution.patchStatus(req.params.id, req.params.status);
+    res.status(200).json(updateResponse);
+
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
 
 
 /**

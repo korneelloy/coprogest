@@ -83,10 +83,38 @@ module.exports = class Unitgroup extends BaseClass {
    * @returns {Promise<Object[]>}
    */
   static async fetchAll() {
-    const [allUnitGroups] = await db.execute(`SELECT * FROM unit_group;`);
+    const [allUnitGroups] = await db.execute(`SELECT 
+      unit_group.*,
+
+      unit_unit_group.adjusted_shares as adjusted_shares,
+      
+      unit.id as unit_id,
+      unit.name as unit_name,
+      unit.shares as unit_shares,
+      unit.id_person as unit_id_person
+
+      FROM unit_group 
+
+      LEFT JOIN unit_unit_group
+        ON unit_group.id = unit_unit_group.id_unit_group
+
+      LEFT JOIN unit
+        ON unit_unit_group.id_unit = unit.id
+      
+      ;`);
     return allUnitGroups;
   }
 
+
+  /**
+   * Fetch all unqiue unitgroups from the database.
+   * @returns {Promise<Object[]>}
+   */
+  static async getAllUnique() {
+    const [allUnitGroups] = await db.execute(`SELECT * FROM unit_group;`);
+    return allUnitGroups;
+  }
+  
   /**
    * Fetch a unitgroup by ID.
    * @param {string} id
@@ -95,7 +123,7 @@ module.exports = class Unitgroup extends BaseClass {
   static async get(id) {
     const [rows] = await db.execute(`SELECT 
       unit_group.*,
-      unit_unit_group.adjusted_shares as unit_unit_group_adjusted_shares,
+      unit_unit_group.adjusted_shares as adjusted_shares,
       unit.id as unit_id,
       unit.name as unit_name,
       unit.shares as unit_shares,

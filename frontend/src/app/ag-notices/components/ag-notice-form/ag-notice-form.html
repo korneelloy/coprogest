@@ -12,7 +12,7 @@
     <label class="block font-medium mb-1">Titre:</label>
     <input formControlName="title" placeholder="AG du 5 juin 2025"
       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
-    <div class="text-sm text-red-600 mt-1" *ngIf="agNoticeForm.get('title')?.invalid && agNoticeForm.get('title')?.touched">
+    <div class="text-sm text-yellow-600	 mt-1" *ngIf="agNoticeForm.get('title')?.invalid && agNoticeForm.get('title')?.touched">
       <small *ngIf="agNoticeForm.get('title')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="agNoticeForm.get('title')?.errors?.['minlength']">* Minimum 2 caractères.</small>
       <small *ngIf="agNoticeForm.get('title')?.errors?.['maxlength']">* Maximum 50 caractères.</small>
@@ -23,7 +23,7 @@
     <label class="block font-medium mb-1">Lieu:</label>
     <input formControlName="place" placeholder="Chez M. Dupont"
       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
-    <div class="text-sm text-red-600 mt-1" *ngIf="agNoticeForm.get('place')?.invalid && agNoticeForm.get('place')?.touched">
+    <div class="text-sm text-yellow-600	 mt-1" *ngIf="agNoticeForm.get('place')?.invalid && agNoticeForm.get('place')?.touched">
       <small *ngIf="agNoticeForm.get('place')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="agNoticeForm.get('place')?.errors?.['minlength']">* Minimum 2 caractères.</small>
       <small *ngIf="agNoticeForm.get('place')?.errors?.['maxlength']">* Maximum 255 caractères.</small>
@@ -34,7 +34,7 @@
     <label class="block font-medium mb-1">Date:</label>
     <input formControlName="ag_date" type="date"
       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
-    <div class="text-sm text-red-600 mt-1" *ngIf="agNoticeForm.get('ag_date')?.invalid && agNoticeForm.get('ag_date')?.touched">
+    <div class="text-sm text-yellow-600	 mt-1" *ngIf="agNoticeForm.get('ag_date')?.invalid && agNoticeForm.get('ag_date')?.touched">
       <small>* Ce champ ne peut pas être vide.</small>
     </div>
   </div>
@@ -43,7 +43,7 @@
     <label class="block font-medium mb-1">Heure:</label>
     <input formControlName="ag_time" type="time"
       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
-    <div class="text-sm text-red-600 mt-1" *ngIf="agNoticeForm.get('ag_time')?.invalid && agNoticeForm.get('ag_time')?.touched">
+    <div class="text-sm text-yellow-600	 mt-1" *ngIf="agNoticeForm.get('ag_time')?.invalid && agNoticeForm.get('ag_time')?.touched">
       <small>* Ce champ ne peut pas être vide.</small>
     </div>
   </div>

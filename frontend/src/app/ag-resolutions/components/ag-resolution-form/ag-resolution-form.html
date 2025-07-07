@@ -8,7 +8,7 @@
     <label class="block font-medium mb-1">Titre: </label>
     <input formControlName="title" placeholder="Choix d'un nouveau syndic"
       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
-      <div *ngIf="agResolutionForm.get('title')?.invalid && (agResolutionForm.get('title')?.touched || formSubmitted)" class="text-sm text-red-600 mt-1">
+      <div *ngIf="agResolutionForm.get('title')?.invalid && (agResolutionForm.get('title')?.touched || formSubmitted)" class="text-sm text-yellow-600	 mt-1">
         <small *ngIf="agResolutionForm.get('title')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="agResolutionForm.get('title')?.errors?.['minlength']">* Minimum 2 caractères.</small>
       <small *ngIf="agResolutionForm.get('title')?.errors?.['maxlength']">* Maximum 50 caractères.</small>
@@ -25,7 +25,7 @@
       (input)="description.style.height = 'auto'; description.style.height = description.scrollHeight + 'px';"
       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
     ></textarea>
-    <div *ngIf="agResolutionForm.get('resolution_text')?.invalid && (agResolutionForm.get('resolution_text')?.touched || formSubmitted)" class="text-sm text-red-600 mt-1">
+    <div *ngIf="agResolutionForm.get('resolution_text')?.invalid && (agResolutionForm.get('resolution_text')?.touched || formSubmitted)" class="text-sm text-yellow-600	 mt-1">
       <small *ngIf="agResolutionForm.get('resolution_text')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       <small *ngIf="agResolutionForm.get('resolution_text')?.errors?.['minlength']">* Minimum 2 caractères.</small>
     </div>
@@ -42,7 +42,7 @@
       <option value="unanimity">Unanimité</option>
       <option value="no_vote">Résolution sans vote</option>
     </select>  
-    <div *ngIf="agResolutionForm.get('required_majority')?.invalid && (agResolutionForm.get('required_majority')?.touched || formSubmitted)" class="text-sm text-red-600 mt-1">
+    <div *ngIf="agResolutionForm.get('required_majority')?.invalid && (agResolutionForm.get('required_majority')?.touched || formSubmitted)" class="text-sm text-yellow-600	 mt-1">
       <small *ngIf="agResolutionForm.get('required_majority')?.errors?.['required']">* champ obligatoire</small>  
     </div>
   </div>
@@ -55,7 +55,7 @@
         {{ unitGroup.name }}
       </option>
     </select>
-    <div *ngIf="agResolutionForm.get('id_unit_group')?.invalid && (agResolutionForm.get('id_unit_group')?.touched || formSubmitted)" class="text-sm text-red-600 mt-1">
+    <div *ngIf="agResolutionForm.get('id_unit_group')?.invalid && (agResolutionForm.get('id_unit_group')?.touched || formSubmitted)" class="text-sm text-yellow-600	 mt-1">
       <small *ngIf="agResolutionForm.get('id_unit_group')?.errors?.['required']">* champ obligatoire</small>  
     </div>
    </div>
@@ -72,7 +72,7 @@
       <option value="0">Non</option>
       <option value="1">Oui</option>
     </select>
-    <div *ngIf="agResolutionForm.get('budget')?.invalid && (agResolutionForm.get('budget')?.touched || formSubmitted)" class="text-sm text-red-600 mt-1">    
+    <div *ngIf="agResolutionForm.get('budget')?.invalid && (agResolutionForm.get('budget')?.touched || formSubmitted)" class="text-sm text-yellow-600	 mt-1">    
       <small *ngIf="agResolutionForm.get('budget')?.errors?.['required']">* champ obligatoire</small>  
     </div>
     <div *ngIf="agResolutionForm.get('budget')?.disabled" class="info-message m-2">
@@ -91,7 +91,7 @@
         formControlName="budget_amount"
         class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
       />
-      <div *ngIf="agResolutionForm.get('budget_amount')?.invalid && (agResolutionForm.get('budget_amount')?.touched || formSubmitted)" class="text-sm text-red-600 mt-1">
+      <div *ngIf="agResolutionForm.get('budget_amount')?.invalid && (agResolutionForm.get('budget_amount')?.touched || formSubmitted)" class="text-sm text-yellow-600	 mt-1">
         <small *ngIf="agResolutionForm.get('budget_amount')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
       </div>
     </div>
@@ -104,7 +104,7 @@
         <option value="operating">Budget opérationnel</option>
         <option value="exceptional">Budget exceptionelle</option>
       </select>   
-      <div *ngIf="agResolutionForm.get('budget_type')?.invalid && (agResolutionForm.get('budget_type')?.touched || formSubmitted)" class="text-sm text-red-600 mt-1"> 
+      <div *ngIf="agResolutionForm.get('budget_type')?.invalid && (agResolutionForm.get('budget_type')?.touched || formSubmitted)" class="text-sm text-yellow-600	 mt-1"> 
         <small *ngIf="agResolutionForm.get('budget_type')?.errors?.['required']">* champ obligatoire</small>
       </div>
     </div>
@@ -116,7 +116,7 @@
         formControlName="operating_budget_start"
         class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
       />
-      <div *ngIf="agResolutionForm.get('operating_budget_start')?.invalid && (agResolutionForm.get('operating_budget_start')?.touched || formSubmitted)" class="text-sm text-red-600 mt-1">
+      <div *ngIf="agResolutionForm.get('operating_budget_start')?.invalid && (agResolutionForm.get('operating_budget_start')?.touched || formSubmitted)" class="text-sm text-yellow-600	 mt-1">
         <small *ngIf="agResolutionForm.get('operating_budget_start')?.errors?.['required']">* champ obligatoire</small>
       </div>
       </div>
@@ -128,7 +128,7 @@
         formControlName="operating_budget_end"
         class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
       />
-      <div *ngIf="agResolutionForm.get('operating_budget_end')?.invalid && (agResolutionForm.get('operating_budget_end')?.touched || formSubmitted)" class="text-sm text-red-600 mt-1">
+      <div *ngIf="agResolutionForm.get('operating_budget_end')?.invalid && (agResolutionForm.get('operating_budget_end')?.touched || formSubmitted)" class="text-sm text-yellow-600	 mt-1">
         <small *ngIf="agResolutionForm.get('operating_budget_end')?.errors?.['required']">* champ obligatoire</small>
       </div>
     </div>
@@ -144,7 +144,7 @@
           </option>
           <option [value]="1">Planifier un ou plusieurs échéances en fixant les dates</option>
         </select>
-        <div *ngIf="agResolutionForm.get('nb_of_instalments')?.invalid && (agResolutionForm.get('nb_of_instalments')?.touched || formSubmitted)" class="text-sm text-red-600 mt-1">
+        <div *ngIf="agResolutionForm.get('nb_of_instalments')?.invalid && (agResolutionForm.get('nb_of_instalments')?.touched || formSubmitted)" class="text-sm text-yellow-600	 mt-1">
           <small *ngIf="agResolutionForm.get('nb_of_instalments')?.errors?.['required']">* champ obligatoire</small>
         </div>
       </div>
@@ -205,7 +205,7 @@
           {{ cat.name }}
         </option>
       </select>
-      <div *ngIf="agResolutionForm.get('budgetCategory')?.invalid && (agResolutionForm.get('budgetCategory')?.touched || formSubmitted)" class="text-sm text-red-600 mt-1">
+      <div *ngIf="agResolutionForm.get('budgetCategory')?.invalid && (agResolutionForm.get('budgetCategory')?.touched || formSubmitted)" class="text-sm text-yellow-600	 mt-1">
         <small *ngIf="agResolutionForm.get('budgetCategory')?.errors?.['required']">* champ obligatoire</small>
       </div>
       </div>
@@ -219,7 +219,7 @@
     {{ isEditMode ? 'Mettre à jour' : 'Créer' }} la résolution
   </button>
   <br>
-  <div *ngIf="noDateError" class="text-red-500 text-sm mt-2">
+  <div *ngIf="noDateError" class="text-yellow-600 text-sm mt-2">
     Vous devez ajouter au moins une échéance si un appel de fonds est prévu.
   </div>
 </form>

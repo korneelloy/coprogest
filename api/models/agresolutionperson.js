@@ -121,7 +121,7 @@ module.exports = class AgResolutionPerson  {
       }
       return {
         message: 'ag_resolution / person created successfully' ,
-        id: this.id
+        id: this.id_ag_resolution
       };
     } catch (err) {
       if (err.code === 'ER_NO_REFERENCED_ROW_2') {
@@ -174,12 +174,9 @@ module.exports = class AgResolutionPerson  {
      */
     static async deleteAllByAgResolution(id_ag_resolution) {
       const [result] = await db.execute(`DELETE FROM ag_resolution_person WHERE id_ag_resolution = ?`, [id_ag_resolution]);
-      if (result.affectedRows === 0) {
-        const error = new Error('ag_resolution / person not found');
-        error.statusCode = 404;
-        throw error;
-      }
-      return { message: 'ag_resolution / person deleted successfully' };
+      return {
+        message: `Votes deleted successfully (${result.affectedRows} deleted)`,
+      };
     }
 
   /**

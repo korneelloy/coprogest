@@ -10,6 +10,9 @@ const router = express.Router();
 // Get all unitgroups
 router.get('/', unitgroupController.getAll);
 
+// Get all unique unitgroups
+router.get('/allunique', unitgroupController.getAllUnique);
+
 // Get a single unitgroup by ID
 router.get('/:id', unitgroupController.getOne);
 

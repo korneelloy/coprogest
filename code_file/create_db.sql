@@ -103,6 +103,7 @@ CREATE TABLE ag_resolution(
    budget BOOLEAN NOT NULL,
    budget_amount DECIMAL(15,2),
    budget_type VARCHAR(20),
+   status VARCHAR(20),
    operating_budget_start DATE,
    operating_budget_end DATE,
    nb_of_instalments TINYINT,

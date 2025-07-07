@@ -30,9 +30,14 @@ router.post('/', agResolutionController.postOne);
 router.put('/:id', agResolutionController.updateOne);
 
 // Update a ag/id_ag_minutes  by ID
-router.patch('/:id', agResolutionController.patchAgMin);
+router.patch('/agmin/:id', agResolutionController.patchAgMin);
+
+// Update the status
+router.patch('/status/:id/:status', agResolutionController.patchStatus);
 
 // Delete a ag resolution by ID
 router.delete('/:id', agResolutionController.deleteOne);
+
+
 
 module.exports = router;

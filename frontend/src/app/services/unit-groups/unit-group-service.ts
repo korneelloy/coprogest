@@ -25,6 +25,15 @@ export class UnitGroupService {
       );
   }
 
+  fetchAllUnique(): Observable<UnitGroup[]> {
+    return this.http
+      .get<UnitGroup[]>(`${this.url}/allunique`, { withCredentials: true })
+      .pipe(
+        tap(() => console.log('Fetched unit-groups')),
+        catchError(this.handleError)
+      );
+  }
+
   fetchById(id: string): Observable<UnitGroup> {
     return this.http
       .get<UnitGroup>(`${this.url}/${id}`, { withCredentials: true })
