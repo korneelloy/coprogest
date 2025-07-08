@@ -1,1 +1,30 @@
-<p>home works!</p>
+<div class="container mx-auto px-4 py-6">
+  <div class="flex flex-col lg:flex-row items-center justify-center gap-8">
+
+    <!-- Bloc Solde -->
+    <div class="flex justify-center items-center">
+      <div class="rounded-full w-56 h-56 flex flex-col justify-center items-center" style="background-color: #048266">
+        <span class="text-black text-3xl font-bold -mt-2">Solde :</span>
+        <span class="text-black text-2xl font-bold">{{ accountBalance }} €</span>
+      </div>
+    </div>
+
+    <!-- Bloc Lots -->
+    <div class="bg-zinc-100 shadow rounded-lg p-6 w-full max-w-xl">
+      <h2 class="text-lg font-semibold text-black mb-4">Vos lots immobiliers</h2>
+      <div *ngIf="userUnits.length > 0; else noUnits">
+        <ul class="space-y-4">
+          <li *ngFor="let unit of userUnits" class="border border-gray-200 p-4 rounded-md">
+            <p><strong>Lot :</strong> {{ unit.designation }}</p>
+            <p><strong>Étage :</strong> {{ unit.floor }}</p>
+            <p><strong>Tantièmes :</strong> {{ unit.tantiemes }}</p>
+          </li>
+        </ul>
+      </div>
+      <ng-template #noUnits>
+        <p class="text-gray-500 italic">Aucun lot enregistré pour le moment.</p>
+      </ng-template>
+    </div>
+
+  </div>
+</div>
