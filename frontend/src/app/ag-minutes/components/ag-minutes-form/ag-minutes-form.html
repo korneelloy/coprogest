@@ -142,7 +142,7 @@
 <ng-container *ngIf="!agMinutesForm.dirty && !presenceChange">
   <div *ngIf="isEditMode">
     <strong class="text-md font-semibold">Résolutions associées</strong>
-    <ul *ngIf="agResolutions$ | async as agResolutions" class="mt-4 space-y-4">
+    <ul *ngIf="agResolutions" class="mt-4 space-y-4">
       <ng-container *ngIf="agResolutions.length > 0; else noResolutions">
         <li *ngFor="let agResolution of agResolutions; let i = index"  class="border rounded-md bg-gray-50 p-4 space-y-4">
           <h2 class="text-xl font-bold text-orange-400 mt-6 mb-2">

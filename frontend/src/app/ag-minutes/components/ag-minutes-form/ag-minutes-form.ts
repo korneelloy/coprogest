@@ -39,7 +39,7 @@ export class AgMinutesForm implements OnInit {
   agMinutesForm: FormGroup;
   isEditMode = false;
   agMinutesId: string | null = null;
-  agResolutions$!: Observable<AgResolution[]>;
+  agResolutions: AgResolution[] = [];
   allNoticesWithoutMinutes: AgResolution[] = [];
   persons$!: Observable<Person[]>;
   persons: Person[] = [];
@@ -134,10 +134,25 @@ export class AgMinutesForm implements OnInit {
     this.agMinutesId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.agMinutesId;
 
-    /** handling of message update succes ag minutes */
-    if (this.agMinutesId) {
-      this.route.queryParamMap.subscribe(params => {
-        if (params.get('updated') === 'true') {
+    /** if creation mode > get the list of AG Notices which do not yet have a Ag Minute */
+
+    if (!this.isEditMode){
+      this.agResolutionService.fetchAllNoticesWithoutMinutes().subscribe((data: AgResolution[]) => {
+        this.allNoticesWithoutMinutes = data;
+        console.log("allNoticesWithoutMinutes", this.allNoticesWithoutMinutes);
+      });     
+      
+      /** set validator only for creation mode - basicaly 2 different forms in reality*/
+      this.agMinutesForm.get('notice_id')?.setValidators([Validators.required]);
+
+    /** else if change mode: */
+    } else if (this.isEditMode) {
+      
+      /** handling of messages for deleting or updating ag minutes */
+      this.route.queryParams.subscribe(params => {
+        if (params['deleted'] === 'true') {
+          this.deletedMessage = "Le compte rendu a été supprimée avec succès.";
+        } else if (params['updated'] === 'true') {
           this.updatedMessage = "Le compte rendu a été mise à jour avec succès.";
           setTimeout(() => {
             this.updatedMessage = null;
@@ -148,152 +163,9 @@ export class AgMinutesForm implements OnInit {
             });
           }, 5000);
         }
-      });      
-    }
-
-    this.unitGroup$ = this.unitGroupService.fetchAll();
-
-    this.unitGroup$.subscribe(data =>{
-      data.forEach(row => {
-        if (!this.unitGroupDict[row.id]) {
-          this.unitGroupDict[row.id] = row.name;
-        }
-      });
-    });
-
-    this.unitGroupShares = {};
-
-    this.unitGroup$.subscribe(data => {
-      data.forEach(row => {
-        const groupId = row.id;
-        const specialShares = row.special_shares;
-
-        if (!this.unitGroupShares[groupId]) {
-          this.unitGroupShares[groupId] = 0;
-        }
-
-        if (specialShares === 1) {
-          if (row.adjusted_shares) {
-            this.unitGroupShares[groupId] += Number(row.adjusted_shares);
-          }
-        } else {
-          if (row.unit_shares) {
-            this.unitGroupShares[groupId] += Number(row.unit_shares);
-          }
-        }
-      });
-    });
-
-
-
-    /** everybody with at least one unit */
-    this.persons$ = this.personService.getAllWithUnitInfo();
-
-    /**list of unique persons */
-    this.persons$.subscribe(data => {
-      this.uniquePersons = data;
-      this.uniquePersons = this.uniquePersons.filter(
-        (person, index, self) =>
-          index === self.findIndex(p => p.id === person.id)
-      );
-    });
-   
-
-    /**
-     * Create a persons array with:
-     * Level 1: An array of all persons who own at least one unit
-     * Level 2: For each person, an array of all units they own
-     * Level 3: For each unit, an array of all unit groups the unit belongs to
-     * 
-     */
-
-    this.persons$.subscribe(data => {
-      const personMap = new Map<string, any>();
-    
-      for (const row of data) {
-        // Create person if not already present
-        if (!personMap.has(row.id)) {
-          personMap.set(row.id, {
-            id: row.id,
-            email: row.email,
-            first_name: row.first_name,
-            last_name: row.last_name,
-            units: []
-          });
-        }
-    
-        const person = personMap.get(row.id);
-    
-        // Check if unit already added to this person
-        let unit = person.units.find((u: any) => u.id === row.unit_id);
-        if (!unit) {
-          unit = {
-            id: row.unit_id,
-            name: row.unit_name,
-            shares: row.unit_shares,
-            unit_groups: []
-          };
-          person.units.push(unit);
-        }
-    
-        // Add unit group if present and not already added
-        if (row.unit_group_name) {
-          const exists = unit.unit_groups.some((g: any) => g.name === row.unit_group_name);
-          if (!exists) {
-            unit.unit_groups.push({
-              name: row.unit_group_name,
-              id: row.unit_group_id,
-              special_shares: row.unit_group_special_shares,
-              adjusted_shares: row.adjusted_shares
-            });
-          }
-        }
-      }
-    
-      this.persons = Array.from(personMap.values());
-    });
-
-
-    this.votes$ = this.agResolutionPersonService.fetchAll();
-    this.votes$.subscribe(data => {
-      this.votes = data;
-      this.selectedVotes = {};
-
-      this.votes.forEach(vote => {
-        if (!this.selectedVotes[vote.id_ag_resolution]) {
-          this.selectedVotes[vote.id_ag_resolution] = {};
-        }
-        this.selectedVotes[vote.id_ag_resolution][vote.id_person] = vote.vote;
-      });      
-    });
-
-    if (!this.isEditMode){
-      this.agResolutionService.fetchAllNoticesWithoutMinutes().subscribe((data: AgResolution[]) => {
-        this.allNoticesWithoutMinutes = data;
-      });      
-
-      this.agMinutesForm.get('notice_id')?.setValidators([Validators.required]);
-
-    } else if (this.isEditMode) {
-      this.route.queryParams.subscribe(params => {
-        if (params['deleted'] === 'true') {
-          this.deletedMessage = "Le compte rendu a été supprimée avec succès.";
-        }
       });
 
-      this.agminutespresencepersonService.fetchAllByMinutes(this.agMinutesId!).subscribe((agMinutesPresencePerson: AgMinutesPresencePerson[]) => {
-        agMinutesPresencePerson.forEach(presence => {
-          this.selectedPersonsOnly.push({
-            id_person: presence.id_person,
-            id_ag_minutes: this.agMinutesId!,
-            presence: presence.presence,
-            represented_by: presence.represented_by
-          });
-          this.selectedPersonsIdOnly.push(presence.id_person);
-        });
-      });
-           
-      
+      /** set validator only for change mode - basicaly 2 different forms in reality*/
       this.agMinutesForm.get('ag_date')?.setValidators([Validators.required]);
       this.agMinutesForm.get('ag_time')?.setValidators([Validators.required]);
       this.agMinutesForm.get('place')?.setValidators([
@@ -301,10 +173,8 @@ export class AgMinutesForm implements OnInit {
         Validators.minLength(2),
         Validators.maxLength(255)
       ])
-      
-      this.agResolutions$ = this.agResolutionService.fetchAllByAgMinutes(this.agMinutesId!);
 
-
+      /** fetch the basic ag minutes info from the database to prefill the form */
       this.agMinutesService.fetchById(this.agMinutesId!).subscribe((agMinutes: AgMinutes) => {
         const dateObj = new Date(agMinutes.minutes_date);
         const pad = (n: number) => n.toString().padStart(2, '0');
@@ -317,8 +187,140 @@ export class AgMinutesForm implements OnInit {
           ag_time: timePart
         });
       });
+
+      /** everybody with at least one unit */
+      this.persons$ = this.personService.getAllWithUnitInfo();
+
+      /**list of unique persons */
+      this.persons$.subscribe(data => {
+        this.uniquePersons = data;
+        this.uniquePersons = this.uniquePersons.filter(
+          (person, index, self) =>
+            index === self.findIndex(p => p.id === person.id)
+        );
+      });
+     
+
+      /**
+       * Create a persons array with:
+       * Level 1: An array of all persons who own at least one unit
+       * Level 2: For each person, an array of all units they own
+       * Level 3: For each unit, an array of all unit groups the unit belongs to
+       * 
+       */
+
+      this.persons$.subscribe(data => {
+        const personMap = new Map<string, any>();
+      
+        for (const row of data) {
+          // Create person if not already present
+          if (!personMap.has(row.id)) {
+            personMap.set(row.id, {
+              id: row.id,
+              email: row.email,
+              first_name: row.first_name,
+              last_name: row.last_name,
+              units: []
+            });
+          }
+      
+          const person = personMap.get(row.id);
+      
+          // Check if unit already added to this person
+          let unit = person.units.find((u: any) => u.id === row.unit_id);
+          if (!unit) {
+            unit = {
+              id: row.unit_id,
+              name: row.unit_name,
+              shares: row.unit_shares,
+              unit_groups: []
+            };
+            person.units.push(unit);
+          }
+      
+          // Add unit group if present and not already added
+          if (row.unit_group_name) {
+            const exists = unit.unit_groups.some((g: any) => g.name === row.unit_group_name);
+            if (!exists) {
+              unit.unit_groups.push({
+                name: row.unit_group_name,
+                id: row.unit_group_id,
+                special_shares: row.unit_group_special_shares,
+                adjusted_shares: row.adjusted_shares
+              });
+            }
+          }
+        }
+      
+        this.persons = Array.from(personMap.values());
+      });
+
+       /** get presence from database and keep them in local memory */
+       this.agminutespresencepersonService.fetchAllByMinutes(this.agMinutesId!).subscribe((agMinutesPresencePerson: AgMinutesPresencePerson[]) => {
+        agMinutesPresencePerson.forEach(presence => {
+          this.selectedPersonsOnly.push({
+            id_person: presence.id_person,
+            id_ag_minutes: this.agMinutesId!,
+            presence: presence.presence,
+            represented_by: presence.represented_by
+          });
+          this.selectedPersonsIdOnly.push(presence.id_person);
+        });
+      });
+
+      /** get all resolutions for this ag minute */  
+      this.agResolutionService.fetchAllByAgMinutes(this.agMinutesId!).subscribe((agResolutions: AgResolution[]) => {
+        this.agResolutions = agResolutions;
+      });
+
+      /** fetch all unit groups asynchronously and on data arrival, map unit group IDs to their names.*/
+      this.unitGroup$ = this.unitGroupService.fetchAll();
+      this.unitGroup$.subscribe(data =>{
+        data.forEach(row => {
+          if (!this.unitGroupDict[row.id]) {
+            this.unitGroupDict[row.id] = row.name;
+          }
+        });
+      });
+
+      /** counting weight of unit groups (total 'tantiemes' per group)y*/
+      this.unitGroupShares = {};
+      this.unitGroup$.subscribe(data => {
+        data.forEach(row => {
+          const groupId = row.id;
+          const specialShares = row.special_shares;
+
+          if (!this.unitGroupShares[groupId]) {
+            this.unitGroupShares[groupId] = 0;
+          }
+
+          if (specialShares === 1) {
+            if (row.adjusted_shares) {
+              this.unitGroupShares[groupId] += Number(row.adjusted_shares);
+            }
+          } else {
+            if (row.unit_shares) {
+              this.unitGroupShares[groupId] += Number(row.unit_shares);
+            }
+          }
+        });
+      });
+
+      /** get votes from database and store them in memmeory in easy to handle structure */
+      this.votes$ = this.agResolutionPersonService.fetchAll();
+      this.votes$.subscribe(data => {
+        this.votes = data;
+        this.selectedVotes = {};
+
+        this.votes.forEach(vote => {
+          if (!this.selectedVotes[vote.id_ag_resolution]) {
+            this.selectedVotes[vote.id_ag_resolution] = {};
+          }
+          this.selectedVotes[vote.id_ag_resolution][vote.id_person] = vote.vote;
+        });      
+      });
+      this.updateFormValidation();
     }
-    this.updateFormValidation();
   }
 
   getSelectedVote(resolutionId: string, personId: string): string | null {
@@ -513,89 +515,110 @@ export class AgMinutesForm implements OnInit {
           this.voteMessage[agResolutionId] = 'Vote enregistré avec succès';
           this.voteError[agResolutionId] = '';  
           setTimeout(() => this.voteMessage[agResolutionId] = '', 3000);
-        },
-        error: err => {
-          this.voteMessage[agResolutionId] = '';
-          this.voteError[agResolutionId] = "Erreur lors de l'enregistrement";
-        }
-      });
-      console.log("newVotes", newVotes);
-      console.log("this.unitGroupShares", this.unitGroupShares);
-      console.log("this.persons", this.persons);
 
-      for (const vote of newVotes){
-        if (vote.vote === "for") {
-          nbOfForVotes = nbOfForVotes + 1;
-        }
-        for (const person of this.persons){
-          if (vote.id_person === person.id) {
-            for (const unit of person.units!){
-              for (const group of unit.unit_groups!){
-                if (group.id === idUnitGroup) {
-                  if (group.special_shares === 0){
-                    if (vote.vote === "for") {
-                      votesInFavor = votesInFavor + Number(unit.shares);
-                    } else if (vote.vote === "against") {
-                      votesAgainst = votesAgainst + Number(unit.shares);
-                    } else if (vote.vote === "abstention") {
-                      votesAbstention = votesAbstention + Number(unit.shares);
-                    }
-                  } else {
-                    nbOfMembers = this.getNbOfUniquePersonsInGroup(group.id);
-                    if (vote.vote === "for") {
-                      votesInFavor = votesInFavor + Number(group.adjusted_shares);
-                    } else if (vote.vote === "against") {
-                      votesAgainst = votesAgainst + Number(group.adjusted_shares);
-                    } else if (vote.vote === "abstention") {
-                      votesAbstention = votesAbstention + Number(group.adjusted_shares);
+          /** TO DO next steps
+           * 
+           * 
+           * 
+          */
+          for (const vote of newVotes){
+            if (vote.vote === "for") {
+              nbOfForVotes = nbOfForVotes + 1;
+            }
+            for (const person of this.persons){
+              if (vote.id_person === person.id) {
+                for (const unit of person.units!){
+                  for (const group of unit.unit_groups!){
+                    if (group.id === idUnitGroup) {
+                      if (group.special_shares === 0){
+                        if (vote.vote === "for") {
+                          votesInFavor = votesInFavor + Number(unit.shares);
+                        } else if (vote.vote === "against") {
+                          votesAgainst = votesAgainst + Number(unit.shares);
+                        } else if (vote.vote === "abstention") {
+                          votesAbstention = votesAbstention + Number(unit.shares);
+                        }
+                      } else {
+                        nbOfMembers = this.getNbOfUniquePersonsInGroup(group.id);
+                        if (vote.vote === "for") {
+                          votesInFavor = votesInFavor + Number(group.adjusted_shares);
+                        } else if (vote.vote === "against") {
+                          votesAgainst = votesAgainst + Number(group.adjusted_shares);
+                        } else if (vote.vote === "abstention") {
+                          votesAbstention = votesAbstention + Number(group.adjusted_shares);
+                        }
+                      }
                     }
                   }
                 }
               }
             }
           }
+          const totalShares = this.getShares(idUnitGroup); 
+
+          /**
+          console.log("votesInFavor", votesInFavor);
+          console.log("votesAgainst", votesAgainst);
+          console.log("votesAbstention", votesAbstention);
+          console.log("totalShares", totalShares);
+          console.log("required_majority", required_majority);
+    
+          console.log('nbOfForVotes', nbOfForVotes);
+          console.log('this.persons', this.persons.length);
+          */
+    
+          if (nbOfMembers === 0 ) {
+            nbOfMembers = this.persons.length
+          }
+    
+          /**
+          console.log('nbOfMembers', nbOfMembers);
+          */
+    
+          const resultVote = this.checkVote(votesInFavor, votesAgainst, votesAbstention, totalShares, required_majority, nbOfForVotes, nbOfMembers, agResolutionId);
+          
+          if (resultVote === 'accepted') {
+            this.voteMessage[agResolutionId] = 'Cette résolution a été définitivement adoptée.';
+            this.voteError[agResolutionId] = '';  
+            
+              /** TO DO 
+            if (this.agResolutions)
+          */
+            
+            this.changeStatus(agResolutionId, 'accepted', 0);
+          
+            for (let i = 0; i < elements.length; i++) {
+              const select = elements[i] as HTMLSelectElement;
+              select.disabled = true;
+              select.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed');
+            }
+    
+    
+          } else if (resultVote === 'rejected') {
+            this.voteMessage[agResolutionId] = 'Cette résolution a été définitivement rejetée.';
+            this.voteError[agResolutionId] = '';  
+            this.changeStatus(agResolutionId, 'rejected', 0);    
+          } else if (resultVote === 'new_vote') {
+            const revote = confirm("La résolution n'as pas été voté à la majorité 25. Souhaitez-vous revoter la résolution à la majortité 25-1 ?");
+            if (revote) {
+              this.changeNextVoteCheckFor_25_1 = agResolutionId;        
+            }
+          }
+          
+
+        },
+        error: err => {
+          this.voteMessage[agResolutionId] = '';
+          this.voteError[agResolutionId] = "Erreur lors de l'enregistrement";
         }
-      }
-      console.log("votesInFavor", votesInFavor);
-      console.log("votesAgainst", votesAgainst);
-      console.log("votesAbstention", votesAbstention);
-      const totalShares = this.getShares(idUnitGroup); 
-      console.log("totalShares", totalShares);
-      console.log("required_majority", required_majority);
-
-      console.log('nbOfForVotes', nbOfForVotes);
-      console.log('this.persons', this.persons.length);
-
-      if (nbOfMembers === 0 ) {
-        nbOfMembers = this.persons.length
-      }
-
-      console.log('nbOfMembers', nbOfMembers);
-
-     
-
-      const resultVote = this.checkVote(votesInFavor, votesAgainst, votesAbstention, totalShares, required_majority, nbOfForVotes, nbOfMembers, agResolutionId);
-      
-      if (resultVote === 'accepted') {
-        this.changeStatus(agResolutionId, 'accepted');
-        for (let i = 0; i < elements.length; i++) {
-          const select = elements[i] as HTMLSelectElement;
-          select.disabled = true;
-          select.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed');
-        }
-
-
-      } else if (resultVote === 'rejected') {
-        this.changeStatus(agResolutionId, 'rejected');
-
-
-      } else if (resultVote === 'new_vote') {
-        const revote = confirm("La résolution n'as pas été voté à la majorité 25. Souhaitez-vous revoter la résolution à la majortité 25-1 ?");
-        if (revote) {
-          this.changeNextVoteCheckFor_25_1 = agResolutionId;        
-        }
-      }
+      });
+      /** 
+      console.log("newVotes", newVotes);
+      console.log("this.unitGroupShares", this.unitGroupShares);
+      console.log("this.persons", this.persons);
+      */
     }
+      
   }
 
   checkVote(votesInFavor: number, votesAgainst: number, votesAbstention: number, totalShares: number, required_majority: string, nbOfForVotes: number, nbOfMembers: number, agResolutionId: string){
@@ -729,8 +752,8 @@ export class AgMinutesForm implements OnInit {
     }
   }
 
-  changeStatus(agResolutionId: string, statut: string) {
-    this.agResolutionService.updateStatus(agResolutionId, statut).subscribe({
+  changeStatus(agResolutionId: string, statut: string, budgetActifStatus: number) {
+    this.agResolutionService.updateStatus(agResolutionId, statut /*, budgetActifStatus*/).subscribe({
       next: (res) => {
         console.log("Statut mis à jour:", res);
       },

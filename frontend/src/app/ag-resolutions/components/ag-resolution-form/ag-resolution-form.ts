@@ -170,7 +170,10 @@ export class AgResolutionForm implements OnInit {
 
     if (this.isEditMode) {
       this.agResolutionService.update(this.idAgResolution!, formValue).subscribe(() => {
-        this.router.navigate(['/agnotices', this.id_ag_notice], { queryParams: { updatedResolution: 'true' } });
+        this.router.navigate(['/agnotices', this.id_ag_notice], { queryParams: { updatedResolution: 'true' } })
+        .then(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
       });
       
     } else {
@@ -187,9 +190,20 @@ export class AgResolutionForm implements OnInit {
           };
           return this.callDateService.create(callDate);
         });
-    
+
+        if (this.tableOfDates.length === 0) {
+          this.router.navigate(['/agnotices', this.id_ag_notice, 'edit'], { queryParams: { createdResolution: 'true' } })
+          .then(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+          return;
+        }
+            
         forkJoin(creations).subscribe(() => {
-          this.router.navigate(['/agnotices', this.id_ag_notice], { queryParams: { createdResolution: 'true' } });
+          this.router.navigate(['/agnotices', this.id_ag_notice, 'edit'], { queryParams: { createdResolution: 'true' } })
+          .then(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
         });
       });
     }

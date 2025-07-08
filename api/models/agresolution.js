@@ -363,11 +363,13 @@ set id_budget_category(value) {
     const [agResolutions] = await db.execute(`
       SELECT DISTINCT 
         ag_notice.title as ag_notice_title,
-        ag_notice.id as ag_notice_id
+        ag_notice.id as ag_notice_id,
+        ag_notice.ag_date
       FROM ag_resolution
       JOIN ag_notice 
         ON ag_resolution.id_ag_notice = ag_notice.id
       WHERE id_ag_minutes IS NULL
+      ORDER BY ag_notice.ag_date DESC
       ;`);
     return agResolutions;
   }
