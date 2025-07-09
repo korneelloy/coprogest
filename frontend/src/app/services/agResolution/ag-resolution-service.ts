@@ -55,9 +55,9 @@ export class AgResolutionService {
 
   
 
-  fetchById(id: string): Observable<AgResolution> {
+  fetchById(id: string): Observable<AgResolution[]> {
     return this.http
-      .get<AgResolution>(`${this.url}/${id}`, { withCredentials: true })
+      .get<AgResolution[]>(`${this.url}/${id}`, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Fetched ag resolution id=${id}`)),
         catchError(this.handleError)

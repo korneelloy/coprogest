@@ -113,24 +113,28 @@ export class AgResolutionForm implements OnInit {
         this.budgetReadOnly = false;
       }
     });
+
     
     if (this.isEditMode) {
-      this.agResolutionService.fetchById(this.idAgResolution!).subscribe((agResolution: AgResolution) => {
-        this.agResolutionForm.patchValue({
-          title: agResolution.title,
-          resolution_text: agResolution.resolution_text,
-          required_majority: agResolution.required_majority,
-          id_unit_group: agResolution.id_unit_group,
-          budget: agResolution.budget,
-          budget_amount: agResolution.budget_amount,
-          budget_type: agResolution.budget_type,
-          operating_budget_start: this.formatDateForInput(agResolution.operating_budget_start),
-          operating_budget_end: this.formatDateForInput(agResolution.operating_budget_end),
-          nb_of_instalments: agResolution.nb_of_instalments,
-          budget_recup_tenant: agResolution.budget_recup_tenant,
-          id_budget_category: agResolution.id_budget_category
-        });
-
+      this.agResolutionService.fetchById(this.idAgResolution!).subscribe((agResolutions: AgResolution[]) => {
+        const agResolution = agResolutions[0];
+      
+        if (agResolution) {
+          this.agResolutionForm.patchValue({
+            title: agResolution.title,
+            resolution_text: agResolution.resolution_text,
+            required_majority: agResolution.required_majority,
+            id_unit_group: agResolution.id_unit_group,
+            budget: agResolution.budget,
+            budget_amount: agResolution.budget_amount,
+            budget_type: agResolution.budget_type,
+            operating_budget_start: this.formatDateForInput(agResolution.operating_budget_start),
+            operating_budget_end: this.formatDateForInput(agResolution.operating_budget_end),
+            nb_of_instalments: agResolution.nb_of_instalments,
+            budget_recup_tenant: agResolution.budget_recup_tenant,
+            id_budget_category: agResolution.id_budget_category
+          });
+        }
         this.callDates$ = this.callDateService.fetchAllByAgResolution(this.idAgResolution!);
 
         this.updateBudgetValidators();

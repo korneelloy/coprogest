@@ -420,7 +420,7 @@ set id_budget_category(value) {
       error.statusCode = 404;
       throw error;
     }
-    return rows[0];
+    return rows;
   }
   
   /**

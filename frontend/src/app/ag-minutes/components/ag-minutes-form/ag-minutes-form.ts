@@ -28,6 +28,12 @@ import { AgResolutionPersonService } from '../../../services/agResolutionPerson/
 import { UnitGroup } from '../../../model/unitgroup';
 import { UnitGroupService } from '../../../services/unit-groups/unit-group-service';
 
+import { Share } from '../../../model/share';
+
+import { ChargeLine } from '../../../model/chargeLine';
+import { ChargeLineService } from '../../../services/chargeLine/charge-line-service';
+
+
 @Component({
   selector: 'app-ag-minutes-form',
   standalone: true,
@@ -40,6 +46,7 @@ export class AgMinutesForm implements OnInit {
   isEditMode = false;
   agMinutesId: string | null = null;
   agResolutions: AgResolution[] = [];
+  agResolutionWithDetails: AgResolution[] = [];
   allNoticesWithoutMinutes: AgResolution[] = [];
   persons$!: Observable<Person[]>;
   persons: Person[] = [];
@@ -55,7 +62,6 @@ export class AgMinutesForm implements OnInit {
 
   selectedVotes: { [agResolutionId: string]: { [personId: string]: string } } = {};
 
-
   presence: string = "";
   
   selectedPersonsOnly: AgMinutesPresencePerson[] = [];
@@ -66,6 +72,7 @@ export class AgMinutesForm implements OnInit {
  
   incompleteVotesMessages: Record<string, string | null> = {};
 
+  resolution: AgResolution = {} as AgResolution;
 
   requiredMajorityLabels: { [key: string]: string } = {
     "24": "Article 24 - Majorité simple des voix exprimées (abstentions non prises en compte)",
@@ -95,7 +102,9 @@ export class AgMinutesForm implements OnInit {
         return 'Statut non défini.';
     }
   }
-  
+
+  shares: Share[] = [];
+ 
 
   formValidation = { valid: true, message: '' };
 
@@ -106,6 +115,7 @@ export class AgMinutesForm implements OnInit {
 
 
   changeNextVoteCheckFor_25_1: string = "";
+  
 
   constructor(
     private fb: FormBuilder,
@@ -118,6 +128,7 @@ export class AgMinutesForm implements OnInit {
     private agminutespresencepersonService: AgminutespresencepersonService,
     private agResolutionPersonService: AgResolutionPersonService,
     private unitGroupService: UnitGroupService,
+    private chargeLineService: ChargeLineService,
   ) {
     this.agMinutesForm = this.fb.group({
       ag_date: [''],
@@ -478,10 +489,13 @@ export class AgMinutesForm implements OnInit {
       let votesAgainst: number = 0;
       let votesAbstention: number = 0;
       let nbOfForVotes: number = 0;
+      let votesUnexpressed: number = 0;
       let nbOfMembers: number = 0;
 
-
       const newVotes: AgResolutionPerson[] = [];
+
+      const keepingTrackOfPeopleVoting: string []= [];
+
 
       for (let i = 0; i < elements.length; i++) {
         const select = elements[i] as HTMLSelectElement;
@@ -495,6 +509,7 @@ export class AgMinutesForm implements OnInit {
         });
       }
 
+
       if (!this.areAllVotesFilled(newVotes)) {
         this.incompleteVotesMessages[agResolutionId] = "Merci de remplir tous les votes avant d'enregistrer.";
         return;
@@ -503,122 +518,226 @@ export class AgMinutesForm implements OnInit {
   
       if (confirm("Êtes-vous sûr de vouloir enregistrer ce vote ? Une fois validé, il ne sera plus possible de le modifier. La résolution sera considérée comme définitivement votée ou rejetée, et si elle prévoit des appels de fonds, ceux-ci seront automatiquement déclenchés.")) {
   
-  
+      this.agResolutionService.fetchById(agResolutionId).subscribe((data: AgResolution[]) => {
+        this.agResolutionWithDetails = data;
+        console.log("this.agResolutionWithDetails", this.agResolutionWithDetails);
 
-      this.agResolutionPersonService.deleteAllByAgResolution(agResolutionId).pipe(
-        switchMap(() => {
-          const createObservables = newVotes.map(vote => this.agResolutionPersonService.create(vote));
-          return forkJoin(createObservables);
-        })
-      ).subscribe({
-        next: () => {
-          this.voteMessage[agResolutionId] = 'Vote enregistré avec succès';
-          this.voteError[agResolutionId] = '';  
-          setTimeout(() => this.voteMessage[agResolutionId] = '', 3000);
-
-          /** TO DO next steps
-           * 
-           * 
-           * 
-          */
-          for (const vote of newVotes){
-            if (vote.vote === "for") {
-              nbOfForVotes = nbOfForVotes + 1;
-            }
-            for (const person of this.persons){
-              if (vote.id_person === person.id) {
+        this.agResolutionPersonService.deleteAllByAgResolution(agResolutionId).pipe(
+          switchMap(() => {
+            const createObservables = newVotes.map(vote => this.agResolutionPersonService.create(vote));
+            return forkJoin(createObservables);
+          })
+        ).subscribe({
+          next: () => {
+            this.voteMessage[agResolutionId] = 'Vote enregistré avec succès';
+            this.voteError[agResolutionId] = '';  
+            
+            /** LEVEL 1 check all persons eligeable to vote*/
+            for (const person of this.persons) {
+              /**LEVEL 2 : if the person was in the meeting AG meeting */
+              const personVote = newVotes.find(vote => vote.id_person === person.id);
+              if (personVote) {
+                /** LEVEL 3 check all the unite of this person */
                 for (const unit of person.units!){
+                  /** LEVEL 4 check all unit groups of this unit */
                   for (const group of unit.unit_groups!){
+                    /** LEVEL 5 and if the unit group matches the unit group of the resolution */
                     if (group.id === idUnitGroup) {
+                      /** LEVEL 6 if no special shares */
                       if (group.special_shares === 0){
-                        if (vote.vote === "for") {
-                          votesInFavor = votesInFavor + Number(unit.shares);
-                        } else if (vote.vote === "against") {
-                          votesAgainst = votesAgainst + Number(unit.shares);
-                        } else if (vote.vote === "abstention") {
-                          votesAbstention = votesAbstention + Number(unit.shares);
+                        //** LEVEL 7a : parallel action to construct a library with information about unit : shares */
+                        const personId =  person.id;
+                        const newShareValue = Number(unit.shares);
+                        const existing = this.shares.find(s => s.unitId === unit.id);
+                        if (existing) {
+                          existing.share += newShareValue;
+                        } else {
+                          const newShare: Share = { unitId: unit.id, share: newShareValue, };
+                          this.shares.push(newShare);
+                          //** LEVEL 8 : parallel action to keep track of the number of unique persons voting in favor, important for some majority calculations */
+                          if (personVote.vote === "for" && !keepingTrackOfPeopleVoting.some(people => people === personVote.id_person)) {
+                            nbOfForVotes = nbOfForVotes + 1;
+                            keepingTrackOfPeopleVoting.push(personVote.id_person);
+                          }
+                        }
+                        //** LEVEL 7b : vote check */
+                        if (personVote.vote === "for") {
+                          votesInFavor += newShareValue;
+                        } else if (personVote.vote === "against") {
+                          votesAgainst += newShareValue;
+                        } else if (personVote.vote === "abstention") {
+                          votesAbstention += newShareValue;
                         }
                       } else {
-                        nbOfMembers = this.getNbOfUniquePersonsInGroup(group.id);
-                        if (vote.vote === "for") {
-                          votesInFavor = votesInFavor + Number(group.adjusted_shares);
-                        } else if (vote.vote === "against") {
-                          votesAgainst = votesAgainst + Number(group.adjusted_shares);
-                        } else if (vote.vote === "abstention") {
-                          votesAbstention = votesAbstention + Number(group.adjusted_shares);
+                      /** LEVEL 6 if special shares */
+                        //** LEVEL 7a : parallel action to construct a library with information about unit : shares */
+                        const personId =  person.id;
+                        const newShareValue = Number(group.adjusted_shares);
+                        const existing = this.shares.find(s => s.unitId === unit.id);
+                        if (existing) {
+                          existing.share += newShareValue;
+                        } else {
+                          const newShare: Share = { unitId: unit.id, share: newShareValue, };
+                          this.shares.push(newShare);
+                          //** LEVEL 8 : parallel action to keep track of the number of unique persons voting in favor, important for some majority calculations */
+                          if (personVote.vote === "for" && !keepingTrackOfPeopleVoting.some(people => people === personVote.id_person)) {
+                            nbOfForVotes = nbOfForVotes + 1;
+                            keepingTrackOfPeopleVoting.push(personVote.id_person);
+                          }
+                        }
+                        //** LEVEL 7b : vote check */
+                        if (personVote.vote === "for") {
+                          votesInFavor += Number(group.adjusted_shares);
+                          //** LEVEL 8 : parallel action to keep track of the number of votes in favor, important for some majority calculations */
+                          nbOfForVotes = nbOfForVotes + 1;
+                        } else if (personVote.vote === "against") {
+                          votesAgainst += Number(group.adjusted_shares);
+                        } else if (personVote.vote === "abstention") {
+                          votesAbstention += Number(group.adjusted_shares);
+                        }
+                      }
+                    }
+                  }
+                }
+                    
+                /** LEVEL 2 : if the person was not in the AG meeting */
+                } else {
+                  /** LEVEL 3 check all the unite of this person */
+                  for (const unit of person.units!){
+                    /** LEVEL 4 check all unit groups of this unit */
+                    for (const group of unit.unit_groups!){
+                      /** LEVEL 5 and if the unit group matches the unit group of the resolution */
+                      if (group.id === idUnitGroup) {
+                        /** LEVEL 6 if no special shares */
+                        if (group.special_shares === 0){
+                           //** LEVEL 7a : parallel action to construct a library with information about unit : shares */
+                           const personId =  person.id;
+                           const newShareValue = Number(unit.shares);
+                           const existing = this.shares.find(s => s.unitId === unit.id);
+                           if (existing) {
+                             existing.share += newShareValue;
+                           } else {
+                             const newShare: Share = { unitId: unit.id, share: newShareValue, };
+                             this.shares.push(newShare);
+                           }
+                           //** LEVEL 7b : no vote > add to unexpreesed vote */
+                          votesUnexpressed += Number(newShareValue);
+                        } else {
+                          /** LEVEL 6 if special shares */
+                          //** LEVEL 7a : parallel action to construct a library with information about unit : shares */
+                          const personId =  person.id;
+                          const newShareValue = Number(group.adjusted_shares);
+                          const existing = this.shares.find(s => s.unitId === unit.id);
+                          if (existing) {
+                            existing.share += newShareValue;
+                          } else {
+                            const newShare: Share = { unitId: unit.id, share: newShareValue, };
+                            this.shares.push(newShare);
+                          }
+                          //** LEVEL 7b : no vote > add to unexpreesed vote */
+                          votesUnexpressed += newShareValue;
                         }
                       }
                     }
                   }
                 }
               }
-            }
-          }
-          const totalShares = this.getShares(idUnitGroup); 
+              
+                  
+                
+              
+         
+            const totalShares = this.getShares(idUnitGroup); 
+            nbOfMembers = this.getNbOfUniquePersonsInGroup(idUnitGroup);
 
-          /**
-          console.log("votesInFavor", votesInFavor);
-          console.log("votesAgainst", votesAgainst);
-          console.log("votesAbstention", votesAbstention);
-          console.log("totalShares", totalShares);
-          console.log("required_majority", required_majority);
-    
-          console.log('nbOfForVotes', nbOfForVotes);
-          console.log('this.persons', this.persons.length);
-          */
-    
-          if (nbOfMembers === 0 ) {
-            nbOfMembers = this.persons.length
-          }
-    
-          /**
-          console.log('nbOfMembers', nbOfMembers);
-          */
-    
-          const resultVote = this.checkVote(votesInFavor, votesAgainst, votesAbstention, totalShares, required_majority, nbOfForVotes, nbOfMembers, agResolutionId);
-          
-          if (resultVote === 'accepted') {
-            this.voteMessage[agResolutionId] = 'Cette résolution a été définitivement adoptée.';
-            this.voteError[agResolutionId] = '';  
-            
-              /** TO DO 
-            if (this.agResolutions)
-          */
-            
-            this.changeStatus(agResolutionId, 'accepted', 0);
-          
-            for (let i = 0; i < elements.length; i++) {
-              const select = elements[i] as HTMLSelectElement;
-              select.disabled = true;
-              select.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed');
-            }
-    
-    
-          } else if (resultVote === 'rejected') {
-            this.voteMessage[agResolutionId] = 'Cette résolution a été définitivement rejetée.';
-            this.voteError[agResolutionId] = '';  
-            this.changeStatus(agResolutionId, 'rejected', 0);    
-          } else if (resultVote === 'new_vote') {
-            const revote = confirm("La résolution n'as pas été voté à la majorité 25. Souhaitez-vous revoter la résolution à la majortité 25-1 ?");
-            if (revote) {
-              this.changeNextVoteCheckFor_25_1 = agResolutionId;        
-            }
-          }
-          
 
-        },
-        error: err => {
-          this.voteMessage[agResolutionId] = '';
-          this.voteError[agResolutionId] = "Erreur lors de l'enregistrement";
-        }
-      });
-      /** 
-      console.log("newVotes", newVotes);
-      console.log("this.unitGroupShares", this.unitGroupShares);
-      console.log("this.persons", this.persons);
-      */
-    }
+            /** 
+            console.log("this.shares", this.shares);
+
+            console.log("votesInFavor", votesInFavor);
+            console.log("votesAgainst", votesAgainst);
+            console.log("votesAbstention", votesAbstention);
+            console.log("votesUnexpressed", votesUnexpressed);
+
+            console.log("totalShares", totalShares);
+            console.log("required_majority", required_majority);
       
+            console.log('nbOfForVotes', nbOfForVotes);
+            console.log('this.persons', this.persons.length);
+            console.log('nbOfMembers', nbOfMembers);
+            */
+      
+            const resultVote = this.checkVote(votesInFavor, votesAgainst, votesAbstention, totalShares, required_majority, nbOfForVotes, nbOfMembers, agResolutionId);
+            
+            if (resultVote === 'accepted') {
+              this.voteMessage[agResolutionId] = 'Cette résolution a été définitivement adoptée.';
+              this.voteError[agResolutionId] = '';  
+              if(this.agResolutionWithDetails[0].budget === 1) {
+                this.changeStatus(agResolutionId, 'accepted', 1);
+              
+                if(this.agResolutionWithDetails[0].nb_of_instalments === 1) {
+                  const creations = this.agResolutionWithDetails.flatMap(item =>
+                    this.shares.map(share =>
+                      this.chargeLineService.create({
+                        amount: Number(((Number(item.budget_amount) / this.agResolutionWithDetails.length / totalShares * share.share).toFixed(2))),
+                        call_date: item.call_date_date!, 
+                        id_unit: share.unitId,
+                        id_ag_resolution: agResolutionId,
+                      })
+                    )
+                  );
+              
+                  forkJoin(creations).subscribe(() => {
+                    this.router.navigate(['/agminutes', this.agMinutesId, 'edit'], {
+                      queryParams: { updated: 'true' }
+                    });
+                  });
+                }
+
+
+              } else {
+                this.changeStatus(agResolutionId, 'accepted', 0);
+              }
+              
+            
+              for (let i = 0; i < elements.length; i++) {
+                const select = elements[i] as HTMLSelectElement;
+                select.disabled = true;
+                select.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed');
+              }
+      
+      
+            } else if (resultVote === 'rejected') {
+              this.voteMessage[agResolutionId] = 'Cette résolution a été définitivement rejetée.';
+              this.voteError[agResolutionId] = '';  
+              this.changeStatus(agResolutionId, 'rejected', 0);   
+              for (let i = 0; i < elements.length; i++) {
+                const select = elements[i] as HTMLSelectElement;
+                select.disabled = true;
+                select.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed');
+              } 
+
+            } else if (resultVote === 'new_vote') {
+              const revote = confirm("La résolution n'as pas été voté à la majorité 25. Souhaitez-vous revoter la résolution à la majortité 25-1 ?");
+              if (revote) {
+                this.changeNextVoteCheckFor_25_1 = agResolutionId;        
+              }
+            }
+            
+
+          },
+          error: err => {
+            this.voteMessage[agResolutionId] = '';
+            this.voteError[agResolutionId] = "Erreur lors de l'enregistrement";
+          }
+        });
+        /** 
+        console.log("newVotes", newVotes);
+        console.log("this.unitGroupShares", this.unitGroupShares);
+        console.log("this.persons", this.persons);
+        */
+      });
+    } 
   }
 
   checkVote(votesInFavor: number, votesAgainst: number, votesAbstention: number, totalShares: number, required_majority: string, nbOfForVotes: number, nbOfMembers: number, agResolutionId: string){
@@ -681,9 +800,6 @@ export class AgMinutesForm implements OnInit {
     return uniquePersonIds.size;
   }
   
-
-
-
   checkPersonUnitsByGroup(personId: string, unitGroupId: string) {
     const person = this.persons.find(p => p.id === personId);
   
@@ -729,7 +845,6 @@ export class AgMinutesForm implements OnInit {
         }
       }
     }
-  
     this.formValidation = { valid: true, message: '' };
   }
   
@@ -772,5 +887,4 @@ export class AgMinutesForm implements OnInit {
     }
     return true;
   }
- 
 }
