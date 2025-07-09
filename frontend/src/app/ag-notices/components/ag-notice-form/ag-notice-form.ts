@@ -24,9 +24,9 @@ export class AgNoticeForm implements OnInit {
   agNoticeForm: FormGroup;
   isEditMode = false;
   agNoticeId: string | null = null;
-  agResolutions$!: Observable<AgResolution[]>;
+  agResolutions: AgResolution[] = [];
 
-  deletedMessage: string | null = null;
+  message: string | null = null;
  
   requiredMajorityLabels: { [key: string]: string } = {
     "24": "Article 24 - Majorité simple des voix exprimées (abstentions non prises en compte)",
@@ -37,6 +37,8 @@ export class AgNoticeForm implements OnInit {
     "no_vote": "Sans vote - Décision prise sans procédure de vote"
   };
 
+  readOnly: boolean = false;
+  idAgMinutes: string = "";
 
   constructor(
     private fb: FormBuilder,
@@ -57,14 +59,37 @@ export class AgNoticeForm implements OnInit {
     this.agNoticeId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.agNoticeId;
 
+    this.route.queryParams.subscribe(params => {
+      if (params['deletedResolution'] === 'true') {
+        this.message = "La résolution a été supprimée avec succès.";
+      } else if (params['createdResolution'] === 'true') {
+        this.message = "La résolution a été créée.";
+      } else if (params['updatedResolution'] === 'true') {
+        this.message = "La résolution a été mise à jour avec succès.";
+      }
+      if (this.message) {
+        setTimeout(() => this.message = null, 5000);    
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {},
+          replaceUrl: true
+        });
+      }
+    });
+
+
     if (this.isEditMode) {
-      this.route.queryParams.subscribe(params => {
-        if (params['deleted'] === 'true') {
-          this.deletedMessage = "La résolution a été supprimée avec succès.";
+      this.agResolutionService.fetchAllByAgNotice(this.agNoticeId!).subscribe((agResolutions: AgResolution[]) => {
+        this.agResolutions = agResolutions;
+        for (const resolution of agResolutions) {
+          console.log(resolution);
+          if (resolution.id_ag_minutes) {
+            this.readOnly = true;
+            this.idAgMinutes = resolution.id_ag_minutes;
+            return;
+          }
         }
       });
-
-      this.agResolutions$ = this.agResolutionService.fetchAllByAgNotice(this.agNoticeId!);
 
       this.agNoticeService.fetchById(this.agNoticeId!).subscribe((agNotice: AgNotice) => {
         const dateObj = new Date(agNotice.ag_date);
@@ -112,7 +137,7 @@ export class AgNoticeForm implements OnInit {
     if (confirmed) {
       this.agResolutionService.delete(id).subscribe(() => {
         const url = new URL(window.location.href);
-        url.searchParams.set('deleted', 'true');
+        url.searchParams.set('deletedResolution', 'true');
         window.location.href = url.toString();
       });
     }

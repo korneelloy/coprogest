@@ -34,11 +34,15 @@ export class UnitGroupList implements OnInit{
         this.deletedMessage = 'Groupe supprimé avec succès.';
         setTimeout(() => this.deletedMessage = null, 5000);
       }
-      this.unitgroups$ = this.unitGroupService.fetchAll();
+      this.unitgroups$ = this.unitGroupService.fetchAllUnique();
     });      
   }
 
   seeDetails(id: string): void {
     this.router.navigate(['/unitgroups', id]);  
-  }  
+  }
+
+  editUnitGroup(id: string): void {
+    this.router.navigate(['/unitgroups', id, 'edit']);  
+  }
 }

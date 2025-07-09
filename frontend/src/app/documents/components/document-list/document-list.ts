@@ -55,6 +55,10 @@ export class DocumentList implements OnInit{
     this.router.navigate(['/documents', id]);  
   }
 
+  editDocument(id: string): void {
+    this.router.navigate(['/documents', id, 'edit']);  
+  }
+
   filter(event: Event): void {
     const selectedId = (event.target as HTMLSelectElement).value;
     if (selectedId == ""){

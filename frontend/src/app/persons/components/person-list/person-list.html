@@ -5,18 +5,34 @@
   {{ createdMessage }}
 </div>
 
-<ul *ngIf="persons$ | async as persons; else loading" class="space-y-4">
-  <li *ngFor="let person of persons" class="space-y-2">
-    <strong>{{ person.first_name && person.last_name ? person.first_name + ' ' + person.last_name : person.email }}</strong><br>
-    <button 
-      (click)="seeDetails(person.id)" 
-      class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center"
+<ul
+  *ngIf="persons$ | async as persons; else loading"
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+>
+  <li
+    *ngFor="let person of persons"
+    class="p-4 bg-white border rounded shadow-sm space-y-3"
+  >
+    <strong class="text-gray-800 text-sm">
+      {{ person.first_name && person.last_name ? person.first_name + ' ' + person.last_name : person.email }}
+    </strong>
+
+    <button
+      (click)="seeDetails(person.id)"
+      class="w-full text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
     >
       Voir les détails
     </button>
-    <hr>
+
+    <button
+      (click)="editPerson(person.id)"
+      class="w-full text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+    >
+      Changer ce copropriétaire
+    </button>
   </li>
 </ul>
+
 
 <div class="m-4">
   <a routerLink="/persons/new"

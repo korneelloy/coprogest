@@ -39,5 +39,8 @@ export class AgMinutesList implements OnInit{
   seeDetails(id: string): void {
     this.router.navigate(['/agminutes', id]);  
   }
-}
 
+  editMinute(id: string): void {
+    this.router.navigate(['/agminutes', id, 'edit']);  
+  }
+}

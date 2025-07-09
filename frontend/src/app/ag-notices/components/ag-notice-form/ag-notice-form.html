@@ -3,14 +3,22 @@
 </h2>
 <hr class="mb-4" />
 
-<div *ngIf="deletedMessage" class="bg-green-100 text-green-800 px-4 py-2 rounded-md mb-4">
-  {{ deletedMessage }}
+<div *ngIf="message" class="bg-green-100 text-green-800 px-4 py-2 rounded-md mb-4">
+  {{ message }}
+</div>
+
+<div *ngIf="readOnly" class="mb-6">
+  <strong>
+    Cette convocation ne peut plus être modifiée car un compte rendu d'assemblée générale y est déjà associé.
+  </strong>
+  <br>
+  <a [routerLink]="['/agminutes/', idAgMinutes]" class="hover:text-orange-300">Cliquez ici pour accéder à ce compte rendu</a>
 </div>
 
 <form [formGroup]="agNoticeForm" (ngSubmit)="onSubmit()" class="space-y-6">
   <div>
     <label class="block font-medium mb-1">Titre:</label>
-    <input formControlName="title" placeholder="AG du 5 juin 2025"
+    <input [readonly]="readOnly" [class.readonly-style]="readOnly"formControlName="title" placeholder="AG du 5 juin 2025"
       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
     <div class="text-sm text-yellow-600	 mt-1" *ngIf="agNoticeForm.get('title')?.invalid && agNoticeForm.get('title')?.touched">
       <small *ngIf="agNoticeForm.get('title')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
@@ -21,7 +29,7 @@
 
   <div>
     <label class="block font-medium mb-1">Lieu:</label>
-    <input formControlName="place" placeholder="Chez M. Dupont"
+    <input [readonly]="readOnly" [class.readonly-style]="readOnly"formControlName="place" placeholder="Chez M. Dupont"
       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
     <div class="text-sm text-yellow-600	 mt-1" *ngIf="agNoticeForm.get('place')?.invalid && agNoticeForm.get('place')?.touched">
       <small *ngIf="agNoticeForm.get('place')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
@@ -32,7 +40,7 @@
 
   <div>
     <label class="block font-medium mb-1">Date:</label>
-    <input formControlName="ag_date" type="date"
+    <input [readonly]="readOnly" [class.readonly-style]="readOnly"formControlName="ag_date" type="date"
       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
     <div class="text-sm text-yellow-600	 mt-1" *ngIf="agNoticeForm.get('ag_date')?.invalid && agNoticeForm.get('ag_date')?.touched">
       <small>* Ce champ ne peut pas être vide.</small>
@@ -41,14 +49,14 @@
 
   <div>
     <label class="block font-medium mb-1">Heure:</label>
-    <input formControlName="ag_time" type="time"
+    <input [readonly]="readOnly" [class.readonly-style]="readOnly"formControlName="ag_time" type="time"
       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300" />
     <div class="text-sm text-yellow-600	 mt-1" *ngIf="agNoticeForm.get('ag_time')?.invalid && agNoticeForm.get('ag_time')?.touched">
       <small>* Ce champ ne peut pas être vide.</small>
     </div>
   </div>
 
-  <button type="submit" [disabled]="agNoticeForm.invalid"
+  <button *ngIf="!readOnly" type="submit" [disabled]="agNoticeForm.invalid"
     class="whitespace-nowrap flex-1 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200 m-4">
     {{ isEditMode ? 'Mettre à jour' : 'Créer' }} la convocation
   </button>
@@ -57,7 +65,7 @@
   <div *ngIf="isEditMode">
     <strong>Résolutions associées</strong>
 
-    <span class="m-4 space-4">
+    <span *ngIf="!readOnly" class="m-4 space-4">
       <a [routerLink]="['/agresolutions/new', agNoticeId]"
         class="inline-block bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200">
         Rajouter une résolution
@@ -65,14 +73,17 @@
     </span>
 
 
-    <ul *ngIf="agResolutions$ | async as agResolutions" class="mt-4 space-y-4">
+    <ul *ngIf="agResolutions" class="mt-4 space-y-4">
       <ng-container *ngIf="agResolutions.length > 0; else noResolutions">
         <li *ngFor="let agResolution of agResolutions" class="border-b border-gray-300 pb-4 space-y-2">
           <strong>{{ agResolution.title }}</strong><br>
           <div>Texte: {{ agResolution.resolution_text }}</div>
           <div>Majorité requise: {{ requiredMajorityLabels[agResolution.required_majority] }}</div>
           <div>Budget: {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</div>
-          <div>
+          <div *ngIf="agResolution.status">Statut: {{ agResolution.status === "accepted" ? 'Résolution adoptée' : 'Résolution rejetée'}}</div>
+
+
+          <div *ngIf="!readOnly">
             <a [routerLink]="['/agresolutions', agResolution.id, 'edit']"
               class="inline-block bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200">
               Modifier la résolution
