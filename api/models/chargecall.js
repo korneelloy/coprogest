@@ -65,6 +65,18 @@ module.exports = class ChargeCall extends BaseClass {
     return allChargeCalls;
   }
 
+
+  /**
+     * Fetch all charge calls from the database for one person.
+     * @returns {Promise<Object[]>}
+     */
+  static async getAllByPerson(personId) {
+    const [allChargeCalls] = await db.execute(`SELECT * FROM charge_call WHERE id_person = ?`, [personId]);
+    return allChargeCalls;
+  }
+
+  
+
   /**
    * Fetch a charge call by ID.
    * @param {string} id

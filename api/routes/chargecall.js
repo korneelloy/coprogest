@@ -10,6 +10,9 @@ const router = express.Router();
 // Get all charge calls
 router.get('/', chargeCallController.getAll);
 
+// Get all charge calls for one person
+router.get('/fetchbyperson/:personId', chargeCallController.getAllByPerson);
+
 // Get a single charge call by ID
 router.get('/:id', chargeCallController.getOne);
 

@@ -39,6 +39,8 @@ export class App implements OnInit  {
       console.log("user$ updated:", user);
       this.connectedUser = user;
     });
+
+    document.addEventListener
   }
     
 
@@ -70,6 +72,7 @@ export class App implements OnInit  {
       menu.classList.add('hidden');
     }
   }
+
 
   logout(): void {
     localStorage.removeItem('authToken');

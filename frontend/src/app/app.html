@@ -28,7 +28,7 @@
                   class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
                   Documents
                 </a>
-                <a routerLink="/ag" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
+                <a routerLink="/agminutes" routerLinkActive="activeLink" [routerLinkActiveOptions]="{ exact: true }"
                   class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
                   Assemblée générale
                 </a>
@@ -62,8 +62,8 @@
                           <li><a routerLink="/documents" class="text-gray-600 hover:text-orange-300 block">Documents</a></li>
                           <li><a routerLink="/agnotices" class="text-gray-600 hover:text-orange-300 block">Convocations AG</a></li>
                           <li><a routerLink="/agminutes" class="text-gray-600 hover:text-orange-300 block">Comptes-rendus d'AG</a></li>
-                          <li><a routerLink="/" class="text-gray-600 hover:text-orange-300 block">Appels de fonds</a></li>
-                          <li><a routerLink="/" class="text-gray-600 hover:text-orange-300 block">Factures</a></li>
+                          <li><a routerLink="/chargecalls" class="text-gray-600 hover:text-orange-300 block">Appels de fonds</a></li>
+                          <li><a routerLink="/invoices" class="text-gray-600 hover:text-orange-300 block">Factures</a></li>
                         </ul>
                       </div>
                     </div>
@@ -121,32 +121,46 @@
     </div>
 
     <!-- Mobile menu -->
+
     <div class="lg:hidden hidden" id="mobile-menu">
       <div class="px-2 pt-2 pb-3 space-y-1">
-        <a routerLink="/" routerLinkActive="activeLink"
-          class="block text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-          Accueil
-        </a>
-        <a routerLink="/finances" routerLinkActive="activeLink"
-          class="block text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-          Finances
-        </a>
-        <a routerLink="/documents" routerLinkActive="activeLink"
-          class="block text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-          Documents
-        </a>
-        <a routerLink="/ag" routerLinkActive="activeLink"
-          class="block text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-          Assemblée Générale
-        </a>
-        <a routerLink="/contact/new" routerLinkActive="activeLink"
-          class="block text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
-          Contact
-        </a>
+        <div class="flex justify-end">
+          <button routerLink="/" routerLinkActive="activeLink"
+            class="bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 min-w-[160px]">
+            Accueil
+          </button>
+        </div>
+        <div class="flex justify-end">
+          <button routerLink="/finances" routerLinkActive="activeLink"
+            class="bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 min-w-[160px]">
+            Finances
+          </button>
+        </div>
+        <div class="flex justify-end">
+          <button routerLink="/documents" routerLinkActive="activeLink"
+            class="bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 min-w-[160px]">
+            Documents
+          </button>
+        </div>
+        <div class="flex justify-end">
+          <button routerLink="/agminutes" routerLinkActive="activeLink"
+            class="bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 min-w-[160px]">
+            Assemblée Générale
+          </button>
+        </div>
+        <div class="flex justify-end">
+          <button routerLink="/contact/new" routerLinkActive="activeLink"
+            class="bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 min-w-[160px]">
+            Contact
+          </button>
+        </div>
+
+
+
         <!-- Mobile Management Dropdown -->
-        <div class="relative">
+        <div class="relative text-right" id="management-mobile-menu">
           <button
-            class="mobile-dropdown-trigger flex items-center text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium w-full justify-between"
+            class="mobile-dropdown-trigger inline-flex items-center text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium min-w-[160px]"
             (click)="openManagementMenu()">
             Management
             <svg class="h-5 w-5 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -154,28 +168,32 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
-          <div class="hidden px-4 py-2 mobile-dropdown-content" id="mobile-management-menu">
-            <ul class="space-y-2 border-l-2 border-orange-500 pl-2 mt-2">
-              <li><a routerLink="/persons" class="text-gray-600 hover:text-orange-300 block">Copropriétaires</a></li>
-              <li><a routerLink="/units" class="text-gray-600 hover:text-orange-300 block">Lots</a></li>
-              <li><a routerLink="/unitgroups" class="text-gray-600 hover:text-orange-300 block">Groupes de lots</a>
-              </li>
-              <li><a routerLink="/documents" class="text-gray-600 hover:text-orange-300 block">Documents</a></li>
-              <li><a routerLink="/agnotices" class="text-gray-600 hover:text-orange-300 block">Convocations AG</a></li>
-              <li><a routerLink="/" class="text-gray-600 hover:text-orange-300 block">Comptes-rendus
-                  d'AG</a></li>
-              <li><a routerLink="/" class="text-gray-600 hover:text-orange-300 block">Appels de fonds</a></li>
-              <li><a routerLink="/invoices" class="text-gray-600 hover:text-orange-300 block">Factures</a></li>
+
+          <!-- Dropdown content -->
+          <div
+            class="hidden absolute right-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 mobile-dropdown-content"
+            id="mobile-management-menu">
+            <ul class="py-2">
+              <li><a routerLink="/persons" class="block px-4 py-2 text-sm text-gray-700  hover:text-orange-300">Copropriétaires</a></li>
+              <li><a routerLink="/units" class="block px-4 py-2 text-sm text-gray-700  hover:text-orange-300">Lots</a></li>
+              <li><a routerLink="/unitgroups" class="block px-4 py-2 text-sm text-gray-700  hover:text-orange-300">Groupes de lots</a></li>
+              <li><a routerLink="/documents" class="block px-4 py-2 text-sm text-gray-700  hover:text-orange-300">Documents</a></li>
+              <li><a routerLink="/agnotices" class="block px-4 py-2 text-sm text-gray-700  hover:text-orange-300">Convocations AG</a></li>
+              <li><a routerLink="/agminutes" class="block px-4 py-2 text-sm text-gray-700  hover:text-orange-300">Comptes-rendus d'AG</a></li>
+              <li><a routerLink="/chargecalls" class="block px-4 py-2 text-sm text-gray-700  hover:text-orange-300">Appels de fonds</a></li>
+              <li><a routerLink="/invoices" class="block px-4 py-2 text-sm text-gray-700  hover:text-orange-300">Factures</a></li>
             </ul>
           </div>
-
         </div>
+
         <div class="pt-4 pb-3 border-t border-gray-200">
           <div class="flex items-center px-3 space-y-2 flex-col">
+            <!-- Optional user info here -->
           </div>
         </div>
       </div>
     </div>
+
   </div>
 </nav>
 </ng-container>

@@ -56,6 +56,17 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./contact/contact-module').then(m => m.ContactModule),
   },
+  {
+    path: 'chargecalls',
+    loadChildren: () =>
+      import('./charge-calls/charge-calls-module').then(m => m.ChargeCallsModule),
+  },
+  {
+    path: 'invoices',
+    loadChildren: () =>
+      import('./invoices/invoices-module').then(m => m.InvoicesModule),
+  },
+
   { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '**', redirectTo: '' },
 ];

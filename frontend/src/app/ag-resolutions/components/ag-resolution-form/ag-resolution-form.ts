@@ -20,7 +20,7 @@ import { BudgetCategoryService } from '../../../services/budget-category/budget-
 import { UnitGroup } from '../../../model/unitgroup';
 import { UnitGroupService } from '../../../services/unit-groups/unit-group-service';
 
-import { CallDate } from '../../../model/call_date';
+import { CallDate } from '../../../model/calldate';
 import { CallDateService } from '../../../services/callDate/call-date-service';
 
 

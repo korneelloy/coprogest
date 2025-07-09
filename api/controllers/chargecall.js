@@ -17,6 +17,23 @@ exports.getAll = async (req, res, next) => {
 };
 
 /**
+ * Retrieve and return all charge calls.
+ */
+exports.getAllByPerson = async (req, res, next) => {
+  try {
+    const personId = req.params.personId;
+    const allChargeCallsByPerson = await ChargeCall.getAllByPerson(personId);
+    res.status(200).json(allChargeCallsByPerson);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+
+/**
  * Retrieve and return a charge call by its ID.
  */
 exports.getOne = async (req, res, next) => {
