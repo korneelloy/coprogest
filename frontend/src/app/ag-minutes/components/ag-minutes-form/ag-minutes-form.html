@@ -177,7 +177,7 @@
               'text-yellow-600': agResolution.status === 'rejected',
               'text-gray-500': !agResolution.status
             }">
-            {{ formatStatus(agResolution.status) }}
+            {{ agResolution.status | statusLabel }}
             </span>
           </div>
 
@@ -205,7 +205,7 @@
 
                     <span *ngIf="agResolution.status"
                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100">
-                      {{ formatVote(getSelectedVote(agResolution.id, personId)) }}
+                      {{ (getSelectedVote(agResolution.id, personId)!) | voteLabel}}
                     </span>
                   </div>
           

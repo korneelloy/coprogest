@@ -34,12 +34,14 @@ import { ChargeLine } from '../../../model/chargeLine';
 import { ChargeLineService } from '../../../services/chargeLine/charge-line-service';
 
 import { RequiredMajorityLabelPipe } from '../../../label/requiredMajority/required-majority-label-pipe';
+import { StatusLabelPipe } from '../../../label/status/status-label-pipe';
+import { VoteLabelPipe } from '../../../label/vote/vote-label-pipe';
 
 
 @Component({
   selector: 'app-ag-minutes-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule, FormsModule, RequiredMajorityLabelPipe],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule, FormsModule, RequiredMajorityLabelPipe, StatusLabelPipe, VoteLabelPipe],
   templateUrl: './ag-minutes-form.html',
   styleUrl: './ag-minutes-form.scss'
 })
