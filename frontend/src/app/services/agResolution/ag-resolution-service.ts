@@ -25,6 +25,15 @@ export class AgResolutionService {
       );
   }
 
+  fetchAllWithActifBudget(): Observable<AgResolution[]> {
+    return this.http
+      .get<AgResolution[]>(`${this.url}/fetchallwithactifbudget`, { withCredentials: true })
+      .pipe(
+        tap(() => console.log('Fetched all ag resolutions with actif budget')),
+        catchError(this.handleError)
+      );
+  }
+
   fetchAllByAgNotice(id_ag_notice: string): Observable<AgResolution[]> {
     return this.http
       .get<AgResolution[]>(`${this.url}/getbyagnotice/${id_ag_notice}`, { withCredentials: true })

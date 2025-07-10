@@ -16,6 +16,23 @@ exports.getAll = async (req, res, next) => {
   }
 };
 
+
+/**
+ * Retrieve and return all invoices.
+ */
+exports.fetchByResolution = async (req, res, next) => {
+  try {
+    const idAgResolution = req.params.idAgResolution;
+    const all = await Invoice.fetchByResolution(idAgResolution);
+    res.status(200).json(all);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
 /**
  * Retrieve and return an invoice by it's ID.
  */

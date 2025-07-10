@@ -1,1 +1,62 @@
-<p>invoice-list works!</p>
+<h2><strong>Liste de factures</strong></h2>
+<hr class="mb-4">
+
+<div *ngIf="createdMessage" class="success-message">
+  {{ createdMessage }}
+</div>
+
+<div *ngIf="deletedMessage" class="success-message">
+  {{ deletedMessage }}
+</div>
+
+<div class="flex flex-col gap-2">
+  <select (change)="filter($event)" class="px-2 py-1 border border-gray-300 rounded-md">
+    <option value="">Toutes les factures</option>
+    <option *ngFor="let state of states" [value]="state.key">
+      {{ state.value }}
+    </option>    
+  </select>
+</div>
+<hr class="mt-4">
+
+<ul
+  *ngIf="invoices$ | async as invoices; else loading"
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+>
+  <li
+    *ngFor="let invoice of invoices"
+    class="p-4 bg-white border rounded shadow-sm space-y-3 listitems {{ invoice.state }}"
+  >
+    <div class="text-gray-800 text-sm font-medium">{{ invoice.description }}</div>
+    <div class="text-sm text-gray-600">Montant : {{ invoice.amount }} euros</div>
+    <div class="text-sm text-gray-600">Date de la facture : {{ invoice.invoice_date | date: 'dd/MM/yy' }}</div>
+    <div class="text-sm text-gray-600">Status : {{ invoice.state | stateLabel }}</div>
+
+    <button
+      (click)="seeDetails(invoice.id!)"
+      class="w-full text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+    >
+      Voir les détails
+    </button>
+
+    <button
+      (click)="editDocument(invoice.id!)"
+      class="w-full text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+    >
+      Modifier cette facture
+    </button>
+  </li>
+</ul>
+
+
+<div class="m-4">
+
+  <a routerLink="/invoices/new"
+    class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+    Enregistrer une nouvelle facture
+  </a>
+</div>
+
+<ng-template #loading>
+  <p>Loading documents...</p>
+</ng-template>

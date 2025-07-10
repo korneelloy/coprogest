@@ -1,11 +1,78 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
+import { Invoice } from '../../../model/invoice';
+import { InvoiceService } from '../../../services/invoice/invoice-service';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { StateLabelPipe } from '../../../label/state/state-label-pipe';
+
+
 
 @Component({
   selector: 'app-invoice-detail',
-  imports: [],
+  imports: [CommonModule, StateLabelPipe],
   templateUrl: './invoice-detail.html',
   styleUrl: './invoice-detail.scss'
 })
-export class InvoiceDetail {
+export class InvoiceDetail implements OnInit {
+  invoice$!: Observable<Invoice>;
+  updatedMessage: string | null = null;
+  createdAndClossed: boolean = false;
+  createdAndQuestion: boolean = false;
+  wellNoted: boolean = false;
+  openAmount: string = "";
+  resolutionId: string = "";
+
+
+  constructor(
+    private route: ActivatedRoute,
+    private invoiceService: InvoiceService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.route.queryParamMap.subscribe(params => {
+        if (params.get('updated') === 'true') {
+          this.updatedMessage = "La facture a été mise à jour avec succès.";
+          setTimeout(() => this.updatedMessage = null, 5000);
+        } else if (params.get('createdAndClosed') === 'true') {
+          this.createdAndClossed = true;
+        } else if(params.get('createdAndQuestion') === 'true') {
+          this.openAmount = params.get('openAmount')!;
+          this.resolutionId = params.get('resolutionId')!;
+          this.createdAndQuestion = true;
+        }
+      });      
+      this.invoice$ = this.invoiceService.fetchById(id);
+    }    
+  }
+
+  deletion(id: string): void {
+    const confirmed = confirm("Êtes-vous sûr de vouloir supprimer cet élément ? Attention, action irréversible !");
+    
+    if (confirmed) {
+      this.invoiceService.delete(id).subscribe(() => {
+        this.router.navigate(['/invoices'], { queryParams: { deleted: 'true' } });
+      });
+    }
+  }
+
+  change(id: string): void {
+    this.router.navigate(['/invoices', id, 'edit']);
+  }
+
+  closeBudget(resolutionId: string){
+    console.log(resolutionId);
+  }
+
+  keepOpen() {
+    this.createdAndQuestion = false;
+    this.wellNoted = true;
+    setTimeout(() => this.wellNoted = false, 5000);    
+
+  }
 
 }

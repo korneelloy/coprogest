@@ -359,6 +359,22 @@ set id_budget_category(value) {
      * Fetch ag notices (via ag resolution) without id_ag_minute
      * @returns {Promise<Object[]>}
      */
+  static async fetchallwithactifbudget() {
+    const [agResolutions] = await db.execute(`
+      SELECT *
+      FROM ag_resolution
+      WHERE ag_resolution.budget_actif = 1
+      ;`);
+    return agResolutions;
+  }
+
+
+  
+
+  /**
+     * Fetch ag notices (via ag resolution) without id_ag_minute
+     * @returns {Promise<Object[]>}
+     */
   static async getAllNoticesWithoutMinutes() {
     const [agResolutions] = await db.execute(`
       SELECT DISTINCT 

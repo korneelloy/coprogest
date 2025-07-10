@@ -15,7 +15,7 @@ module.exports = class Invoice extends BaseClass {
    * @param {Number} amount - Amount - can be null
    * @param {Date} invoice_date - Invoice date
    * @param {string} description - not null
-   * @param {string} state - not null - enum {to be paid, contested, paid}
+   * @param {string} state - not null - enum {to_be_paid, contested, paid}
    * @param {string} id_ag_resolution - Link to ag resolution/budget- Foreign key - verification foreign key constraint handled in the CRUD operations
    * @param {Date|null} createdAt - creation date - set in SQL code
    * @param {Date|null} updatedAt - last update - set in SQL code
@@ -82,7 +82,7 @@ module.exports = class Invoice extends BaseClass {
   }
 
   set state(value) {
-    if (!isStringMax20(value) || !["to be paid", "contested", "paid"].includes(value)) {
+    if (!isStringMax20(value) || !["to_be_paid", "contested", "paid"].includes(value)) {
       const error = new Error('Invalid state');
       error.statusCode = 400;
       throw error;
@@ -110,9 +110,26 @@ module.exports = class Invoice extends BaseClass {
    * @returns {Promise<Object[]>}
    */
   static async fetchAll() {
-    const [all] = await db.execute(`SELECT * FROM invoice;`);
+    const [all] = await db.execute(`SELECT * FROM invoice
+        ORDER BY GREATEST(
+          IFNULL(updated_at, '1970-01-01 00:00:00'),
+          created_at
+        ) DESC;`);
     return all;
   }
+
+  
+  /**
+   * Fetch all invoices by resolution
+   * @returns {Promise<Object[]>}
+   */
+  static async fetchByResolution(idAgResolution) {
+    const [all] = await db.execute(`SELECT * FROM invoice
+      WHERE  id_ag_resolution = ?`, [idAgResolution]
+    );
+    return all;
+  }
+
 
   /**
    * Fetch an Invoice by it's ID.

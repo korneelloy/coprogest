@@ -32,6 +32,22 @@ exports.getAllNoticesWithoutMinutes = async (req, res, next) => {
   }
 };
 
+/**
+ * Get all ag resolutions/notice without minutes
+ */
+exports.fetchallwithactifbudget = async (req, res, next) => {
+  try {
+    const allWithActifBudget = await AgResolution.fetchallwithactifbudget();
+    res.status(200).json(allWithActifBudget);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+
 
 /**
  * Retrieve and return a agresolutions by ag notice.

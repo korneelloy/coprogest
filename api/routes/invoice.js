@@ -10,6 +10,9 @@ const router = express.Router();
 // Get all invoices
 router.get('/', invoiceController.getAll);
 
+// Get all invoices by resolution
+router.get('/fetchbyresolution/:idAgResolution', invoiceController.fetchByResolution);
+
 // Get a single invoice by ID
 router.get('/:id', invoiceController.getOne);
 

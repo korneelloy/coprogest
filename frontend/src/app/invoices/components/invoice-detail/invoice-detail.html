@@ -1,1 +1,61 @@
-<p>invoice-detail works!</p>
+<h2><strong>Détails d'une facture</strong></h2>
+<hr>
+
+<div *ngIf="updatedMessage" class="success-message">
+  {{ updatedMessage }}
+</div>
+
+<div *ngIf="createdAndClossed" class="space-y-4 m-5 text-orange-500">
+  La facture a été enregistrée et la ligne de budget correspondant à cette facture a été clôturée.
+</div>
+
+
+<div *ngIf="createdAndQuestion" class="m-5 p-4 space-y-4 text-orange-700 bg-orange-50 rounded-md border border-orange-200">
+  <p>Facture enregistrée.</p>
+  <p>Il reste <strong>{{openAmount}} euros</strong> sur la ligne de budget.</p>
+  <p>
+    Souhaitez-vous 
+    <button 
+      (click)="closeBudget(resolutionId)" 
+      class="ml-2 mr-2 inline-block px-4 py-2 text-sm font-medium text-black bg-zinc-100 rounded-md hover:text-orange-300 hover:bg-zinc-200 transition"
+    >
+      clôturer
+    </button> 
+    cette ligne ou la 
+    <button 
+      (click)="keepOpen()" 
+      class="ml-2 inline-block px-4 py-2 text-sm font-medium text-black bg-zinc-100 rounded-md hover:text-orange-300 hover:bg-zinc-200 transition"
+    >
+      laisser ouverte
+    </button> ?
+  </p>
+  <p class="text-sm font-semibold text-red-600">
+    Attention, la fermeture d'une ligne du budget est irréversible.
+  </p>
+</div>
+
+<div *ngIf="wellNoted" class="space-y-4 m-5 text-orange-500">
+  Ok, bien noté. Cette ligne reste ouverte pour d'éventuelles futures factures. 
+</div>
+
+<ul *ngIf="invoice$ | async as invoice; else loading">
+  <li class="space-y-4">
+    <strong>{{ invoice.description }}</strong><br>
+    <div>Montant : {{ invoice.amount }} euros</div>
+    <div>Date de la facture : {{ invoice.invoice_date | date: 'dd/MM/yy' }}</div>
+    <div>Status : {{ invoice.state | stateLabel }}</div>
+
+
+    <button (click)="change(invoice.id!)" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+      Changer cette facture
+    </button><br>
+    
+    <button (click)="deletion(invoice.id!)" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+      Supprimer cette facture
+    </button><br>
+  </li>
+</ul>
+
+<ng-template #loading>
+  <p>Loading document...</p>
+</ng-template>
