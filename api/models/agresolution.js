@@ -609,13 +609,15 @@ set id_budget_category(value) {
    * @returns {Promise<Object>}
    */
 
-   static async patchStatus(id, status) {
+   static async patchStatus(id, status, budgetActifStatus) {
     try {
       const [result] = await db.execute(
         `UPDATE ag_resolution
-          SET status = ? 
+          SET status = ?,
+          budget_actif = ?
           WHERE id = ?`,
           [ status,
+            budgetActifStatus,
             id
           ]
         );

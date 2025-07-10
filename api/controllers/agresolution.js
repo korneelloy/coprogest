@@ -235,7 +235,7 @@ exports.patchAgMin = async (req, res, next) => {
  */
 exports.patchStatus = async (req, res, next) => {
   try {
-    const updateResponse = await AgResolution.patchStatus(req.params.id, req.params.status);
+    const updateResponse = await AgResolution.patchStatus(req.params.id, req.params.status, req.params.budgetActifStatus);
     res.status(200).json(updateResponse);
 
   } catch(err) {

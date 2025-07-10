@@ -23,6 +23,8 @@ import { UnitGroupService } from '../../../services/unit-groups/unit-group-servi
 import { CallDate } from '../../../model/calldate';
 import { CallDateService } from '../../../services/callDate/call-date-service';
 
+import { formatDateForInput } from '../../../utils/formatDateForInput';
+import { formatDateForOutput } from '../../../utils/formatDateForOutput';
 
 
 @Component({
@@ -128,8 +130,8 @@ export class AgResolutionForm implements OnInit {
             budget: agResolution.budget,
             budget_amount: agResolution.budget_amount,
             budget_type: agResolution.budget_type,
-            operating_budget_start: this.formatDateForInput(agResolution.operating_budget_start),
-            operating_budget_end: this.formatDateForInput(agResolution.operating_budget_end),
+            operating_budget_start: formatDateForInput(agResolution.operating_budget_start),
+            operating_budget_end: formatDateForInput(agResolution.operating_budget_end),
             nb_of_instalments: agResolution.nb_of_instalments,
             budget_recup_tenant: agResolution.budget_recup_tenant,
             id_budget_category: agResolution.id_budget_category
@@ -162,8 +164,8 @@ export class AgResolutionForm implements OnInit {
     formValue.id_ag_notice = this.id_ag_notice;
     formValue.id_ag_minutes = this.id_ag_minutes;
 
-    formValue.operating_budget_start = this.parseDateOrNull(formValue.operating_budget_start);
-    formValue.operating_budget_end = this.parseDateOrNull(formValue.operating_budget_end);
+    formValue.operating_budget_start = formatDateForOutput(formValue.operating_budget_start);
+    formValue.operating_budget_end = formatDateForOutput(formValue.operating_budget_end);
 
     Object.keys(formValue).forEach(key => {
       if (formValue[key] === '') {
@@ -211,28 +213,6 @@ export class AgResolutionForm implements OnInit {
         });
       });
     }
-  }    
- 
-  private formatDateForInput(date: string | Date): string {
-    if (!date) return '';
-  
-    if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      // déjà au bon format
-      return date;
-    }
-  
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = (d.getMonth() + 1).toString().padStart(2, '0');
-    const day = d.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  private parseDateOrNull(dateStr: string): string | null {
-    if (!dateStr) return null;
-  
-    const date = new Date(dateStr);
-    return isNaN(date.getTime()) ? null : date.toISOString().split('T')[0];
   }
 
   private updateBudgetValidators(): void {

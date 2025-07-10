@@ -105,18 +105,26 @@ export class InvoiceForm implements OnInit {
           for (const oldInvoice of this.oldInvoices) {
             alreadyUsedBudget += Number(oldInvoice.amount);
           }
-          console.log("alreadyUsedBudget", alreadyUsedBudget);
-          console.log("formData.amount", formData.amount);
-          console.log("this.resolution!.budget_amount", this.resolution!.budget_amount);
+          console.log("alreadyUsedBudget", typeof(alreadyUsedBudget));
+          console.log("formData.amount", typeof(formData.amount));
+          console.log("this.resolution!.budget_amount", typeof(this.resolution!.budget_amount));
+          const resolution_budget_amount = Number(this.resolution!.budget_amount);
 
-        if ((alreadyUsedBudget + formData.amount) <= this.resolution!.budget_amount) {    
+        if ((alreadyUsedBudget + formData.amount) <= resolution_budget_amount) {    
           this.invoiceService.create(formData).subscribe((response) => {
-            if ((alreadyUsedBudget + formData.amount) === this.resolution!.budget_amount) {
-              /* TO DO close budget*/
-              this.router.navigate(['/invoices', response.id], { queryParams: { createdAndClosed: 'true' } });
+            if ((alreadyUsedBudget + formData.amount) == resolution_budget_amount) {
+              this.agResolutionService.updateStatus(this.resolution!.id, "accepted", 0).subscribe({
+                next: () => {
+                  console.log('Status updated successfully');
+                  this.router.navigate(['/invoices', response.id], { queryParams: { createdAndClosed: 'true' } });
+                },
+                error: (err) => {
+                  console.error('Failed to update status', err);
+                }
+              });
             } else {
-              const openAmount = Number(this.resolution!.budget_amount) - alreadyUsedBudget - formData.amount;
-              this.router.navigate(['/invoices', response.id], { queryParams: { createdAndQuestion: 'true', openAmount: openAmount, resolutionId: this.resolution!.id} });
+              const openAmount = Number(resolution_budget_amount) - alreadyUsedBudget - formData.amount;
+              this.router.navigate(['/invoices', response.id], { queryParams: { createdAndQuestion: 'true', openAmount: openAmount, resolutionId: this.resolution!.id } });
             }
 
           });

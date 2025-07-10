@@ -20,6 +20,7 @@ export class InvoiceList implements OnInit{
   invoices$!: Observable<Invoice[]>;
   createdMessage: string | null = null;
   deletedMessage: string | null = null;
+  createdAndClossed: boolean = false;
 
   states = [
     { key: "to_be_paid", value: "À payer" },
@@ -44,6 +45,10 @@ export class InvoiceList implements OnInit{
       else if (params.get('deleted') === 'true') {
         this.deletedMessage = 'Facture supprimée avec succès.';
         setTimeout(() => this.deletedMessage = null, 5000);
+      } else if (params.get('createdAndClosed') === 'true') {
+        this.createdAndClossed = true;
+        setTimeout(() => this.createdAndClossed = false, 5000);
+
       }
       this.invoices$ = this.invoiceService.fetchAll();
     });      

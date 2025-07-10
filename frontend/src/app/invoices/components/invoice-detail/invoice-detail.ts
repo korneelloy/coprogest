@@ -6,7 +6,8 @@ import { InvoiceService } from '../../../services/invoice/invoice-service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { StateLabelPipe } from '../../../label/state/state-label-pipe';
-
+import { AgResolution } from '../../../model/agresolution';
+import { AgResolutionService } from '../../../services/agResolution/ag-resolution-service';
 
 
 @Component({
@@ -23,12 +24,14 @@ export class InvoiceDetail implements OnInit {
   wellNoted: boolean = false;
   openAmount: string = "";
   resolutionId: string = "";
+  invoiceId: string = "";
 
 
   constructor(
     private route: ActivatedRoute,
     private invoiceService: InvoiceService,
-    private router: Router
+    private router: Router,
+    private agResolutionService: AgResolutionService,
   ) {}
 
   ngOnInit(): void {
@@ -44,7 +47,7 @@ export class InvoiceDetail implements OnInit {
           this.openAmount = params.get('openAmount')!;
           this.resolutionId = params.get('resolutionId')!;
           this.createdAndQuestion = true;
-        }
+        } 
       });      
       this.invoice$ = this.invoiceService.fetchById(id);
     }    
@@ -52,7 +55,6 @@ export class InvoiceDetail implements OnInit {
 
   deletion(id: string): void {
     const confirmed = confirm("Êtes-vous sûr de vouloir supprimer cet élément ? Attention, action irréversible !");
-    
     if (confirmed) {
       this.invoiceService.delete(id).subscribe(() => {
         this.router.navigate(['/invoices'], { queryParams: { deleted: 'true' } });
@@ -65,14 +67,20 @@ export class InvoiceDetail implements OnInit {
   }
 
   closeBudget(resolutionId: string){
-    console.log(resolutionId);
+    this.agResolutionService.updateStatus(resolutionId, "accepted", 0).subscribe({
+      next: () => {
+        this.router.navigate(['/invoices'], { queryParams: { createdAndClosed: 'true' } });
+      },
+      error: (err) => {
+        console.error('Failed to update status', err);
+      }
+    });
   }
 
   keepOpen() {
     this.createdAndQuestion = false;
     this.wellNoted = true;
     setTimeout(() => this.wellNoted = false, 5000);    
-
   }
 
 }

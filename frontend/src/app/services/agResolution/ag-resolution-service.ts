@@ -101,9 +101,9 @@ export class AgResolutionService {
       );
   }
 
-  updateStatus(id: string, status: string): Observable<AgResolution> {
+  updateStatus(id: string, status: string, budgetActifStatus: number): Observable<AgResolution> {
     return this.http
-      .patch<AgResolution>(`${this.url}/status/${id}/${status}`, {}, { withCredentials: true })
+      .patch<AgResolution>(`${this.url}/status/${id}/${status}/${budgetActifStatus}`, {}, { withCredentials: true })
       .pipe(
         tap(() => console.log(`Updated ag resolution id=${id}`)),
         catchError(this.handleError)

@@ -36,7 +36,7 @@ router.put('/:id', agResolutionController.updateOne);
 router.patch('/agmin/:id', agResolutionController.patchAgMin);
 
 // Update the status
-router.patch('/status/:id/:status', agResolutionController.patchStatus);
+router.patch('/status/:id/:status/:budgetActifStatus', agResolutionController.patchStatus);
 
 // Delete a ag resolution by ID
 router.delete('/:id', agResolutionController.deleteOne);

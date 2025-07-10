@@ -868,7 +868,7 @@ export class AgMinutesForm implements OnInit {
   }
 
   changeStatus(agResolutionId: string, statut: string, budgetActifStatus: number) {
-    this.agResolutionService.updateStatus(agResolutionId, statut /*, budgetActifStatus*/).subscribe({
+    this.agResolutionService.updateStatus(agResolutionId, statut, budgetActifStatus).subscribe({
       next: (res) => {
         console.log("Statut mis à jour:", res);
       },
