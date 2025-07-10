@@ -106,7 +106,7 @@ CREATE TABLE ag_resolution(
    status VARCHAR(20),
    operating_budget_start DATE,
    operating_budget_end DATE,
-   nb_of_instalments TINYINT,
+   instalments TINYINT,
    budget_recup_tenant BOOLEAN,
    budget_actif BOOLEAN DEFAULT false,
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

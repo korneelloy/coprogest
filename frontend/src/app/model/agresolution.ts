@@ -13,7 +13,7 @@ export interface AgResolution {
   budget_type: string;
   operating_budget_start: Date;
   operating_budget_end: Date;
-  nb_of_instalments: Number;
+  instalments: Number;
   budget_recup_tenant: Number; //boolean
   budget_actif: Number; //boolean
   id_budget_category: string;

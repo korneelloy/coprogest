@@ -92,7 +92,7 @@ Table ag_resolution{
    budget_type varchar
    operating_budget_start date
    operating_budget_end date
-   nb_of_instalments TINYINT
+   instalments TINYINT
    budget_recup_tenant boolean
    budget_actif boolean 
    created_at timestamp

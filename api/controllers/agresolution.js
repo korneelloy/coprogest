@@ -123,7 +123,7 @@ exports.postOne = async (req, res, next) => {
     const budget_type = req.body.budget_type;
     const operating_budget_start = req.body.operating_budget_start;
     const operating_budget_end = req.body.operating_budget_end;
-    const nb_of_instalments = req.body.nb_of_instalments;
+    const instalments = req.body.instalments;
     const budget_recup_tenant = req.body.budget_recup_tenant;
     const budget_actif = 0;
     const id_budget_category = req.body.id_budget_category;
@@ -141,7 +141,7 @@ exports.postOne = async (req, res, next) => {
       budget_type,
       operating_budget_start,
       operating_budget_end,
-      nb_of_instalments,
+      instalments,
       budget_recup_tenant,
       budget_actif,
       id_budget_category
@@ -177,7 +177,7 @@ exports.updateOne = async (req, res, next) => {
     const budget_type = req.body.budget_type;
     const operating_budget_start = req.body.operating_budget_start;
     const operating_budget_end = req.body.operating_budget_end;
-    const nb_of_instalments = req.body.nb_of_instalments;
+    const instalments = req.body.instalments;
     const budget_recup_tenant = req.body.budget_recup_tenant;
     const budget_actif = req.body.budget_actif;
     const id_budget_category = req.body.id_budget_category;
@@ -195,7 +195,7 @@ exports.updateOne = async (req, res, next) => {
       budget_type,
       operating_budget_start,
       operating_budget_end,
-      nb_of_instalments,
+      instalments,
       budget_recup_tenant,
       budget_actif,
       id_budget_category

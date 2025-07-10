@@ -82,7 +82,7 @@ export class AgResolutionForm implements OnInit {
       budget:  ['', [Validators.required]],  // Oui/Non budget lié
       operating_budget_start: [''],
       operating_budget_end: [''],
-      nb_of_instalments: [''],
+      instalments: [''],
       budget_recup_tenant: [''],
       budget_type: [''],
       id_budget_category: [''],
@@ -138,7 +138,7 @@ export class AgResolutionForm implements OnInit {
             budget_type: agResolution.budget_type,
             operating_budget_start: formatDateForInput(agResolution.operating_budget_start),
             operating_budget_end: formatDateForInput(agResolution.operating_budget_end),
-            nb_of_instalments: agResolution.nb_of_instalments,
+            instalments: agResolution.instalments,
             budget_recup_tenant: agResolution.budget_recup_tenant,
             id_budget_category: agResolution.id_budget_category
           });
@@ -164,7 +164,7 @@ export class AgResolutionForm implements OnInit {
     const formValue = this.agResolutionForm.value;
 
     formValue.budget = Number(formValue.budget);
-    formValue.nb_of_instalments = Number(formValue.nb_of_instalments);
+    formValue.instalments = Number(formValue.instalments);
     formValue.budget_recup_tenant = Number(formValue.budget_recup_tenant);
 
     formValue.id_ag_notice = this.id_ag_notice;
@@ -224,7 +224,7 @@ export class AgResolutionForm implements OnInit {
   private updateBudgetValidators(): void {
     const budgetValue = this.agResolutionForm.get('budget')?.value;
   
-    const controlsToToggle = ['budget_amount', 'budget_type', 'nb_of_instalments', 'id_budget_category'];
+    const controlsToToggle = ['budget_amount', 'budget_type', 'instalments', 'id_budget_category'];
   
     if (budgetValue === '1' || budgetValue === 1 || budgetValue === 'oui') {
       controlsToToggle.forEach(field => {
@@ -308,7 +308,7 @@ export class AgResolutionForm implements OnInit {
       return;
     }
 
-    const nbOfInstalments = this.agResolutionForm.get('nb_of_instalments')?.value;
+    const nbOfInstalments = this.agResolutionForm.get('instalments')?.value;
 
     if (nbOfInstalments === 1 || nbOfInstalments === "1") {
       if (this.isEditMode) {

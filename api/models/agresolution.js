@@ -29,7 +29,7 @@ module.exports = class AgResolution extends BaseClass {
    * @param {string|null} budget_type - enum {operating or exceptional} - nullable
    * @param {Date|null} operating_budget_start - start date of operating budget - null if budget-type = exceptional
    * @param {Date|null} operating_budget_end - end date of operating budget - null if budget-type = exceptional
-   * @param {Number|null} nb_of_instalments - in how many times the budget will be called?: 0 if we wait for the invoice / 1 : in one time: 2 in two times etc
+   * @param {Number|null} instalments - in how many times the budget will be called?: 0 if we wait for the invoice / 1 : in one time: 2 in two times etc
    * @param {boolean|null} budget_recup_tenant - able to ask tenant to pay back? nullable
    * @param {boolean|null} budget_actif - actif or closed / closed by default 
    * @param {string|null} id_budget_category - Link to budget category - Foreign key - verification foreign key constraint handled in the CRUD operations nullable
@@ -44,7 +44,7 @@ module.exports = class AgResolution extends BaseClass {
     id_unit_group, id_ag_notice, id_ag_minutes=null, status=null,
     createdAt = null, updatedAt = null,
     budget_amount = null, budget_type = null, operating_budget_start = null, operating_budget_end = null,
-    nb_of_instalments = null, budget_recup_tenant = null, budget_actif = null, id_budget_category = null,
+    instalments = null, budget_recup_tenant = null, budget_actif = null, id_budget_category = null,
     budget_category_name = null, call_date_date = null, call_date_id = null
   }) {
     super({ id, createdAt, updatedAt });
@@ -60,7 +60,7 @@ module.exports = class AgResolution extends BaseClass {
     this.budget_type = budget_type;
     this.operating_budget_start = operating_budget_start;
     this.operating_budget_end = operating_budget_end;
-    this.nb_of_instalments = nb_of_instalments;
+    this.instalments = instalments;
     this.budget_recup_tenant = budget_recup_tenant;
     this.budget_actif = budget_actif;
     this.id_budget_category = id_budget_category;
@@ -268,28 +268,28 @@ set operating_budget_end(value) {
 }
 
 
-get nb_of_instalments() {
-  return this._nb_of_instalments;
+get instalments() {
+  return this._instalments;
 }
 
 
-set nb_of_instalments(value) {
+set instalments(value) {
   if (value === null) {
-    this._nb_of_instalments = null;
+    this._instalments = null;
     return;
   }
   if (typeof value !== 'number' || isNaN(value)) {
-    throw new TypeError('Nb_of_instalments amount must be a valid number');
+    throw new TypeError('instalments amount must be a valid number');
   }
 
   if (value < 0 || value > 999) {
-    throw new RangeError('Nb_of_instalments amount must be between 0 and 999');
+    throw new RangeError('instalments amount must be between 0 and 999');
   }
 
   if (!Number.isInteger(value)) {
-    throw new RangeError('Nb_of_instalments must be an integer');
+    throw new RangeError('instalments must be an integer');
   }
-  this._nb_of_instalments = value;
+  this._instalments = value;
 }
   
 get budget_recup_tenant() {
@@ -461,7 +461,7 @@ set id_budget_category(value) {
           budget_type,
           operating_budget_start,
           operating_budget_end,
-          nb_of_instalments,
+          instalments,
           budget_recup_tenant,
           budget_actif,
 
@@ -482,7 +482,7 @@ set id_budget_category(value) {
             this.budget_type,
             this.operating_budget_start,
             this.operating_budget_end,
-            this.nb_of_instalments,
+            this.instalments,
             this.budget_recup_tenant,
             this.budget_actif,
 
@@ -529,7 +529,7 @@ set id_budget_category(value) {
           budget_type = ?,
           operating_budget_start = ?,
           operating_budget_end = ?,
-          nb_of_instalments = ?,
+          instalments = ?,
           budget_recup_tenant = ?,
           budget_actif = ?,
           id_budget_category = ?
@@ -545,7 +545,7 @@ set id_budget_category(value) {
             this.budget_type,
             this.operating_budget_start,
             this.operating_budget_end,
-            this.nb_of_instalments,
+            this.instalments,
             this.budget_recup_tenant,
             this.budget_actif,
             this.id_budget_category,

@@ -670,7 +670,7 @@ export class AgMinutesForm implements OnInit {
               if(this.agResolutionWithDetails[0].budget === 1) {
                 this.changeStatus(agResolutionId, 'accepted', 1);
               
-                if(this.agResolutionWithDetails[0].nb_of_instalments === 1) {
+                if(this.agResolutionWithDetails[0].instalments === 1) {
                   const creations = this.agResolutionWithDetails.flatMap(item =>
                     this.shares.map(share =>
                       this.chargeLineService.create({
