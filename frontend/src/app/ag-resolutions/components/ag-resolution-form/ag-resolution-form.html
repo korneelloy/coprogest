@@ -35,13 +35,16 @@
     <label class="block font-medium mb-1">Majorité requise: </label>
     <select id="required_majority" formControlName="required_majority" required class="w-full px-3 py-2 border rounded-md">
       <option value="" disabled>Choisissez une majorité</option>
-      <option value="24">Article 24</option>
-      <option value="25">Article 25</option>
-      <option value="25-1">Article 25-1</option>
-      <option value="26">Article 26</option>
-      <option value="unanimity">Unanimité</option>
-      <option value="no_vote">Résolution sans vote</option>
-    </select>  
+      <option *ngFor="let key of requiredMajorityKeys" [value]="key">
+        {{ key | requiredMajorityLabel }}
+      </option>
+    </select>
+
+
+
+
+
+
     <div *ngIf="agResolutionForm.get('required_majority')?.invalid && (agResolutionForm.get('required_majority')?.touched || formSubmitted)" class="text-sm text-yellow-600	 mt-1">
       <small *ngIf="agResolutionForm.get('required_majority')?.errors?.['required']">* champ obligatoire</small>  
     </div>

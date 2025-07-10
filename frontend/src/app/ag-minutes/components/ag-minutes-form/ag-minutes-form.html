@@ -164,7 +164,7 @@
             </ng-container>
           
             <div class="font-medium">Majorité requise</div>
-            <div>{{ requiredMajorityLabels[agResolution.required_majority] }}</div>
+            <div>{{ (agResolution.required_majority) | requiredMajorityLabel }}</div>
           
             <div class="font-medium">Groupe</div>
             <div>

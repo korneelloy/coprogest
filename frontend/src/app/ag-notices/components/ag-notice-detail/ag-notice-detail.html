@@ -26,7 +26,7 @@
           >
             <p class="font-medium text-gray-800">{{ agResolution.title }}</p>
             <p class="text-sm text-gray-600 mt-1">Texte : {{ agResolution.resolution_text }}</p>
-            <p class="text-sm text-gray-600">Majorité requise : {{ requiredMajorityLabels[agResolution.required_majority] }}</p>
+            <p class="text-sm text-gray-600">Majorité requise : {{ agResolution.required_majority | requiredMajorityLabel }}</p>
             <p class="text-sm text-gray-600">Budget : {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</p>
             <p *ngIf="agResolution.budget === 1" class="text-sm text-gray-600">Montant : {{ agResolution.budget_amount }} euros</p>
             <p *ngIf="agResolution?.status !== 'NULL'" class="text-sm text-gray-600">Statut : {{ agResolution.status }}</p>

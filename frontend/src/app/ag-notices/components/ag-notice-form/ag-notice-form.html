@@ -78,7 +78,7 @@
         <li *ngFor="let agResolution of agResolutions" class="border-b border-gray-300 pb-4 space-y-2">
           <strong>{{ agResolution.title }}</strong><br>
           <div>Texte: {{ agResolution.resolution_text }}</div>
-          <div>Majorité requise: {{ requiredMajorityLabels[agResolution.required_majority] }}</div>
+          <div>Majorité requise: {{ agResolution.required_majority | requiredMajorityLabel }}</div>
           <div>Budget: {{ agResolution.budget === 1 ? 'Oui' : 'Non' }}</div>
           <div *ngIf="agResolution.status">Statut: {{ agResolution.status === "accepted" ? 'Résolution adoptée' : 'Résolution rejetée'}}</div>
 

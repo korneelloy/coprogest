@@ -11,10 +11,12 @@ import { AgMinutesService } from '../../../services/agminutes/ag-minutes-service
 import { AgResolution } from '../../../model/agresolution';
 import { AgResolutionService } from '../../../services/agResolution/ag-resolution-service';
 
+import { RequiredMajorityLabelPipe } from '../../../label/requiredMajority/required-majority-label-pipe';
+
 
 @Component({
   selector: 'app-ag-minutes-detail',
-  imports: [CommonModule],
+  imports: [CommonModule, RequiredMajorityLabelPipe],
   templateUrl: './ag-minutes-detail.html',
   styleUrl: './ag-minutes-detail.scss'
 })
@@ -23,15 +25,6 @@ export class AgMinutesDetail implements OnInit {
   updatedMessage: string | null = null;
 
   agResolutions$!: Observable<AgResolution[]>;
-
-  requiredMajorityLabels: { [key: string]: string } = {
-    "24": "Article 24 - Majorité simple des voix exprimées (abstentions non prises en compte)",
-    "25": "Article 25 - Majorité absolue requise (pas de second vote possible)",
-    "25-1": "Article 25-1 - Second vote possible à la majorité simple, si le quorum est atteint",
-    "26": "Article 26 - Double majorité : au moins 2/3 des voix de tous les copropriétaires ET la majorité en nombre des copropriétaires présents ou représentés",
-    "unanimity": "Article 26-1 - Unanimité de tous les copropriétaires requise",
-    "no_vote": "Sans vote - Décision prise sans procédure de vote"
-  };
 
   constructor(
     private route: ActivatedRoute,

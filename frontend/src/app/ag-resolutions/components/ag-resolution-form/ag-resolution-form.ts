@@ -26,11 +26,14 @@ import { CallDateService } from '../../../services/callDate/call-date-service';
 import { formatDateForInput } from '../../../utils/formatDateForInput';
 import { formatDateForOutput } from '../../../utils/formatDateForOutput';
 
+import { RequiredMajorityLabelPipe } from '../../../label/requiredMajority/required-majority-label-pipe';
+
+
 
 @Component({
   selector: 'app-ag-resolution-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule, FormsModule ],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule, FormsModule, RequiredMajorityLabelPipe ],
   templateUrl: './ag-resolution-form.html',
   styleUrl: './ag-resolution-form.scss'
 })
@@ -58,6 +61,9 @@ export class AgResolutionForm implements OnInit {
   formSubmitted = false;
 
   tableOfDates: string[] = []
+
+  requiredMajorityKeys = ['24', '25', '25-1', '26', 'unanimity', 'no_vote'];
+
 
   constructor(
     private fb: FormBuilder,

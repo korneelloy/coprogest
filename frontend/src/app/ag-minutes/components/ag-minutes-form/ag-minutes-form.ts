@@ -33,11 +33,13 @@ import { Share } from '../../../model/share';
 import { ChargeLine } from '../../../model/chargeLine';
 import { ChargeLineService } from '../../../services/chargeLine/charge-line-service';
 
+import { RequiredMajorityLabelPipe } from '../../../label/requiredMajority/required-majority-label-pipe';
+
 
 @Component({
   selector: 'app-ag-minutes-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule, FormsModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule, FormsModule, RequiredMajorityLabelPipe],
   templateUrl: './ag-minutes-form.html',
   styleUrl: './ag-minutes-form.scss'
 })
@@ -73,15 +75,6 @@ export class AgMinutesForm implements OnInit {
   incompleteVotesMessages: Record<string, string | null> = {};
 
   resolution: AgResolution = {} as AgResolution;
-
-  requiredMajorityLabels: { [key: string]: string } = {
-    "24": "Article 24 - Majorité simple des voix exprimées (abstentions non prises en compte)",
-    "25": "Article 25 - Majorité absolue requise (pas de second vote possible)",
-    "25-1": "Article 25-1 - Second vote possible à la majorité simple, si le quorum est atteint",
-    "26": "Article 26 - Double majorité : au moins 2/3 des voix de tous les copropriétaires ET la majorité en nombre des copropriétaires présents ou représentés",
-    "unanimity": "Article 26-1 - Unanimité de tous les copropriétaires requise",
-    "no_vote": "Sans vote - Décision prise sans procédure de vote"
-  };
 
   formatVote(vote: string | null): string {
     switch (vote) {
@@ -444,8 +437,8 @@ export class AgMinutesForm implements OnInit {
       this.selectedPersonsIdOnly.splice(indexId, 1);
     }
     
-    /** if checked */
-    if (isChecked) {
+    /** if checked and not marked as absent*/
+    if (isChecked && presence !== 'absent') {
       /**create a new  presence, null if var doesn't exists*/
       const newPresence: AgMinutesPresencePerson = {
         id_person: personId,
