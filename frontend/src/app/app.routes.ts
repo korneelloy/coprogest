@@ -56,6 +56,7 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./contact/contact-module').then(m => m.ContactModule),
   },
+  
   { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '**', redirectTo: '' },
 ];

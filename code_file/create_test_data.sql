@@ -1,3 +1,9 @@
+-- Insertion des rôles (doit précéder les INSERT de personnes)
+INSERT INTO role (id, name) VALUES
+('5041878f-2523-41d0-97b1-cd05bc60f1b8', 'coowner'),
+('9663d291-1a31-40a0-b5b1-7f73140bd5cc', 'manager'),
+('0641e7ea-d13d-46a3-86c2-6dcba6cd320c', 'assistant');
+
 -- utilisateurs
 
 INSERT INTO person (id, email, password, first_name, last_name, street, postal_code, city, telephone, id_role) VALUES
@@ -116,10 +122,8 @@ INSERT INTO budget_category (id, name) VALUES
 ('41730a00-f81e-48d8-9b3a-4ae9fcb187eb', 'eau'),
 ('41730a00-f81e-48d8-9b3a-4ae9fcb187ec', 'electricité'),
 ('41730a00-f81e-48d8-9b3a-4ae9fcb187ed', 'entretien'),
-('41730a00-f81e-48d8-9b3a-4ae9fcb187ee', 'nettoyage');
+('41730a00-f81e-48d8-9b3a-4ae9fcb187ee', 'nettoyage'),
 ('41730a00-f81e-48d8-9b3a-4ae9fcb187ey', 'Travaux');
-
-
 
 -- ag notices
 
