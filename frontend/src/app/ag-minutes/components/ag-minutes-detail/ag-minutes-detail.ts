@@ -13,6 +13,7 @@ import { AgResolutionService } from '../../../services/agResolution/ag-resolutio
 
 import { RequiredMajorityLabelPipe } from '../../../label/requiredMajority/required-majority-label-pipe';
 
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-ag-minutes-detail',
@@ -30,7 +31,9 @@ export class AgMinutesDetail implements OnInit {
     private route: ActivatedRoute,
     private agMinutesService: AgMinutesService,
     private router: Router,
+    private http: HttpClient,
     private agResolutionService: AgResolutionService
+
   ) {}
 
   ngOnInit(): void {
@@ -53,4 +56,19 @@ export class AgMinutesDetail implements OnInit {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
+
+  generateMinuteWord(agMinuteId: string): void {
+    this.http.get(`http://localhost:3000/api/v1/agminutes/generateminutes/${agMinuteId}`, {
+      responseType: 'blob'
+    }).subscribe((blob: Blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `compte-rendu-${agMinuteId}.docx`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }, (error: any) => {
+      console.error("Erreur lors de la génération du compte rendu", error);
+    });
+  } 
 }

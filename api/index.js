@@ -6,7 +6,7 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-
+const contactRoutes = require('./routes/contact');
 
 
 const { auth, isManager, isAssistant } = require('./util/auth')
@@ -73,6 +73,7 @@ app.use('/api/v1/invoicepayments', invoicePaymentRoutes);
 app.use('/api/v1/agresolutionpersons', agResolutionPersonRoutes);
 app.use('/api/v1/agminutespresencepersons', agMinutesPresencePersonRoutes);
 app.use('/api/v1/invoices', invoiceRoutes);
+app.use('/api', contactRoutes);
 
 /**
  * 
