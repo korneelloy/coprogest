@@ -22,13 +22,7 @@ export class InvoiceList implements OnInit{
   deletedMessage: string | null = null;
   createdAndClossed: boolean = false;
 
-  states = [
-    { key: "to_be_paid", value: "À payer" },
-    { key: "contested", value: "Facture en litige" },
-    { key: "paid", value: "Payé" }
-  ];
-  
-
+  states = ['to_be_paid', 'contested', 'paid'];
 
   constructor(
     private invoiceService: InvoiceService,
