@@ -61,7 +61,31 @@ module.exports = class ChargeCall extends BaseClass {
    * @returns {Promise<Object[]>}
    */
   static async fetchAll() {
-    const [allChargeCalls] = await db.execute(`SELECT * FROM charge_call;`);
+    const [allChargeCalls] = await db.execute(`
+      SELECT
+        cc.id AS charge_call_id,
+        cc.charge_call_date,
+        COALESCE(cl.total_charged, 0) AS total_charged,
+        COALESCE(cp.total_paid, 0) AS total_paid,
+        COALESCE(cl.total_charged, 0) - COALESCE(cp.total_paid, 0) AS amount_due
+      FROM charge_call cc
+
+      -- Subquery: total amount of charge lines per call
+      LEFT JOIN (
+        SELECT id_charge_call, SUM(amount) AS total_charged
+        FROM charge_line
+        GROUP BY id_charge_call
+      ) cl ON cl.id_charge_call = cc.id
+
+      -- Subquery: total payments per charge call
+      LEFT JOIN (
+        SELECT id_charge_call, SUM(amount) AS total_paid
+        FROM charge_payment
+        GROUP BY id_charge_call
+      ) cp ON cp.id_charge_call = cc.id
+
+      ORDER BY cc.charge_call_date DESC;
+      ;`);
     return allChargeCalls;
   }
 
@@ -71,7 +95,34 @@ module.exports = class ChargeCall extends BaseClass {
      * @returns {Promise<Object[]>}
      */
   static async getAllByPerson(personId) {
-    const [allChargeCalls] = await db.execute(`SELECT * FROM charge_call WHERE id_person = ?`, [personId]);
+    const [allChargeCalls] = await db.execute(`
+      SELECT * FROM charge_call 
+            SELECT
+        cc.id AS charge_call_id,
+        cc.charge_call_date,
+        COALESCE(cl.total_charged, 0) AS total_charged,
+        COALESCE(cp.total_paid, 0) AS total_paid,
+        COALESCE(cl.total_charged, 0) - COALESCE(cp.total_paid, 0) AS amount_due
+      FROM charge_call cc
+
+      -- Subquery: total amount of charge lines per call
+      LEFT JOIN (
+        SELECT id_charge_call, SUM(amount) AS total_charged
+        FROM charge_line
+        GROUP BY id_charge_call
+      ) cl ON cl.id_charge_call = cc.id
+
+      -- Subquery: total payments per charge call
+      LEFT JOIN (
+        SELECT id_charge_call, SUM(amount) AS total_paid
+        FROM charge_payment
+        GROUP BY id_charge_call
+      ) cp ON cp.id_charge_call = cc.id
+
+      ORDER BY cc.charge_call_date DESC
+      
+      WHERE id_person = ?`
+      , [personId]);
     return allChargeCalls;
   }
 

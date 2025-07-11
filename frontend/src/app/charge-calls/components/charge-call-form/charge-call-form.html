@@ -1,1 +1,72 @@
 <p>charge-call-form works!</p>
+
+<!--
+
+<h2><strong>Formulaire pour facture</strong></h2>
+<hr>
+
+<form [formGroup]="chargeCallForm" (ngSubmit)="onSubmit()">
+  <div class="mb-4">
+    <label class="block mb-1">Description: </label>
+    <input formControlName="description" placeholder="Description de la facture" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+    <div *ngIf="chargeCallForm.get('description')?.invalid && chargeCallForm.get('description')?.touched" class="text-sm text-yellow-600	 mt-1">
+      <small *ngIf="chargeCallForm.get('description')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+      <small *ngIf="chargeCallForm.get('description')?.errors?.['minlength']">* Ce champ doit contenir au moins 2 caractères.</small>
+      <small *ngIf="chargeCallForm.get('description')?.errors?.['maxlength']">* Ce champ ne peut contenir plus que 255 caractères.</small>
+    </div>
+  </div>
+
+  <div class="mb-4" >
+    <label class="block mb-1">Montant: </label>
+    <input [readonly]="isEditMode" [class.disabled-field]="isEditMode" type="number" formControlName="amount" placeholder="1500" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+    <div *ngIf="chargeCallForm.get('amount')?.invalid && chargeCallForm.get('amount')?.touched" class="text-sm text-yellow-600	 mt-1">
+      <small *ngIf="chargeCallForm.get('amount')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+      <small *ngIf="chargeCallForm.get('amount')?.errors?.['pattern']">* Ce champ doit contenir une URL valide.</small>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label class="block mb-1">Date: </label>
+    <input type="date" formControlName="invoice_date" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+    <div *ngIf="chargeCallForm.get('invoice_date')?.invalid && chargeCallForm.get('invoice_date')?.touched" class="text-sm text-yellow-600	 mt-1">
+      <small *ngIf="chargeCallForm.get('invoice_date')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+    </div>
+  </div>
+
+
+  <div class="mb-4">
+    <label for="state" class="block mb-1">Statut</label>
+    <select id="state" formControlName="state" required class="w-full border border-gray-300 rounded-md px-3 py-2">
+      <option value="" disabled>Choisissez un statut</option>   
+      <option *ngFor="let state of states" [value]="state">
+        {{ state | stateLabel }}
+      </option>    
+    </select>
+    <div *ngIf="chargeCallForm.get('state')?.invalid && chargeCallForm.get('state')?.touched" class="text-sm text-yellow-600	 mt-1">
+      <small>* Veuillez choisir un statut.</small>
+    </div>
+  </div>
+  
+  <div class="mb-4">
+    <label for="resolutionsWithBudgetActif" class="block mb-1">Résolution</label>
+    <select id="resolutionsWithBudgetActif" formControlName="id_ag_resolution" required class="w-full border border-gray-300 rounded-md px-3 py-2"
+    [class.disabled-field]="isEditMode"
+    >
+      <option value="" disabled>Choisissez une résolution</option>
+      <option *ngFor="let resolution of resolutionsWithBudgetActif" [value]="resolution.id">
+        {{ resolution.title }} (budget total voté de {{ resolution.budget_amount }} euros) 
+      </option>
+    </select>
+  
+  </div>
+
+  <button type="submit" [disabled]="chargeCallForm.invalid" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+    {{ isEditMode ? 'Mettre à jour' : 'Créer' }} la facture
+  </button>
+
+  <div *ngIf="invoiceErrorMessage" class="error-message">
+    {{ invoiceErrorMessage }}
+  </div>
+
+</form>
+-->

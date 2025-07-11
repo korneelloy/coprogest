@@ -12,12 +12,12 @@ import { formatDateForOutput } from '../../../utils/formatDateForOutput';
 import { AgResolution } from '../../../model/agresolution';
 import { AgResolutionService } from '../../../services/agResolution/ag-resolution-service';
 
-
+import { StateLabelPipe } from '../../../label/state/state-label-pipe';
 
 @Component({
   selector: 'app-invoice-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule, StateLabelPipe],
   templateUrl: './invoice-form.html',
   styleUrl: './invoice-form.scss'
 })
@@ -31,12 +31,7 @@ export class InvoiceForm implements OnInit {
   invoiceErrorMessage: string | null = null;
   tempValueIdResolution: string = ""; 
 
-
-  states = [
-    { key: "to_be_paid", value: "À payer" },
-    { key: "contested", value: "Facture en litige" },
-    { key: "paid", value: "Payé" }
-  ];
+  states = ['to_be_paid', 'contested', 'paid'];
 
   constructor(
     private fb: FormBuilder,

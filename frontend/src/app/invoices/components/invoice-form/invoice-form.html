@@ -33,9 +33,9 @@
   <div class="mb-4">
     <label for="state" class="block mb-1">Statut</label>
     <select id="state" formControlName="state" required class="w-full border border-gray-300 rounded-md px-3 py-2">
-      <option value="" disabled>Choisissez un statut</option>
-      <option *ngFor="let state of states" [value]="state.key">
-        {{ state.value }}
+      <option value="" disabled>Choisissez un statut</option>   
+      <option *ngFor="let state of states" [value]="state">
+        {{ state | stateLabel }}
       </option>    
     </select>
     <div *ngIf="invoiceForm.get('state')?.invalid && invoiceForm.get('state')?.touched" class="text-sm text-yellow-600	 mt-1">
