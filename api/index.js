@@ -3,10 +3,11 @@
  * Sets up middleware, routes, and starts the server.
  */
 
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const contactRoutes = require('./routes/contact');
 
 
 const { auth, isManager, isAssistant } = require('./util/auth')
@@ -32,6 +33,7 @@ const invoicePaymentRoutes = require('./routes/invoicepayment');
 const agResolutionPersonRoutes = require('./routes/agresolutionperson');
 const agMinutesPresencePersonRoutes = require('./routes/agminutespresenceperson');
 const invoiceRoutes = require('./routes/invoice');
+const contactRoutes = require('./routes/contact');
 
 
 const errorController = require('./controllers/error');
@@ -73,7 +75,7 @@ app.use('/api/v1/invoicepayments', invoicePaymentRoutes);
 app.use('/api/v1/agresolutionpersons', agResolutionPersonRoutes);
 app.use('/api/v1/agminutespresencepersons', agMinutesPresencePersonRoutes);
 app.use('/api/v1/invoices', invoiceRoutes);
-app.use('/api', contactRoutes);
+app.use('/api/v1/contact', contactRoutes);
 
 /**
  * 

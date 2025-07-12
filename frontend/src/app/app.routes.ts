@@ -66,6 +66,11 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./invoices/invoices-module').then(m => m.InvoicesModule),
   },
+  {
+    path: 'landingpage',
+    loadChildren: () =>
+      import('./landingpage/landingpage-module').then(m => m.LandingpageModule),
+  },
 
   { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '**', redirectTo: '' },

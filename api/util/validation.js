@@ -71,6 +71,15 @@ module.exports = {
       return typeof value === 'string' && value.length <= 255;
   },
 
+  isStringMax1000(value) {
+    /**
+     * Validate a string with some conditions: max 255
+     * @param {string} value - supposed string
+     * @returns {boolean} - true if conditions are met / false if not
+     */
+      return typeof value === 'string' && value.length <= 1000;
+  },
+
   isNullOrString(value) {
   /**
    * Validate a string to be a string or null

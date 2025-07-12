@@ -52,3 +52,11 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+/**TO DO */
+exports.logout = (req, res) => {
+  res
+  .clearCookie('accesToke')
+  .status(200)
+  .json({ message : "Déconnexion réuissi"});
+};
