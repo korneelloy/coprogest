@@ -75,7 +75,15 @@ export class App implements OnInit  {
 
 
   logout(): void {
-    localStorage.removeItem('authToken');
-    this.authService.logout();  
+    localStorage.removeItem('token');
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: err => {
+        console.error('Logout failed:', err);
+      }
+    });
   }
+  
 }  

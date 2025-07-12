@@ -88,15 +88,17 @@ Then, create a config file at: `api/config/config.json` with the following struc
   "password": "your_mysql_password"
 }
 
+You will also need `api/config/config.js` with the following structure:
+require('dotenv').config({ path: '../.env' });
+module.exports = {
+  JWT_SECRET: process.env.JWT_SECRET
+};
 
-In the phony data, we created 3 types of users, in order to test:
-They all have some strange last names: 
+And: `api/.env` with:
+YAHOO_APP_PASSWORD=your_yahoo_mail_password
+SMTP_USER=your_yahoo_mail_email
+JWT_SECRET=your_JWT_secrete_code
 
-Sample users for testing (all passwords: `Password123!`):
-- **Ann TheManager:** manager@gmail.com  
-- **John TheAssistant:** assistant@gmail.com  
-- **Cloe TheCoOwner:** coowner@gmail.com  
----
 
 ## Features
 

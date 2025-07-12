@@ -10,6 +10,8 @@ const router = express.Router();
 
 // post login-in request
 router.post('/', loginController.login);
+router.post('/logout', loginController.logout);
+
 
 
 module.exports = router;

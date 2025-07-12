@@ -3,7 +3,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Person = require('../models/person');
 
-const SECRET = process.env.JWT_SECRET || 'your_secret_key';
+const { JWT_SECRET } = require('../config/config');
+
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -23,7 +24,7 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign(
       { personId: person.id, email: person.email, role: person.role_name },
-      SECRET,
+      JWT_SECRET,
       { expiresIn: '1h' }
     );
 
@@ -53,10 +54,10 @@ exports.login = async (req, res) => {
   }
 };
 
-/**TO DO */
 exports.logout = (req, res) => {
   res
-  .clearCookie('accesToke')
+  .clearCookie('token', { httpOnly: true, sameSite: 'Strict', secure: true })
   .status(200)
-  .json({ message : "Déconnexion réuissi"});
+  .json({ message: "Déconnexion réussie" });
+
 };

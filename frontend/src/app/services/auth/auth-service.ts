@@ -38,10 +38,18 @@ export class AuthService {
     );
   }
 
-  logout(): void {
-    this.sessionService.clearUser();
-    this.router.navigate(['/login']);
+  logout(): Observable<any> {
+    return this.http.post<any>(`${this.url}/logout`, {}, { withCredentials: true }).pipe(
+      tap(() => {
+        this.sessionService.clearUser();
+      }),
+      catchError(err => {
+        console.error('Logout failed:', err);
+        return throwError(() => err);
+      })
+    );
   }
+  
 
   isLoggedIn(): boolean {
     return this.sessionService.isLoggedIn();
