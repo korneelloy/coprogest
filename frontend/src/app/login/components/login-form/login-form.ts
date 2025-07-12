@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../../services/auth/auth-service';
 
@@ -25,7 +26,9 @@ export class LoginForm implements OnInit{
  
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {  
@@ -47,6 +50,8 @@ export class LoginForm implements OnInit{
       next: (res) => {
         console.log('Login success:', res);
         this.loginError = '';
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/home';
+        this.router.navigateByUrl(returnUrl);
       },
       error: (err) => {
         console.error('Login error:', err);

@@ -55,9 +55,11 @@ export class SessionService {
       catchError(err => {
         this.currentUser = null;
         this.userSubject.next(null);
+        /*
         if (err.status === 401) {
           this.router.navigate(['/login']);
         }
+          */
         return of(null);
       })
     );

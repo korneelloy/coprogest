@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
 
 
 @Component({
@@ -13,19 +10,12 @@ import { Router } from '@angular/router';
 })
 export class LandingPageComponent implements OnInit {
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
   ) {}
-
-  subject = '';
-  message = '';
-
-  successMessage = ''; 
-  errorMessage = '';   
 
   adminPart: boolean = false;
   finPart: boolean = false;
   comPart: boolean = false;
+
 
   ngOnInit(): void {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -46,30 +36,82 @@ export class LandingPageComponent implements OnInit {
           target.scrollIntoView({ behavior: "smooth" });
         }
       });
-    }); 
-  }  
+    });
 
-  
+
+    /**
+    this.authService.logout().subscribe({
+      next: () => {      
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            const theId = (e.srcElement as HTMLDivElement).id;
+            console.log(theId);
+            let target: HTMLElement | null = document.getElementById("features");
+            if (theId) {
+              if (theId === 'feat') {
+                target = document.getElementById("features");
+              } else if (theId === 'cont') {
+                target = document.getElementById("contact");
+              }
+            }
+            
+            if (target) {
+              target.scrollIntoView({ behavior: "smooth" });
+            }
+          });
+        });
+      },
+      error: err => {
+        console.error('Logout failed:', err);
+      }
+    });
+
+    this.personService.fetchAll().subscribe((persons: Person[]) => {
+      for (const person of persons) {
+        if (person.role_name === 'manager') {
+          this.toEmails.push(person.email);
+        }
+      }
+    });
+    */
+  }
+  /** TO DO 
   sendMessage() {
-    const data = { subject: this.subject, message: this.message };
-
-    /**TO DO*/
-    /** 
-    this.http.post('http://localhost:3000/api/contact', data, { responseType: 'text' }).subscribe({
+    this.isSending = true; 
+    const name = (document.getElementById("name") as HTMLInputElement).value;;
+    const email = (document.getElementById("email") as HTMLInputElement).value;;
+    const message = (document.getElementById("message") as HTMLTextAreaElement).value;;
+  
+    const contactMessage: ContactMessage = {
+      subject: `Demande d'information depuis la page d'introduction de la part de ${name}`,
+      message: message,
+      fromEmail: email,
+      toEmails: this.toEmails
+    };
+  
+  
+    this.contactService.create(contactMessage).subscribe({
       next: (res) => {
         console.log('Réponse reçue :', res);
-        this.successMessage = res;
+        this.successMessage = 'Votre message a bien été envoyé.';
         this.errorMessage = '';
       },
       error: (err) => {
-        console.error('Erreur lors de l’envoi :', err);
-        this.errorMessage = 'Erreur lors de l’envoi du message.';
+        console.error("Erreur lors de l'envoi :", err);
+        this.errorMessage = "Erreur lors de l'envoi du message.";
         this.successMessage = '';
-      }
-    });
-        */
-
+      },
+      complete: () => {
+        this.isSending = false; 
+        setTimeout(() => {
+          this.successMessage = '';
+          this.errorMessage = '';
+        }, 5000);
+    }});
+   
   }
+ */
 
   showAdmin(event: Event){
     event.preventDefault;

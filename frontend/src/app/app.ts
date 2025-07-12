@@ -1,10 +1,11 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { RouterModule, Router, ActivatedRoute, RouterOutlet } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute, RouterOutlet, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { SessionService } from './services/session/session-service';
 import { Person } from '../app/model/person';
 import { AuthService } from './services/auth/auth-service';
+import { filter } from 'rxjs';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { AuthService } from './services/auth/auth-service';
 export class App implements OnInit  {
   protected title = 'frontend';
   connectedUser: Person | null = null;
-
+  dontShow: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,20 +28,44 @@ export class App implements OnInit  {
   ) {}
 
   ngOnInit(): void {
-    this.sessionService.loadUserFromServer().subscribe(user => {
-      if (!user) {
-        this.router.navigate(['/login']);
-      } else {
-        this.connectedUser = user;
-      }
-    });
-    
+
+    /** 
+    const publicRoutes = ['/', '/landingpage', '/login'];
+    const currentUrl = this.router.url;
+
+    if (!publicRoutes.includes(currentUrl)) {
+      this.sessionService.loadUserFromServer().subscribe(user => {
+        if (!user) {
+          this.router.navigate(['/login']);
+        } else {
+          this.connectedUser = user;
+        }
+      });
+    }
+
+
+    const publicRoutes = ['/landingpage', '/login'];
+    const currentUrl = this.router.url;
+
+    if (!publicRoutes.includes(currentUrl)) {
+      this.dontShow = true;
+    } else {
+      this.dontShow = false;
+    }    */
+
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        const publicRoutes = ['/landingpage', '/login'];
+        const currentUrl = event.urlAfterRedirects;
+
+        this.dontShow = publicRoutes.includes(currentUrl);
+      });
+
     this.sessionService.user$.subscribe(user => {
       console.log("user$ updated:", user);
       this.connectedUser = user;
     });
-
-    document.addEventListener
   }
     
 
@@ -48,6 +73,7 @@ export class App implements OnInit  {
     return this.sessionService.isLoggedIn();
   }
  
+
   openMenu(){
     const mobileMenu = document.getElementById('mobile-menu');
       mobileMenu?.classList.toggle('hidden');
