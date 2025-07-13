@@ -17,6 +17,39 @@ exports.getAll = async (req, res, next) => {
 };
 
 /**
+ * Retrieve and return all charge lines without charge call
+ */
+exports.fetchAllNotCalled = async (req, res, next) => {
+  try {
+    const allChargeLines = await ChargeLine.fetchAllNotCalled();
+    res.status(200).json(allChargeLines);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+/**
+ * Retrieve and return all charge lines without charge call
+ */
+exports.fetchByChargeCallId = async (req, res, next) => {
+  try {
+    const chargeCallId = req.params.chargeCallId;
+    const allChargeLines = await ChargeLine.fetchByChargeCallId(chargeCallId);
+    res.status(200).json(allChargeLines);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+
+
+/**
  * Retrieve and return a charge line by its ID.
  */
 exports.getOne = async (req, res, next) => {
@@ -102,6 +135,28 @@ exports.updateOne = async (req, res, next) => {
     next(err);
   } 
 };
+
+/**
+ * Update the id_charge_call of an existing charge line identified by its ID.
+ */
+exports.updateIdChargeCall = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const id_charge_call = req.body.id_charge_call;
+    
+    const updateResponse = await ChargeLine.updateIdChargeCall(id, id_charge_call);
+
+    res.status(200).json(updateResponse);
+
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  } 
+};
+
+
 
 /**
  * Delete a charge line by its ID.

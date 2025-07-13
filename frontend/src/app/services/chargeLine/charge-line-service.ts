@@ -24,6 +24,24 @@ export class ChargeLineService {
         catchError(this.handleError)
       );
   }
+  
+  fetchByChargeCallId(chargeCallId: string): Observable<ChargeLine[]> {
+      return this.http
+        .get<ChargeLine[]>(`${this.url}/fetchbychargecallid/${chargeCallId}`, { withCredentials: true })
+        .pipe(
+          tap(() => console.log('Fetched charge lines')),
+          catchError(this.handleError)
+        );
+    }
+
+  fetchAllNotCalled(): Observable<ChargeLine[]> {
+    return this.http
+      .get<ChargeLine[]>(`${this.url}/fetchallnotcalled`, { withCredentials: true })
+      .pipe(
+        tap(() => console.log('Fetched all charge lines not yet called')),
+        catchError(this.handleError)
+      );
+  }
 
   fetchById(id: string): Observable<ChargeLine> {
     return this.http
@@ -39,7 +57,7 @@ export class ChargeLineService {
     return this.http
       .post<ChargeLine>(this.url, chargeLine, { withCredentials: true })
       .pipe(
-        tap((newChargeLine) => console.log(`Created call date id=${newChargeLine.id}`)),
+        tap((newChargeLine) => console.log(`Created charge line id=${newChargeLine.id}`)),
         catchError(this.handleError)
       );
   }
@@ -52,6 +70,21 @@ export class ChargeLineService {
         catchError(this.handleError)
       );
   }
+
+  updateIdChargeCall(id: string, id_charge_call: string): Observable<ChargeLine> {
+    return this.http
+      .patch<ChargeLine>(
+        `${this.url}/${id}`,
+        { id_charge_call },
+        { withCredentials: true }
+      )
+      .pipe(
+        tap(() => console.log(`Updated charge line id=${id}`)),
+        catchError(this.handleError)
+      );
+  }
+  
+
 
   delete(id: string): Observable<void> {
     return this.http

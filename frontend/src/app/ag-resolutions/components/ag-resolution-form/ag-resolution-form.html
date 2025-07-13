@@ -138,12 +138,12 @@
   
 
     <div class="mb-4">
-      <label class="block font-medium mb-2">Appel de fonds</label>
+      <label class="block font-medium mb-2">Appel de charges</label>
       <div class="mb-4 ml-4">
         <select formControlName="instalments" class="w-full px-3 py-2 border rounded-md">
           <option value="" disabled>Choisissez une option</option>
           <option [value]="0">
-            Pas d'appel de fond de suite - en attente de réception de la facture avant tout appel de fonds
+            Pas d'appel de charges de suite - en attente de réception de la facture avant tout appel de charges
           </option>
           <option [value]="1">Planifier un ou plusieurs échéances en fixant les dates</option>
         </select>
@@ -223,6 +223,6 @@
   </button>
   <br>
   <div *ngIf="noDateError" class="text-yellow-600 text-sm mt-2">
-    Vous devez ajouter au moins une échéance si un appel de fonds est prévu.
+    Vous devez ajouter au moins une échéance si un appel de charges est prévu.
   </div>
 </form>

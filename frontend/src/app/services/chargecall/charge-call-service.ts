@@ -47,7 +47,7 @@ export class ChargeCallService {
     return this.http
       .post<ChargeCall>(this.url, chargeCall, { withCredentials: true })
       .pipe(
-        tap((newChargeCall) => console.log(`Created call date id=${newChargeCall.id}`)),
+        tap((newChargeCall) => console.log(`Created charge call id=${newChargeCall.id}`)),
         catchError(this.handleError)
       );
   }

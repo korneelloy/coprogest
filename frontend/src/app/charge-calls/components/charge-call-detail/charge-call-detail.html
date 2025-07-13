@@ -1,1 +1,43 @@
-<p>charge-call-detail works!</p>
+<h2 class="text-2xl font-bold mb-4 text-gray-800">Détails d'un appel de charges</h2>
+<hr class="mb-6 border-gray-300" />
+
+<ul *ngIf="chargeCall else loading">
+  <li class="space-y-6 bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+    <h3 class="text-xl font-semibold text-gray-900">
+      Date : {{ chargeCall.charge_call_date | date: 'dd/MM/yy' }}
+    </h3>
+
+    <div class="text-gray-700 space-y-1">
+      <p><span class="font-medium">Copropriétaire :</span> 
+        {{ chargeCall.person_first_name && chargeCall.person_last_name 
+            ? chargeCall.person_first_name + ' ' + chargeCall.person_last_name 
+            : chargeCall.person_email }}
+      </p>
+      <p><span class="font-medium">Montant global :</span> {{ chargeCall.total_charged }} €</p>
+      <p><span class="font-medium">Payé :</span> {{ chargeCall.total_paid }} €</p>
+      <p><span class="font-medium">Montant dû :</span> {{ chargeCall.amount_due }} €</p>
+      <p><span class="font-medium">Statut global :</span> {{ chargeCall.first_charge_line_state! | chargeCallState }}</p>
+    </div>
+
+    <div class="mt-4">
+      <p class="font-semibold text-gray-800 mb-2">Détails par ligne :</p>
+      <ul class="space-y-3 pl-4 border-l-4 border-orange-300">
+        <li 
+          *ngFor="let chargeLine of chargeLines; let i = index" 
+          class="text-sm text-gray-800 bg-gray-50 p-3 rounded-lg border border-gray-200 shadow-sm"
+        >
+          <span class="text-orange-600 font-bold">Ligne {{ i + 1 }} :</span><br />
+          <span class="block"><span class="font-medium">Montant :</span> {{ chargeLine.amount }} €</span>
+          <span class="block"><span class="font-medium">Lot :</span> {{ chargeLine.unit_name }}</span>
+          <span class="block"><span class="font-medium">Résolution :</span> {{ chargeLine.ag_resolution_title }}</span>
+          <span class="block"><span class="font-medium">Date AG :</span> {{ chargeLine.ag_minutes_date | date: 'dd/MM/yy' }}</span>
+          <span class="block"><span class="font-medium">Statut :</span> {{ chargeLine.state! | chargeCallState}}</span>
+        </li>
+      </ul>
+    </div>
+  </li>
+</ul>
+
+<ng-template #loading>
+  <div class="text-gray-500 italic">Chargement du groupe en cours...</div>
+</ng-template>

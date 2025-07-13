@@ -1,33 +1,36 @@
-<h2><strong>Liste des appels de fond</strong></h2>
+<h2><strong>Liste des appels de charges</strong></h2>
 <hr class="mb-4">
 
 <div *ngIf="createdMessage" class="success-message">
   {{ createdMessage }}
 </div>
 
-<div *ngIf="deletedMessage" class="success-message">
-  {{ deletedMessage }}
-</div>
-
 <div class="flex flex-col gap-2">
   <select (change)="filter($event)" class="px-2 py-1 border border-gray-300 rounded-md">
     <option value="">Tous les appels</option>
-    <option value="open">À régler</option>
-    <option value="closed">Soldé</option> 
+    <option *ngFor="let state of states" [value]="state">
+      {{ state | chargeCallState }}
+    </option>    
   </select>
 </div>
 <hr class="mt-4">
 
+
+
 <ul
-  *ngIf="chargeCalls$ | async as chargeCalls; else loading"
+  *ngIf="chargeCalls else loading"
   class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
 >
   <li
     *ngFor="let chargeCall of chargeCalls"
-    class="p-4 bg-white border rounded shadow-sm space-y-3 listitems { invoice.state }"
+    class="p-4 bg-white border rounded shadow-sm space-y-3 listitems {{ chargeCall.first_charge_line_state }}"
   >
     <div class="text-gray-800 text-sm font-medium">{{ chargeCall.charge_call_date | date: 'dd/MM/yy' }}</div>
-    <div class="text-sm text-gray-600">Montant : {{ chargeCall.id_person }} euros</div>
+    <div class="text-sm text-gray-600"> {{ chargeCall.person_first_name && chargeCall.person_last_name ? chargeCall.person_first_name + ' ' + chargeCall.person_last_name : chargeCall.person_email }}</div>
+
+    <div class="text-sm text-gray-600"> {{ chargeCall.total_charged }} euros</div>
+   
+    <div class="text-sm text-gray-600">{{ chargeCall.first_charge_line_state! | chargeCallState}} </div>
     
 
     <button
@@ -38,10 +41,10 @@
     </button>
 
     <button
-      (click)="editDocument(chargeCall.id!)"
+      (click)="printDocument(chargeCall.id!)"
       class="w-full text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
     >
-      Modifier cet appel de charge
+      Imprimer cet appel de charge
     </button>
   </li>
 </ul>

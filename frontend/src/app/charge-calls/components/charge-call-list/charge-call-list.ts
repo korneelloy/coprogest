@@ -1,24 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
 import { ChargeCall } from '../../../model/chargecall';
 import { ChargeCallService } from '../../../services/chargecall/charge-call-service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { RouterModule } from '@angular/router';
 
+import { ChargeCallStatePipe } from '../../../label/chargeCallState/charge-call-state-pipe';
+
+
 
 @Component({
   selector: 'app-charge-call-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ChargeCallStatePipe],
   templateUrl: './charge-call-list.html',
   styleUrl: './charge-call-list.scss'
 })
 export class ChargeCallList implements OnInit{
-  chargeCalls$!: Observable<ChargeCall[]>;
+  chargeCalls: ChargeCall[]= [];
   createdMessage: string | null = null;
   deletedMessage: string | null = null;
+
+  states = ['to_be_sent', 'send', 'remainder', 'paid'];
+ 
 
   constructor(
     private chargeCallService: ChargeCallService,
@@ -30,14 +35,14 @@ export class ChargeCallList implements OnInit{
     /**TO DO a verifier */
     this.route.queryParamMap.subscribe(params => {
       if (params.get('created') === 'true') {
-        this.createdMessage = "La facture a été rajoutée avec succès.";
+        this.createdMessage = "L'appel de charge a été rajouté avec succès.";
         setTimeout(() => this.createdMessage = null, 5000);
       }
-      else if (params.get('deleted') === 'true') {
-        this.deletedMessage = 'Facture supprimée avec succès.';
-        setTimeout(() => this.deletedMessage = null, 5000);
-      } 
-      this.chargeCalls$ = this.chargeCallService.fetchAll();
+
+      this.chargeCallService.fetchAll().subscribe((chargeCalls: ChargeCall[]) => {
+        this.chargeCalls = chargeCalls;
+        console.log(this.chargeCalls);
+      })
     });      
   }
 
@@ -45,7 +50,7 @@ export class ChargeCallList implements OnInit{
     this.router.navigate(['/chargecalls', id]);  
   }
 
-  editDocument(id: string): void {
+  printDocument(id: string): void {
     this.router.navigate(['/chargecalls', id, 'edit']);  
   }
 

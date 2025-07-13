@@ -36,7 +36,7 @@ module.exports = class ChargeCall extends BaseClass {
       error.statusCode = 400;
       throw error;
     }
-    this._charge_call_date = date;
+    this._charge_call_date = value;
   }
   
 
@@ -62,32 +62,60 @@ module.exports = class ChargeCall extends BaseClass {
    */
   static async fetchAll() {
     const [allChargeCalls] = await db.execute(`
-      SELECT
-        cc.id AS charge_call_id,
-        cc.charge_call_date,
-        COALESCE(cl.total_charged, 0) AS total_charged,
-        COALESCE(cp.total_paid, 0) AS total_paid,
-        COALESCE(cl.total_charged, 0) - COALESCE(cp.total_paid, 0) AS amount_due
-      FROM charge_call cc
+    SELECT
+      cc.id AS id,
+      cc.charge_call_date,
+      COALESCE(cl.total_charged, 0) AS total_charged,
+      COALESCE(cp.total_paid, 0) AS total_paid,
+      COALESCE(cl.total_charged, 0) - COALESCE(cp.total_paid, 0) AS amount_due,
+      
+      -- Person info
+      p.id AS id_person,
+      p.email AS person_email,
+      p.first_name AS person_first_name,
+      p.last_name AS person_last_name,
 
-      -- Subquery: total amount of charge lines per call
-      LEFT JOIN (
-        SELECT id_charge_call, SUM(amount) AS total_charged
-        FROM charge_line
-        GROUP BY id_charge_call
-      ) cl ON cl.id_charge_call = cc.id
+      -- First charge line state
+      (
+        SELECT cl2.state
+        FROM charge_line cl2
+        WHERE cl2.id_charge_call = cc.id
+        ORDER BY cl2.id ASC
+        LIMIT 1
+      ) AS first_charge_line_state,
 
-      -- Subquery: total payments per charge call
-      LEFT JOIN (
-        SELECT id_charge_call, SUM(amount) AS total_paid
-        FROM charge_payment
-        GROUP BY id_charge_call
-      ) cp ON cp.id_charge_call = cc.id
+      -- All charge line states in a table
+      (
+        SELECT JSON_ARRAYAGG(cl3.state)
+        FROM charge_line cl3
+        WHERE cl3.id_charge_call = cc.id
+      ) AS all_charge_line_states
 
-      ORDER BY cc.charge_call_date DESC;
-      ;`);
+
+    FROM charge_call cc
+
+    -- Join total charged
+    LEFT JOIN (
+      SELECT id_charge_call, SUM(amount) AS total_charged
+      FROM charge_line
+      GROUP BY id_charge_call
+    ) cl ON cl.id_charge_call = cc.id
+
+    -- Join total paid
+    LEFT JOIN (
+      SELECT id_charge_call, SUM(amount) AS total_paid
+      FROM charge_payment
+      GROUP BY id_charge_call
+    ) cp ON cp.id_charge_call = cc.id
+
+    -- Join person
+    LEFT JOIN person p ON p.id = cc.id_person
+
+    ORDER BY cc.charge_call_date DESC;
+    `);
     return allChargeCalls;
   }
+
 
 
   /**
@@ -134,7 +162,65 @@ module.exports = class ChargeCall extends BaseClass {
    * @returns {Promise<Object>}
    */
   static async get(id) {
-    const [rows] = await db.execute(`SELECT * FROM charge_call WHERE charge_call.id = ?`, [id]);
+    const [rows] = await db.execute(`
+ 
+    SELECT
+      cc.id AS id,
+      cc.charge_call_date,
+      COALESCE(cl.total_charged, 0) AS total_charged,
+      COALESCE(cp.total_paid, 0) AS total_paid,
+      COALESCE(cl.total_charged, 0) - COALESCE(cp.total_paid, 0) AS amount_due,
+      
+      -- Person info
+      p.id AS id_person,
+      p.email AS person_email,
+      p.first_name AS person_first_name,
+      p.last_name AS person_last_name,
+
+      -- First charge line state
+      (
+        SELECT cl2.state
+        FROM charge_line cl2
+        WHERE cl2.id_charge_call = cc.id
+        ORDER BY cl2.id ASC
+        LIMIT 1
+      ) AS first_charge_line_state,
+
+      -- All unique charge line states in a JSON array
+      (
+        SELECT JSON_ARRAYAGG(state)
+        FROM (
+          SELECT DISTINCT cl3.state
+          FROM charge_line cl3
+          WHERE cl3.id_charge_call = cc.id
+        ) AS distinct_states
+      ) AS all_charge_line_states
+
+    FROM charge_call cc
+
+    -- Join total charged
+    LEFT JOIN (
+      SELECT id_charge_call, SUM(amount) AS total_charged
+      FROM charge_line
+      GROUP BY id_charge_call
+    ) cl ON cl.id_charge_call = cc.id
+
+    -- Join total paid
+    LEFT JOIN (
+      SELECT id_charge_call, SUM(amount) AS total_paid
+      FROM charge_payment
+      GROUP BY id_charge_call
+    ) cp ON cp.id_charge_call = cc.id
+
+    -- Join person
+    LEFT JOIN person p ON p.id = cc.id_person
+
+    WHERE cc.id = ?
+    ORDER BY cc.charge_call_date DESC 
+
+
+
+     `, [id]);
 
     if (rows.length === 0) {
       const error = new Error('Charge call not found');

@@ -511,7 +511,7 @@ export class AgMinutesForm implements OnInit {
       }
       this.incompleteVotesMessages[agResolutionId] = null;
   
-      if (confirm("Êtes-vous sûr de vouloir enregistrer ce vote ? Une fois validé, il ne sera plus possible de le modifier. La résolution sera considérée comme définitivement votée ou rejetée, et si elle prévoit des appels de fonds, ceux-ci seront automatiquement déclenchés.")) {
+      if (confirm("Êtes-vous sûr de vouloir enregistrer ce vote ? Une fois validé, il ne sera plus possible de le modifier. La résolution sera considérée comme définitivement votée ou rejetée, et si elle prévoit des appels de charges, ceux-ci seront automatiquement déclenchés.")) {
   
       this.agResolutionService.fetchById(agResolutionId).subscribe((data: AgResolution[]) => {
         this.agResolutionWithDetails = data;

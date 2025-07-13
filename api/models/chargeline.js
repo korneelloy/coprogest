@@ -14,7 +14,7 @@ module.exports = class ChargeLine extends BaseClass {
    * @param {string} id - UUID of the charge line
    * @param {Number} amount - the amount of the line 
    * @param {Date} call_date - date of charge line
-   * @param {Date} state -  enum {to be sent, send, remainder, paid} - not null - DEFAULT 'to_be_sent'
+   * @param {Date} state -  enum {to_be_sent, send, remainder, paid} - not null - DEFAULT 'to_be_sent'
    * @param {string} id_unit - UUID of the unit - not null - Foreign key - verification foreign key constraint handled in the CRUD operations
    * @param {string} id_charge_call - UUID of the charge calll - can be null - Foreign key - verification foreign key constraint handled in the CRUD operations
    * @param {string} id_ag_resolution - UUID of the id ag resolution budget - not null - Foreign key - verification foreign key constraint handled in the CRUD operations
@@ -22,7 +22,7 @@ module.exports = class ChargeLine extends BaseClass {
    * @param {Date|null} updatedAt - last update - set in SQL code
   */
 
-  constructor({id, amount, call_date,id_unit, id_ag_resolution, state = "to be sent", id_charge_call = null, createdAt = null, updatedAt = null }) {
+  constructor({id, amount, call_date,id_unit, id_ag_resolution, state = "to_be_sent", id_charge_call = null, createdAt = null, updatedAt = null }) {
     super({ id, createdAt, updatedAt });
     this.amount = amount;
     this.call_date = call_date;
@@ -113,8 +113,8 @@ module.exports = class ChargeLine extends BaseClass {
       throw error;
     }
 
-    if (value !== 'to be sent' && value !== 'send' && value !== 'remainder' && value !== 'paid') {
-      const error = new Error('State must be "to be sent", "send", "remainder" or "paid".');
+    if (value !== 'to_be_sent' && value !== 'send' && value !== 'remainder' && value !== 'paid') {
+      const error = new Error('State must be "to_be_sent", "send", "remainder" or "paid".');
       error.statusCode = 400;
       throw error;
     }
@@ -132,6 +132,83 @@ module.exports = class ChargeLine extends BaseClass {
     const [allChargeLines] = await db.execute(`SELECT * FROM charge_line;`);
     return allChargeLines;
   }
+
+
+
+ /**
+   * Fetch all charge lines from the database without charge call
+   * @returns {Promise<Object[]>}
+   */
+  static async fetchAllNotCalled() {
+    const [allChargeLinesWithoutChargeCall] = await db.execute(`
+      SELECT 
+        charge_line.*,
+        unit.id_person as unit_id_person,
+        person.id as person_id,
+        person.email as person_email,
+        person.first_name as person_first_name,
+        person.last_name as person_last_name,
+        ag_resolution.title as ag_resolution_title,
+        ag_minutes.minutes_date as ag_minutes_date
+
+      FROM charge_line 
+
+      LEFT JOIN unit
+        ON unit.id = charge_line.id_unit
+      
+      LEFT JOIN person
+        ON person.id = unit.id_person
+
+      LEFT JOIN ag_resolution
+        ON ag_resolution.id = charge_line.id_ag_resolution
+      
+      LEFT JOIN ag_minutes
+        ON ag_minutes.id = ag_resolution.id_ag_minutes
+
+      WHERE charge_line.id_charge_call IS NULL
+      
+      ORDER BY charge_line.call_date
+      ;`);
+    return allChargeLinesWithoutChargeCall;
+  }
+
+ 
+  /**
+   * Fetch all charge lines from the database with spoecific chargeCall id
+   * @param {string} id
+   * @returns {Promise<Object[]>}
+   */
+  static async fetchByChargeCallId(chargeCallId) {
+    const [allChargeLinesWithChargeCallId] = await db.execute(`
+      SELECT 
+        charge_line.amount,
+        charge_line.state,
+        unit.name as unit_name,
+        ag_resolution.title as ag_resolution_title,
+        ag_minutes.minutes_date as ag_minutes_date
+
+      FROM charge_line 
+
+      LEFT JOIN unit
+        ON unit.id = charge_line.id_unit
+      
+      LEFT JOIN person
+        ON person.id = unit.id_person
+
+      LEFT JOIN ag_resolution
+        ON ag_resolution.id = charge_line.id_ag_resolution
+      
+      LEFT JOIN ag_minutes
+        ON ag_minutes.id = ag_resolution.id_ag_minutes
+
+      WHERE charge_line.id_charge_call = ?
+      
+      ORDER BY charge_line.call_date
+      ;`, [chargeCallId]);
+    return allChargeLinesWithChargeCallId;
+  }
+
+
 
   /**
    * Fetch a charge line by ID.
@@ -209,6 +286,30 @@ module.exports = class ChargeLine extends BaseClass {
       throw err;
     }
   }
+
+  /**
+  * Update the id_charge_call of a charge line in the database by ID.
+    * @param {string} id
+    * @param {string} id_charge_call
+    * @returns {Promise<Object>}
+    */
+    
+  static async updateIdChargeCall(id, id_charge_call) {
+    const [result] = await db.execute(
+      `UPDATE charge_line
+        SET id_charge_call = ? 
+        WHERE charge_line.id = ?`,
+        [id_charge_call, id]
+      );
+      if (result.affectedRows === 0) {
+        const error = new Error('Charge_line not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      return { 
+        message: 'Charge_line updated successfully' 
+      };
+    }
 
    /**
      * Delete a charge line by ID.
