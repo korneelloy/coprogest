@@ -4,6 +4,11 @@ import { authGuard } from '../app/auth/auth-guard';
 
 export const routes: Routes = [
   {
+    path: 'landingpage',
+    loadChildren: () =>
+      import('./landingpage/landingpage-module').then(m => m.LandingpageModule),
+  },
+  {
     path: 'login',
     loadChildren: () =>
       import('./login/login-module').then(m => m.LoginModule),
@@ -80,11 +85,7 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./invoices/invoices-module').then(m => m.InvoicesModule),
   },
-  {
-    path: 'landingpage',
-    loadChildren: () =>
-      import('./landingpage/landingpage-module').then(m => m.LandingpageModule),
-  },
+ 
 
   { path: '', redirectTo: '/landingpage', pathMatch: 'full' },
   { path: '**', redirectTo: '' },

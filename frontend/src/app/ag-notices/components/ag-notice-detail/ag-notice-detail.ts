@@ -11,7 +11,7 @@ import { AgNoticeService } from '../../../services/agnotice/ag-notice-service';
 import { AgResolution } from '../../../model/agresolution';
 import { AgResolutionService } from '../../../services/agResolution/ag-resolution-service';
 
-import { HttpClient } from '@angular/common/http';
+import { AgNoticePrintService } from '../../../services/printAgNotice/ag-notice-print-service';
 
 import { RequiredMajorityLabelPipe } from '../../../label/requiredMajority/required-majority-label-pipe';
 
@@ -32,7 +32,7 @@ export class AgNoticeDetail implements OnInit {
     private agNoticeService: AgNoticeService,
     private router: Router,
     private agResolutionService: AgResolutionService,
-    private http: HttpClient
+    private agNoticePrintService: AgNoticePrintService,
   ) {}
 
   ngOnInit(): void {
@@ -65,18 +65,21 @@ export class AgNoticeDetail implements OnInit {
   seeDetailsResolution(id: string): void {
     this.router.navigate(['/agresolutions', id]);
   }
+  
   generateWord(agNoticeId: string): void {
-    this.http.get(`http://localhost:3000/api/v1/agnotices/generateconvocations/${agNoticeId}`, {
-      responseType: 'blob'
-    }).subscribe(blob => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `convocation-${agNoticeId}.docx`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    }, error => {
-      console.error("Erreur lors de la génération du document", error);
+    this.agNoticePrintService.downloadConvocation(agNoticeId).subscribe({
+      next: blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `convocation-${agNoticeId}.docx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: error => {
+        console.error("Erreur lors de la génération du document", error.message);
+      }
     });
   }
+  
 }
