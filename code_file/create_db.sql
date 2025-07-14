@@ -175,9 +175,7 @@ CREATE TABLE charge_payment(
    description VARCHAR(255),
    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
    updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-   id_charge_call VARCHAR(36) NOT NULL,
-   PRIMARY KEY(id),
-   FOREIGN KEY(id_charge_call) REFERENCES charge_call(id) ON DELETE RESTRICT ON UPDATE CASCADE
+   PRIMARY KEY(id)
 );
 
 CREATE TABLE charge_line(
@@ -231,6 +229,16 @@ CREATE TABLE ag_resolution_person(
    FOREIGN KEY(id_person) REFERENCES person(id) ON DELETE RESTRICT ON UPDATE CASCADE,
    FOREIGN KEY(id_ag_resolution) REFERENCES ag_resolution(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+CREATE TABLE charge_line_charge_payment(
+   id_charge_line VARCHAR(40),
+   id_charge_payment VARCHAR(40),
+   partial_payment DECIMAL(15,2),
+   PRIMARY KEY(id_charge_line, id_charge_payment),
+   FOREIGN KEY(id_charge_line) REFERENCES charge_line(id),
+   FOREIGN KEY(id_charge_payment) REFERENCES charge_payment(id)
+);
+
 
 INSERT INTO role (id, name) VALUES
 ('5041878f-2523-41d0-97b1-cd05bc60f1b8', 'coowner'),

@@ -38,6 +38,21 @@
   </li>
 </ul>
 
+<div>
+  <button
+    class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm mt-7 mr-7 inline-block"
+    (click)="backToList()"
+  >
+    Retour à la liste des appels
+  </button>
+  <button
+    (click)="generateWord(chargeCall.id!)"
+    class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm mt-7 inline-block"
+    >
+    Imprimer cet appel de charge
+  </button>
+</div>
+
 <ng-template #loading>
   <div class="text-gray-500 italic">Chargement du groupe en cours...</div>
 </ng-template>

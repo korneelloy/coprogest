@@ -30,7 +30,8 @@ export class ChargeCallDetail implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private chargeCallService: ChargeCallService,
-    private chargeLineService: ChargeLineService
+    private chargeLineService: ChargeLineService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -38,10 +39,20 @@ export class ChargeCallDetail implements OnInit {
     if (id) {
       this.chargeCallService.fetchById(id).subscribe((chargeCall: ChargeCall) => {
         this.chargeCall = chargeCall;
+        console.log("this.chargeCall", this.chargeCall);
         this.chargeLineService.fetchByChargeCallId(id).subscribe((chargeLines: ChargeLine[]) => {
           this.chargeLines = chargeLines;
+          console.log("this.chargeLines",  this.chargeLines)
         })
       })
     }
+  }
+
+  generateWord(chargeCallId: string): void {
+    console.log("to be implemented")
+  }
+
+  backToList(){
+    this.router.navigate(['chargecalls']); 
   }
 }

@@ -50,8 +50,24 @@ export class ChargeCallList implements OnInit{
     this.router.navigate(['/chargecalls', id]);  
   }
 
-  printDocument(id: string): void {
-    this.router.navigate(['/chargecalls', id, 'edit']);  
+  generateWord(chargeCallId: string): void {
+    console.log("to be implemented")
+    /**TO DO */
+    /** 
+    this.chargeCallPrintService.downloadConvocation(chargeCallId).subscribe({
+      next: blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `chargecall-${chargeCallId}.docx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: error => {
+        console.error("Erreur lors de la génération du document", error.message);
+      }
+    });
+    */
   }
 
   /**TO DO a verifier */

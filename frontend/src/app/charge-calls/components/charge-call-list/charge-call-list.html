@@ -41,7 +41,7 @@
     </button>
 
     <button
-      (click)="printDocument(chargeCall.id!)"
+      (click)="generateWord(chargeCall.id!)"
       class="w-full text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
     >
       Imprimer cet appel de charge
@@ -50,13 +50,22 @@
 </ul>
 
 
-<div class="m-4">
 
+<div>
   <a routerLink="/chargecalls/new"
-    class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center m-4">
+    class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm mt-7 mr-7 inline-block"
+  >
     Enregistrer un nouvel appel de charge
   </a>
+  
+  <a routerLink="/chargepayments/new"
+    class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm mt-7 inline-block"
+    >
+    Enregistrer un paiement
+  </a>
 </div>
+
+
 
 <ng-template #loading>
   <p>Loading documents...</p>

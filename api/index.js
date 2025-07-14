@@ -34,6 +34,8 @@ const agResolutionPersonRoutes = require('./routes/agresolutionperson');
 const agMinutesPresencePersonRoutes = require('./routes/agminutespresenceperson');
 const invoiceRoutes = require('./routes/invoice');
 const contactRoutes = require('./routes/contact');
+const chargeLineChargePaymentRoutes = require('./routes/chargelinechargepayment');
+
 
 
 const errorController = require('./controllers/error');
@@ -55,6 +57,31 @@ app.use(cors({
 // Route group for operations
 
 
+
+app.use('/api/v1/login', loginRoutes);
+app.use('/api/v1/documentcategories', documentCategoryRoutes);
+app.use('/api/v1/documents', documentRoutes);
+app.use('/api/v1/persons', personRoutes);
+app.use('/api/v1/roles',roleRoutes);
+app.use('/api/v1/unitgroups', unitgroupRoutes);
+app.use('/api/v1/units', unitRoutes);
+app.use('/api/v1/unitunitgroups', unitUnitGroupRoutes);
+app.use('/api/v1/agnotices', agNoticeRoutes);
+app.use('/api/v1/agresolutions', agResolutionsRoutes);
+app.use('/api/v1/budgetcategories', budgetCategoryRoutes);
+app.use('/api/v1/calldates', callDateRoutes);
+app.use('/api/v1/agnoticesentpersons',  agNoticeSentPersonRoutes);
+app.use('/api/v1/chargecalls', chargeCallRoutes);
+app.use('/api/v1/chargepayments', chargePaymentRoutes);
+app.use('/api/v1/chargelines', chargeLineRoutes);
+app.use('/api/v1/agminutes', agMinuteRoutes);
+app.use('/api/v1/invoicepayments',  invoicePaymentRoutes);
+app.use('/api/v1/agresolutionpersons', agResolutionPersonRoutes);
+app.use('/api/v1/agminutespresencepersons',agMinutesPresencePersonRoutes);
+app.use('/api/v1/invoices',  invoiceRoutes);
+app.use('/api/v1/contact', contactRoutes);
+app.use('/api/v1/chargelinechargepayments', chargeLineChargePaymentRoutes);
+/** 
 app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/documentcategories', auth, documentCategoryRoutes);
 app.use('/api/v1/documents', auth, documentRoutes);
@@ -77,7 +104,9 @@ app.use('/api/v1/agresolutionpersons', auth, agResolutionPersonRoutes);
 app.use('/api/v1/agminutespresencepersons', auth, agMinutesPresencePersonRoutes);
 app.use('/api/v1/invoices', auth, invoiceRoutes);
 app.use('/api/v1/contact', contactRoutes);
+app.use('/api/v1/chargelinechargepayments', auth, chargeLineChargePaymentRoutes);
 
+*/
 
 
 // Error handlers

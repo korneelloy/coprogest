@@ -41,14 +41,12 @@ exports.postOne = async (req, res, next) => {
     const amount = req.body.amount;
     const charge_payment_date = req.body.charge_payment_date;
     const description = req.body.description;
-    const id_charge_call = req.body.id_charge_call;
 
     const chargePayment = new ChargePayment({
       id,
       amount,
       charge_payment_date,
-      description,
-      id_charge_call
+      description
     });
     
     const postResponse = await chargePayment.post();
@@ -73,14 +71,12 @@ exports.updateOne = async (req, res, next) => {
     const amount = req.body.amount;
     const charge_payment_date = req.body.charge_payment_date;
     const description = req.body.description;
-    const id_charge_call = req.body.id_charge_call;
 
     const chargePayment = new ChargePayment({
       id,
       amount,
       charge_payment_date,
-      description,
-      id_charge_call
+      description
     });
     
     const updateResponse = await chargePayment.update();

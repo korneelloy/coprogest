@@ -85,7 +85,12 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./invoices/invoices-module').then(m => m.InvoicesModule),
   },
- 
+  {
+    path: 'chargepayments',
+    canActivate: [authGuard],
+    loadChildren: () =>
+      import('./charge-payments/charge-payments-module').then(m => m.ChargePaymentsModule),
+  },
 
   { path: '', redirectTo: '/landingpage', pathMatch: 'full' },
   { path: '**', redirectTo: '' },

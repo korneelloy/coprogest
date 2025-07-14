@@ -4,7 +4,7 @@
  */
 
 const db = require('../util/database');
-const { isValidAmount, isNullOrStringMax255, isValidUUIDv4 } = require('../util/validation');
+const { isValidAmount, isNullOrStringMax255 } = require('../util/validation');
 const BaseClass = require('./baseclass');
 
 
@@ -15,15 +15,13 @@ module.exports = class ChargePayment extends BaseClass {
    * @param {Number} amount - the amount paid 
    * @param {Date} charge_payment_date - date of charge payment
    * @param {Date} description - description - can be null
-   * @param {Date} id_charge_call - UUID of the charge date - not null - Foreign key - verification foreign key constraint handled in the CRUD operations
    * @param {Date|null} createdAt - creation date - set in SQL code
    * @param {Date|null} updatedAt - last update - set in SQL code
   */
-  constructor({id, amount, charge_payment_date, id_charge_call, createdAt = null, updatedAt = null, description = null }) {
+  constructor({id, amount, charge_payment_date, createdAt = null, updatedAt = null, description = null }) {
     super({ id, createdAt, updatedAt });
     this.amount = amount;
     this.charge_payment_date = charge_payment_date;
-    this.id_charge_call = id_charge_call;
     this.description = description;
   }
   
@@ -57,20 +55,6 @@ module.exports = class ChargePayment extends BaseClass {
     this._charge_payment_date = date;
   }
   
-
-  get id_charge_call() {
-    return this._id_charge_call;
-  }
-  
-  set id_charge_call(value) {
-    if (!isValidUUIDv4(value)) {
-      const error = new Error('Invalid id_charge_call');
-      error.statusCode = 400;
-      throw error;
-    }
-    this._id_charge_call = value;
-  }
-
   get description() {
     return this._description;
   }
@@ -119,9 +103,9 @@ module.exports = class ChargePayment extends BaseClass {
     try {
       const [result] = await db.execute(
         `INSERT INTO charge_payment 
-          (id, amount, charge_payment_date, description, id_charge_call) 
-          VALUES (?, ?, ?, ?, ?)`, 
-          [this.id, this.amount, this.charge_payment_date, this.description, this.id_charge_call]
+          (id, amount, charge_payment_date, description) 
+          VALUES (?, ?, ?, ?)`, 
+          [this.id, this.amount, this.charge_payment_date, this.description]
         );
       
       if (result.affectedRows === 0) {
@@ -151,9 +135,9 @@ module.exports = class ChargePayment extends BaseClass {
     try {
       const [result] = await db.execute(
         `UPDATE charge_payment
-          SET amount = ?, charge_payment_date = ?, description = ?, id_charge_call = ?
+          SET amount = ?, charge_payment_date = ?, description = ?
           WHERE charge_payment.id = ?`,
-          [this.amount, this.charge_payment_date, this.description, this.id_charge_call, this.id]
+          [this.amount, this.charge_payment_date, this.description, this.id]
         );
 
       if (result.affectedRows === 0) {
