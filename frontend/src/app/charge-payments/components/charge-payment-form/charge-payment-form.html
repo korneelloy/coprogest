@@ -1,1 +1,109 @@
-<p>charge-payment-form works!</p>
+<h2 class="text-2xl font-bold mb-4 text-gray-800">Formulaire pour enregister un paiement</h2>
+<hr class="mb-6 border-gray-300">
+
+<div *ngIf="uniquePersons">
+  <div class="mb-4">
+    <label for="uniquePersons" class="block text-sm font-semibold mb-1">Choix du copropriétaire</label>
+    <select 
+      id="uniquePersons"
+      [(ngModel)]="selectedPersonId"
+      (ngModelChange)="onPersonChange($event)"
+      class="w-full border border-gray-300 rounded-md px-3 py-2">
+        <option value="" disabled selected>Choisissez un copropriétaire</option>
+        <option *ngFor="let person of uniquePersons" [value]="person.id">
+          {{ person.first_name && person.last_name ? person.first_name + ' ' + person.last_name : person.email }}
+        </option>
+    </select>
+  </div>
+</div>
+
+<ng-container *ngIf="showForm">
+
+  <form [formGroup]="chargePaymentForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Montant :</label>
+      <input 
+        formControlName="amount" 
+        placeholder="56"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+        id="amount"
+        (change)="onAmountChange()"
+
+      />
+      <div *ngIf="chargePaymentForm.get('amount')?.invalid && chargePaymentForm.get('amount')?.touched" class="text-sm text-yellow-600	 mt-1">
+        <small *ngIf="chargePaymentForm.get('amount')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Date de paiement :</label>
+      <input type="date" formControlName="charge_payment_date" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      <div *ngIf="chargePaymentForm.get('charge_payment_date')?.invalid && chargePaymentForm.get('charge_payment_date')?.touched" class="text-sm text-yellow-600 mt-1">
+        <small *ngIf="chargePaymentForm.get('charge_payment_date')?.errors?.['required']">* Ce champ ne peut pas être vide.</small>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Description :</label>
+      <textarea
+        formControlName="description"
+        placeholder="Donnez ici un peu plus de détails sur le contenu du paiement (champ non obligatoire)." 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none overflow-hidden"
+        style="min-height: 60px;"
+        #description
+        (input)="description.style.height = 'auto'; description.style.height = description.scrollHeight + 'px';"
+      ></textarea>
+    </div>
+
+    <div class="space-y-4">
+      <div
+        *ngFor="let chargeLine of filteredLines"
+        class="border border-gray-200 p-4 rounded-lg shadow-sm bg-white flex items-start gap-4"
+      >
+        <!-- Checkbox on the left -->
+        <input
+          type="checkbox"
+          [value]="chargeLine.id"
+          [checked]="selectedChargeLinesIdsOnly.includes(chargeLine.id!)"
+          (change)="onCheckboxChange(chargeLine.id!, $event)"
+          class="h-5 w-5 mt-1 text-orange-500 border-gray-300 rounded focus:ring-orange-400 shrink-0"
+          [disabled]="totalAmountToBeDivided <= 0 && !selectedChargeLinesIdsOnly.includes(chargeLine.id!)"
+          />
+    
+        <!-- Info content on the right -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm text-gray-800 w-full">
+          <div class="text-lg font-semibold text-orange-400">
+            Solde impayé: {{ chargeLine.open_amount }} €
+          </div>
+          <div>
+            <span class="font-medium text-gray-600">Lot:</span>
+            {{ chargeLine.unit_name }}
+          </div>
+          <div>
+            <span class="font-medium text-gray-600">Résolution:</span>
+            {{ chargeLine.ag_resolution_title }}
+          </div>
+          <div>
+            <span class="font-medium text-gray-600">Date AG:</span>
+            {{ chargeLine.ag_minutes_date | date: 'dd/MM/yy' }}
+          </div>
+          <div>
+            <span class="font-medium text-gray-600">Statut appel de charge:</span>
+            {{ chargeLine.state! | chargeCallState }}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="flex justify-end">
+      <button
+        type="submit"
+        [disabled]="chargePaymentForm.invalid"
+        class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center"
+      >
+        Enregistrer le paiement
+      </button>
+    </div>
+  </form>
+</ng-container>

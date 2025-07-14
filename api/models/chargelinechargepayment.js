@@ -15,7 +15,7 @@ module.exports = class ChargeLineChargePayment  {
    * @param {string} partial_payment - number if partial payment in involved. otherwise NULL
 
   */
-  constructor({id_charge_line, id_charge_payment, partial_payment }) {
+  constructor({id_charge_line, id_charge_payment, partial_payment = null }) {
     this.id_charge_line = id_charge_line;
     this.id_charge_payment = id_charge_payment;
     this.partial_payment = partial_payment;
@@ -50,7 +50,7 @@ module.exports = class ChargeLineChargePayment  {
   }
 
   get partial_payment() {
-    return this._vote;
+    return this._partial_payment;
   }
  
   set partial_payment(value) {
@@ -108,6 +108,11 @@ module.exports = class ChargeLineChargePayment  {
    */
   async post() {
     try {
+      console.log("Posting chargeLineChargePayment with:", {
+        id_charge_line: this.id_charge_line,
+        id_charge_payment: this.id_charge_payment,
+        partial_payment: this.partial_payment,
+      });
       const [result] = await db.execute(
         `INSERT INTO charge_line_charge_payment 
           (id_charge_line, id_charge_payment, partial_payment) 

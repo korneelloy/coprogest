@@ -15,7 +15,9 @@ export interface ChargeLine {
   person_last_name?: string,
   ag_resolution_title?: string,
   ag_minutes_date?: string,
-  unit_name?: string
+  unit_name?: string,
+  open_amount?: number,
+  total_partial_paid?: number
 }
 
 

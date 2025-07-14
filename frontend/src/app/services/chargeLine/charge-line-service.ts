@@ -43,6 +43,15 @@ export class ChargeLineService {
       );
   }
 
+  fetchAllWithOpenAmounts(): Observable<ChargeLine[]> {
+    return this.http
+      .get<ChargeLine[]>(`${this.url}/fetchallwithopenamounts`, { withCredentials: true })
+      .pipe(
+        tap(() => console.log('Fetched all charge lines that are not yet fully paid')),
+        catchError(this.handleError)
+      );
+  }
+
   fetchById(id: string): Observable<ChargeLine> {
     return this.http
       .get<ChargeLine>(`${this.url}/${id}`, { withCredentials: true })

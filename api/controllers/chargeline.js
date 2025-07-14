@@ -32,6 +32,21 @@ exports.fetchAllNotCalled = async (req, res, next) => {
 };
 
 /**
+ * Retrieve and return all charge lines that are not yet fully paid
+ */
+exports.fetchAllWithOpenAmounts = async (req, res, next) => {
+  try {
+    const allChargeLinesWithOpenAmounts = await ChargeLine.fetchAllWithOpenAmounts();
+    res.status(200).json(allChargeLinesWithOpenAmounts);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+/**
  * Retrieve and return all charge lines without charge call
  */
 exports.fetchByChargeCallId = async (req, res, next) => {

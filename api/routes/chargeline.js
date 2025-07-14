@@ -16,6 +16,9 @@ router.get('/fetchbychargecallid/:chargeCallId', chargeLineController.fetchByCha
 // Get all charge calls not yet called
 router.get('/fetchallnotcalled', chargeLineController.fetchAllNotCalled);
 
+// Get all charge calls not yet called
+router.get('/fetchallwithopenamounts', chargeLineController.fetchAllWithOpenAmounts);
+
 // Get a single charge call by ID
 router.get('/:id', chargeLineController.getOne);
 

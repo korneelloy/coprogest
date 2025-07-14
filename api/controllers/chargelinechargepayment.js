@@ -56,7 +56,7 @@ exports.postOne = async (req, res, next) => {
   try {
     const id_charge_line = req.body.id_charge_line;
     const id_charge_payment = req.body.id_charge_payment;
-    const partial_payment = req.body.partial_payment;
+    const partial_payment = req.body.partial_payment ?? null;
 
     const chargeLineChargePayment = new ChargeLineChargePayment({
       id_charge_line,

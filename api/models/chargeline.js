@@ -129,10 +129,88 @@ module.exports = class ChargeLine extends BaseClass {
    * @returns {Promise<Object[]>}
    */
   static async fetchAll() {
-    const [allChargeLines] = await db.execute(`SELECT * FROM charge_line;`);
+    const [allChargeLines] = await db.execute(`SELECT 
+      charge_line.*,
+      person.id as person_id,
+      ag_resolution.title as ag_resolution_title,
+      ag_minutes.minutes_date as ag_minutes_date,
+      unit.name as unit_name,
+
+      COALESCE(total_partial_payments.total_partial_paid, 0) AS total_partial_paid,
+      charge_line.amount - COALESCE(total_partial_payments.total_partial_paid, 0) AS open_amount
+
+      FROM charge_line
+
+      LEFT JOIN unit
+        ON unit.id = charge_line.id_unit
+      
+      LEFT JOIN person
+        ON person.id = unit.id_person 
+
+      LEFT JOIN ag_resolution
+        ON ag_resolution.id = charge_line.id_ag_resolution
+
+      LEFT JOIN ag_minutes
+        ON ag_minutes.id = ag_resolution.id_ag_minutes
+
+      LEFT JOIN (
+        SELECT 
+          charge_line_charge_payment.id_charge_line,
+          SUM(charge_line_charge_payment.partial_payment) AS total_partial_paid
+        FROM charge_line_charge_payment
+        GROUP BY charge_line_charge_payment.id_charge_line
+      ) AS total_partial_payments
+        ON total_partial_payments.id_charge_line = charge_line.id
+      ;
+      `);
     return allChargeLines;
   }
 
+
+  /**
+   * Fetch all charge lines from the database.
+   * @returns {Promise<Object[]>}
+   */
+  static async fetchAllWithOpenAmounts() {
+    const [allChargeLinesWithOpenAmounts] = await db.execute(`
+      SELECT 
+        charge_line.*,
+        person.id AS person_id,
+        ag_resolution.title AS ag_resolution_title,
+        ag_minutes.minutes_date AS ag_minutes_date,
+        unit.name AS unit_name,
+  
+        COALESCE(total_partial_payments.total_partial_paid, 0) AS total_partial_paid,
+        charge_line.amount - COALESCE(total_partial_payments.total_partial_paid, 0) AS open_amount
+  
+      FROM charge_line
+  
+      LEFT JOIN unit ON unit.id = charge_line.id_unit
+      LEFT JOIN person ON person.id = unit.id_person 
+      LEFT JOIN ag_resolution ON ag_resolution.id = charge_line.id_ag_resolution
+      LEFT JOIN ag_minutes ON ag_minutes.id = ag_resolution.id_ag_minutes
+  
+      LEFT JOIN (
+        SELECT 
+          id_charge_line,
+          SUM(partial_payment) AS total_partial_paid
+        FROM charge_line_charge_payment
+        WHERE partial_payment IS NOT NULL
+        GROUP BY id_charge_line
+      ) AS total_partial_payments
+        ON total_partial_payments.id_charge_line = charge_line.id
+  
+      WHERE NOT EXISTS (
+        SELECT 1
+        FROM charge_line_charge_payment clcp
+        WHERE clcp.id_charge_line = charge_line.id
+        AND clcp.partial_payment IS NULL
+      );
+    `);
+  
+    return allChargeLinesWithOpenAmounts;
+  }
+  
 
 
  /**

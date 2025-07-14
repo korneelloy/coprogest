@@ -38,7 +38,7 @@ export class ChargeLineChargePaymentService {
     return this.http
       .post<ChargeLineChargePayment>(this.url, chargeLineChargePayment, { withCredentials: true })
       .pipe(
-        tap((newChargeLineChargePayment) => console.log(`Created document id=${newChargeLineChargePayment.id_charge_line}`)),
+        tap((newChargeLineChargePayment) => console.log(`Created chargeLineChargePayment id=${newChargeLineChargePayment.id_charge_line}`)),
         catchError(this.handleError)
       );
   }
