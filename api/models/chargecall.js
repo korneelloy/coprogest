@@ -116,32 +116,76 @@ module.exports = class ChargeCall extends BaseClass {
      */
   static async getAllByPerson(personId) {
     const [allChargeCalls] = await db.execute(`
-      SELECT * FROM charge_call 
-            SELECT
-        cc.id AS charge_call_id,
+     SELECT
+        cc.id AS id,
         cc.charge_call_date,
-        COALESCE(cl.total_charged, 0) AS total_charged,
-        COALESCE(cp.total_paid, 0) AS total_paid,
-        COALESCE(cl.total_charged, 0) - COALESCE(cp.total_paid, 0) AS amount_due
+  
+      -- Total charged per charge_call
+      COALESCE(cl.total_charged, 0) AS total_charged,
+
+      -- Total paid via associated charge lines
+      COALESCE(cp.total_paid, 0) AS total_paid,
+
+      -- Difference
+      COALESCE(cl.total_charged, 0) - COALESCE(cp.total_paid, 0) AS amount_due,
+
+      -- Person info
+      p.id AS id_person,
+      p.email AS person_email,
+      p.first_name AS person_first_name,
+      p.last_name AS person_last_name,
+
+      -- First charge line state
+      (
+        SELECT cl2.state
+        FROM charge_line cl2
+        WHERE cl2.id_charge_call = cc.id
+        ORDER BY cl2.id ASC
+        LIMIT 1
+      ) AS first_charge_line_state,
+
+      -- All unique charge line states in a JSON array
+      (
+        SELECT JSON_ARRAYAGG(state)
+        FROM (
+          SELECT DISTINCT cl3.state
+          FROM charge_line cl3
+          WHERE cl3.id_charge_call = cc.id
+        ) AS distinct_states
+      ) AS all_charge_line_states
+
       FROM charge_call cc
 
-      -- Subquery: total amount of charge lines per call
+      -- Total charged: sum of charge_lines belonging to this charge_call
       LEFT JOIN (
         SELECT id_charge_call, SUM(amount) AS total_charged
         FROM charge_line
         GROUP BY id_charge_call
       ) cl ON cl.id_charge_call = cc.id
 
-      -- Subquery: total payments per charge call
+      -- Total paid: sum of payments related to all lines in this charge_call
       LEFT JOIN (
-        SELECT id_charge_call, SUM(amount) AS total_paid
-        FROM charge_payment
-        GROUP BY id_charge_call
+        SELECT cl.id_charge_call, SUM(
+          CASE
+            WHEN cp.partial_payment IS NULL THEN chp.amount
+            ELSE cp.partial_payment
+          END
+        ) AS total_paid
+        FROM charge_line cl
+        JOIN charge_line_charge_payment cp ON cp.id_charge_line = cl.id
+        JOIN charge_payment chp ON chp.id = cp.id_charge_payment
+        WHERE cl.id_charge_call IS NOT NULL
+        GROUP BY cl.id_charge_call
       ) cp ON cp.id_charge_call = cc.id
 
-      ORDER BY cc.charge_call_date DESC
+      -- Person
+      LEFT JOIN person p ON p.id = cc.id_person
+
       
-      WHERE id_person = ?`
+    WHERE id_person = ?
+    ORDER BY cc.charge_call_date DESC
+      
+      `
       , [personId]);
     return allChargeCalls;
   }
