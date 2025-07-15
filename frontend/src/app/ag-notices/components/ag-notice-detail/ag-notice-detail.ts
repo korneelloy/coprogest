@@ -14,10 +14,12 @@ import { AgResolutionService } from '../../../services/agResolution/ag-resolutio
 import { AgNoticePrintService } from '../../../services/printAgNotice/ag-notice-print-service';
 
 import { RequiredMajorityLabelPipe } from '../../../label/requiredMajority/required-majority-label-pipe';
+import { StatusLabelPipe } from '../../../label/status/status-label-pipe';
+
 
 @Component({
   selector: 'app-ag-notice-detail',
-  imports: [CommonModule, RequiredMajorityLabelPipe],
+  imports: [CommonModule, RequiredMajorityLabelPipe, StatusLabelPipe],
   templateUrl: './ag-notice-detail.html',
   styleUrl: './ag-notice-detail.scss'
 })

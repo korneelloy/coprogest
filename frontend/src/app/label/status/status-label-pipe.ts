@@ -11,6 +11,6 @@ export class StatusLabelPipe implements PipeTransform {
   };
 
   transform(value: string): string {
-    return this.labels[value] || 'Statut non défini.';
+    return this.labels[value] || 'Résolution pas encore votée';
   }
 }
