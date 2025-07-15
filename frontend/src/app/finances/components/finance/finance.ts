@@ -41,12 +41,12 @@ export class Finance implements OnInit  {
       this.chargePaymentService.fetchAllPerPerson(this.connectedUser!.id).subscribe((chargePaymentsByPerson: ChargePayment[])=>{
         this.chargePayments = chargePaymentsByPerson
         for (const payment of chargePaymentsByPerson) {
-          this.accountBalance =+ payment.amount;
+          this.accountBalance = this.accountBalance + Number(payment.amount);
         }
         this.chargeCallService.fetchByPerson(this.connectedUser!.id).subscribe((chargeCallsByPerson: any[]) => {
           this.chargeCallsByPerson = chargeCallsByPerson;
           for (const charge of chargeCallsByPerson) {
-            this.accountBalance =- charge.total_amount;
+            this.accountBalance = this.accountBalance - Number(charge.total_amount);
           }
         });
 
