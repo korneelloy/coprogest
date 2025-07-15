@@ -80,6 +80,31 @@ module.exports = class ChargePayment extends BaseClass {
   }
 
   /**
+   * Fetch all charge payments per person
+   * @param {string} personId
+   * @returns {Promise<Object[]>}
+   */
+  static async fetchAllPerPerson(personId) {
+    const [allChargePaymentsPerPerson] = await db.execute(`
+      SELECT DISTINCT
+        charge_payment.amount,
+        charge_payment.charge_payment_date,
+        charge_payment.description
+      FROM charge_payment
+      LEFT JOIN charge_line_charge_payment
+        ON charge_line_charge_payment.id_charge_payment = charge_payment.id
+      LEFT JOIN charge_line 
+        ON charge_line.id = charge_line_charge_payment.id_charge_line
+      LEFT JOIN charge_call
+        ON charge_call.id = charge_line.id_charge_call
+      WHERE charge_call.id_person = ?
+    `, [personId]);
+  
+    return allChargePaymentsPerPerson;
+  }
+  
+
+  /**
    * Fetch a charge payment by ID.
    * @param {string} id
    * @returns {Promise<Object>}

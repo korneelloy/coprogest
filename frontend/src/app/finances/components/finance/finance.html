@@ -1,0 +1,43 @@
+<div class="container mx-auto px-4 py-6">
+  <div class="bg-white shadow rounded-lg p-6 w-full max-w-2xl mx-auto">
+    <div class="space-y-4">
+      <div class="grid grid-cols-2 items-center">
+        <span class="text-black text-xl font-semibold">Solde situation comptable :</span>
+        <span
+          [ngClass]="accountBalance < 0 ? 'text-orange-500' : 'text-green-600'"
+          class="text-2xl font-bold text-right"
+        >
+          {{ accountBalance }} €
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white shadow rounded-lg p-6 w-full max-w-2xl mx-auto mt-7">
+    <div class="space-y-4">
+      <ul *ngIf="combined && combined.length > 0; else loading">
+        <li
+          *ngFor="let line of combined"
+        >
+          <div class="grid grid-cols-2 items-center mt-4">
+            <span >
+              {{ line.type === 'charge_payment' ? 'Paiement du' : 'Appel de charge du' }}
+              {{ line.date | date:'mediumDate' }}
+            </span>      
+            <span
+              [ngClass]="line.type === 'charge_payment' ? 'text-green-600' : 'text-orange-500'"
+              class="text-right"
+            >
+              {{ line.type === 'charge_payment' ? ' + ' : ' - ' }}{{ line.amount }} €
+            </span>
+          </div>
+        </li>
+      </ul>
+      
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p>Loading documents...</p>
+</ng-template>

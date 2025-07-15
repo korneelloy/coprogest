@@ -17,6 +17,22 @@ exports.getAll = async (req, res, next) => {
 };
 
 /**
+ * Retrieve and return all charge payments epr person
+ */
+exports.fetchAllPerPerson = async (req, res, next) => {
+  try {
+    const personId = req.params.personId;
+    const allChargePaymentsPerPerson = await ChargePayment.fetchAllPerPerson(personId);
+    res.status(200).json(allChargePaymentsPerPerson);
+  } catch(err) {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+/**
  * Retrieve and return a charge payment by its ID.
  */
 exports.getOne = async (req, res, next) => {

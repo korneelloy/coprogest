@@ -46,6 +46,7 @@ exports.fetchAllWithOpenAmounts = async (req, res, next) => {
   }
 };
 
+
 /**
  * Retrieve and return all charge lines without charge call
  */

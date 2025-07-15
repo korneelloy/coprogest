@@ -25,6 +25,16 @@ export class ChargePaymentService {
       );
   }
 
+  fetchAllPerPerson(personId: string): Observable<ChargePayment[]> {
+    return this.http
+      .get<ChargePayment[]>(`${this.url}/fetchallperperson/${personId}`, { withCredentials: true })
+      .pipe(
+        tap(() => console.log('Fetched all charge payment per person')),
+        catchError(this.handleError)
+      );
+  }
+  
+
   fetchById(id: string): Observable<ChargePayment> {
     return this.http
       .get<ChargePayment>(`${this.url}/${id}`, { withCredentials: true })

@@ -52,6 +52,7 @@ export class ChargeLineService {
       );
   }
 
+
   fetchById(id: string): Observable<ChargeLine> {
     return this.http
       .get<ChargeLine>(`${this.url}/${id}`, { withCredentials: true })

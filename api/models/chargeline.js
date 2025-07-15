@@ -166,7 +166,6 @@ module.exports = class ChargeLine extends BaseClass {
     return allChargeLines;
   }
 
-
   /**
    * Fetch all charge lines from the database.
    * @returns {Promise<Object[]>}

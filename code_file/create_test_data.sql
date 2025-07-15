@@ -11,7 +11,7 @@ INSERT INTO person (id, email, password, first_name, last_name, street, postal_c
 ('2011ba64-274b-475e-938d-bf4f416d2e34', 'catherine.leroy@fakegmail.com', '$2b$10$IzgzYkKv9bWLk1XaMNkLa.CbPQhsLY9dTATV.FXmpAp0sTw3j1ds6', 'Catherine', 'Leroy', '3 impasse Victor Hugo', '34000', 'Montpellier', '06 45 23 67 89', '0641e7ea-d13d-46a3-86c2-6dcba6cd320c'),
 ('666044ba-5e19-46d9-ad61-7e1987f6cdaa', 'julie.morel@fakelaposte.net', '$2b$10$IzgzYkKv9bWLk1XaMNkLa.CbPQhsLY9dTATV.FXmpAp0sTw3j1ds6', 'Julie', 'Morel', '56 boulevard Voltaire', '33000', 'Bordeaux', '07 11 22 33 44','5041878f-2523-41d0-97b1-cd05bc60f1b8'),
 ('0715c4b6-ebd7-4dbb-a695-57692207f985', 'monica.faure@fakeprotonmail.com', '$2b$10$IzgzYkKv9bWLk1XaMNkLa.CbPQhsLY9dTATV.FXmpAp0sTw3j1ds6', 'Monica', 'Faure', '27 place de l’Église', '06000', 'Nice', '06 99 88 77 66', '5041878f-2523-41d0-97b1-cd05bc60f1b8'),
-('c2411233-ad0a-43f1-8e2d-c9e7d003b237', 'samuel.durand@fakefree.fr', '$2b$10$IzgzYkKv9bWLk1XaMNkLa.CbPQhsLY9dTATV.FXmpAp0sTw3j1ds6', 'Samuel', 'Durand', '104 chemin du Moulin', '13090', 'Aix-en-Provence', '07 65 43 21 09', '5041878f-2523-41d0-97b1-cd05bc60f1b8'),
+('c2411233-ad0a-43f1-8e2d-c9e7d003b237', 'samuel.durand@free.fr', '$2b$10$IzgzYkKv9bWLk1XaMNkLa.CbPQhsLY9dTATV.FXmpAp0sTw3j1ds6', 'Samuel', 'Durand', '104 chemin du Moulin', '13090', 'Aix-en-Provence', '07 65 43 21 09', '5041878f-2523-41d0-97b1-cd05bc60f1b8'),
 ('b6994850-a1e2-4f87-ba5d-2b0b846834ed', 'daniel.leclerc@fakehotmail.fr', '$2b$10$IzgzYkKv9bWLk1XaMNkLa.CbPQhsLY9dTATV.FXmpAp0sTw3j1ds6', 'Daniel', 'Leclerc', '17 allée des Tilleuls', '67000', 'Strasbourg', '06 78 12 98 34', '5041878f-2523-41d0-97b1-cd05bc60f1b8'),
 ('3dbdf433-96e2-4256-82df-09a3f241be44', 'jessica.perrin@fakewanadoo.fr', '$2b$10$IzgzYkKv9bWLk1XaMNkLa.CbPQhsLY9dTATV.FXmpAp0sTw3j1ds6', 'Jessica', 'Perrin', '42 rue des Lilas', '31000', 'Toulouse', '06 01 23 45 67', '5041878f-2523-41d0-97b1-cd05bc60f1b8'),
 ('7a7fb120-372c-4ebb-9f77-604a56e778eb', 'michael.bernard@fakemayer.fr', '$2b$10$IzgzYkKv9bWLk1XaMNkLa.CbPQhsLY9dTATV.FXmpAp0sTw3j1ds6', 'Michael', 'Bernard', '95 quai de la Loire', '44000', 'Nantes', '07 84 21 56 33', '5041878f-2523-41d0-97b1-cd05bc60f1b8'),
@@ -20,13 +20,13 @@ INSERT INTO person (id, email, password, first_name, last_name, street, postal_c
 -- units
 
 INSERT INTO unit (id, name, shares, description, id_person) VALUES
-('c12cb34b-6448-4059-91ad-6881d9bbd20c', 'Lot 1', 130, 'Appartement 1er étage gauche', '2011ba64-274b-475e-938d-bf4f416d2e34'),
-('dbfd0774-0f81-4e6b-9015-cdec8a7d1ecd', 'Lot 2', 95, 'Appartement 1er étage droite',  '7a7fb120-372c-4ebb-9f77-604a56e778eb'),
+('c12cb34b-6448-4059-91ad-6881d9bbd20c', 'Lot 1', 130, 'Appartement 1er étage gauche', '38522c35-d231-49f7-9db3-83c9d7084fe3'),
+('dbfd0774-0f81-4e6b-9015-cdec8a7d1ecd', 'Lot 2', 95, 'Appartement 1er étage droite',  '38522c35-d231-49f7-9db3-83c9d7084fe2'),
 ('c9f71085-845d-46c7-809d-3453b847fbbd', 'Lot 3', 120, 'Appartement 2e étage gauche',  '38522c35-d231-49f7-9db3-83c9d7084fe1'),
 ('7f86f914-d31c-496d-a4f5-f315af1b97b0', 'Lot 4', 110, 'Appartement 2e étage droite', 'c2411233-ad0a-43f1-8e2d-c9e7d003b237'),
-('aceceac2-ae4c-4354-b08a-7720f203263d', 'Lot 5', 90, 'Studio rez-de-chaussée gauche', '666044ba-5e19-46d9-ad61-7e1987f6cdaa'),
+('aceceac2-ae4c-4354-b08a-7720f203263d', 'Lot 5', 90, 'Studio rez-de-chaussée gauche', '38522c35-d231-49f7-9db3-83c9d7084fe3'),
 ('ff756164-ed9f-42b2-9f94-0e081654803b', 'Lot 6', 85, 'Studio rez-de-chaussée droite', 'c2411233-ad0a-43f1-8e2d-c9e7d003b237'),
-('481a87e1-2f12-41d4-8ed5-edbfad94a8bb', 'Lot 7', 105, 'Appartement 3e étage gauche',  'b6994850-a1e2-4f87-ba5d-2b0b846834ed'),
+('481a87e1-2f12-41d4-8ed5-edbfad94a8bb', 'Lot 7', 105, 'Appartement 3e étage gauche',  '38522c35-d231-49f7-9db3-83c9d7084fe2'),
 ('f1c436e9-e292-4b4c-92c3-134dbd87fb3c', 'Lot 8', 80, 'Appartement 3e étage droite',  '0715c4b6-ebd7-4dbb-a695-57692207f985'),
 ('241b21e4-cca7-43eb-b016-88ef27cd41c4', 'Lot 9', 85, 'Appartement 4e étage gauche',  '7a7fb120-372c-4ebb-9f77-604a56e778eb'),
 ('49e30d14-5a45-451e-9abc-e777aca94261', 'Lot 10', 100, 'Appartement 4e étage droite', 'c6bdd364-85fb-4b7a-afc7-71ef424f30dc');
