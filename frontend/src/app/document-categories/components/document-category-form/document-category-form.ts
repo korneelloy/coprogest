@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DocumentService } from '../../../services/document/document-service';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+
 import { DocumentCategoryService } from '../../../services/document-category/document-category-service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,7 @@ import { DocumentCategory } from '../../../model/documentcategory';
 @Component({
   selector: 'app-document-category-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
     templateUrl: './document-category-form.html',
   styleUrl: './document-category-form.scss'
 })

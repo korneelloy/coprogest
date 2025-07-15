@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+
 import { Unit } from '../../../model/unit';
 import { UnitService } from '../../../services/unit/unit-service';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
 import { UnitUnitGroup } from '../../../model/unitunitgroup';
 import { UnitUnitGroupService } from '../../../services/unitunitgroup/unit-unit-group-service';
 
 
 @Component({
   selector: 'app-unit-detail',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './unit-detail.html',
   styleUrls: ['./unit-detail.scss']
 })

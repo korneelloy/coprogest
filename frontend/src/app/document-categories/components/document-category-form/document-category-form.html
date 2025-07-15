@@ -1,7 +1,18 @@
-<h2 class="text-xl font-bold mb-2">
-  <strong>Formulaire pour une catégorie de document</strong>
-</h2>
-<hr class="mb-4">
+<div class="mb-7">
+  <div class="flex items-center justify-between">
+    <h2 class="font-bold">
+      Formulaire pour une catégorie de document
+    </h2>
+    <div>
+      <a routerLink="/documentcategories"
+      class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+      >
+        Retour à la liste des catégories
+      </a>
+    </div>
+  </div>
+</div>
+<hr class="mb-7">
 
 <form [formGroup]="documentForm" (ngSubmit)="onSubmit()" class="space-y-4">
   <div>
@@ -13,7 +24,9 @@
       <small *ngIf="documentForm.get('name')?.errors?.['maxlength']">* Ce champ ne peut contenir plus que 50 caractères.</small>
     </div>
   </div>
-  <button type="submit" [disabled]="documentForm.invalid" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+  <button type="submit" [disabled]="documentForm.invalid" 
+  class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+  >
     {{ isEditMode ? 'Mettre à jour' : 'Créer' }} la catégorie
   </button>
 </form>

@@ -1,7 +1,19 @@
-<h2 class="text-xl font-bold mb-2">
-  Détails d'une convocation
-</h2>
-<hr class="mb-4 border-gray-300" />
+<div class="mb-7">
+  <div class="flex items-center justify-between">
+    <h2 class="font-bold">
+      Détails d'une convocation
+    </h2>
+    <div>
+      <a routerLink="/agnotices"
+      class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+      >
+        Retour à la liste des convocations
+      </a>
+    </div>
+  </div>
+</div>
+<hr class="mb-7">
+
 
 <div *ngIf="updatedMessage" class="text-green-600 font-medium mb-4">
   {{ updatedMessage }}
@@ -42,13 +54,15 @@
 
     <button 
       (click)="change(agNotice.id)" 
-      class="whitespace-nowrap flex-1 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200">
+      class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm mr-5"
+      >
       Modifier la convocation
     </button>
 
     <button 
       (click)="generateWord(agNotice.id)" 
-      class="ml-4 whitespace-nowrap flex-1 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200">
+      class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+      >
       Générer la convocation
     </button>
 

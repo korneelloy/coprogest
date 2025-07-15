@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { AgNotice } from '../../../model/agnotice';
 import { AgNoticeService } from '../../../services/agnotice/ag-notice-service';
@@ -19,7 +18,7 @@ import { StatusLabelPipe } from '../../../label/status/status-label-pipe';
 
 @Component({
   selector: 'app-ag-notice-detail',
-  imports: [CommonModule, RequiredMajorityLabelPipe, StatusLabelPipe],
+  imports: [CommonModule, RequiredMajorityLabelPipe, StatusLabelPipe, RouterModule],
   templateUrl: './ag-notice-detail.html',
   styleUrl: './ag-notice-detail.scss'
 })

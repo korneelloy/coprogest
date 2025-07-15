@@ -116,9 +116,7 @@ INSERT INTO budget_category (id, name) VALUES
 ('41730a00-f81e-48d8-9b3a-4ae9fcb187eb', 'eau'),
 ('41730a00-f81e-48d8-9b3a-4ae9fcb187ec', 'electricité'),
 ('41730a00-f81e-48d8-9b3a-4ae9fcb187ed', 'entretien'),
-('41730a00-f81e-48d8-9b3a-4ae9fcb187ee', 'nettoyage'),
-('41730a00-f81e-48d8-9b3a-4ae9fcb187ey', 'Travaux');
-
+('41730a00-f81e-48d8-9b3a-4ae9fcb187ee', 'nettoyage');
 -- ag notices
 
 INSERT INTO ag_notice (id, title, place, ag_date) VALUES

@@ -1,5 +1,18 @@
-<h2 class="text-2xl font-bold mb-4 text-gray-800">Détails d'un groupe</h2>
-<hr class="mb-6 border-gray-300">
+<div class="mb-7">
+  <div class="flex items-center justify-between">
+    <h2 class="font-bold">
+      Détails d'un groupe
+    </h2>
+    <div>
+      <a routerLink="/unitgroups"
+      class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+      >
+        Retour à la liste des groups
+      </a>
+    </div>
+  </div>
+</div>
+<hr class="mb-7">
 
 <!-- Message de succès -->
 <div *ngIf="updatedMessage" class="mb-4 p-3 rounded-md bg-green-100 text-green-800 shadow-sm">
@@ -37,15 +50,15 @@
     <div class="flex gap-4 pt-4">
       <button 
         (click)="change(unitGroup.id)" 
-        class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center"
-      >
+        class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+        >
         Modifier ce groupe
       </button>
 
       <button 
         (click)="deletion(unitGroup.id)" 
-        class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center"
-      >
+        class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+        >
         Supprimer ce groupe
       </button>
     </div>

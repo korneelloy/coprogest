@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
+
 import { Invoice } from '../../../model/invoice';
 import { InvoiceService } from '../../../services/invoice/invoice-service';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
 import { StateLabelPipe } from '../../../label/state/state-label-pipe';
-import { AgResolution } from '../../../model/agresolution';
 import { AgResolutionService } from '../../../services/agResolution/ag-resolution-service';
 
 
 @Component({
   selector: 'app-invoice-detail',
-  imports: [CommonModule, StateLabelPipe],
+  imports: [CommonModule, StateLabelPipe, RouterModule],
   templateUrl: './invoice-detail.html',
   styleUrl: './invoice-detail.scss'
 })

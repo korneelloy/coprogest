@@ -1,7 +1,19 @@
-<h2 class="text-xl font-bold mb-2">
-  Formulaire pour convocation AG
-</h2>
-<hr class="mb-4" />
+<div class="mb-7">
+  <div class="flex items-center justify-between">
+    <h2 class="font-bold">
+      Formulaire pour convocation AG
+    </h2>
+    <div>
+      <a routerLink="/agnotices"
+      class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+      >
+        Retour à la liste des convocations
+      </a>
+    </div>
+  </div>
+</div>
+<hr class="mb-7">
+
 
 <div *ngIf="message" class="bg-green-100 text-green-800 px-4 py-2 rounded-md mb-4">
   {{ message }}
@@ -57,7 +69,8 @@
   </div>
 
   <button *ngIf="!readOnly" type="submit" [disabled]="agNoticeForm.invalid"
-    class="whitespace-nowrap flex-1 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200 m-4">
+    class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+  >
     {{ isEditMode ? 'Mettre à jour' : 'Créer' }} la convocation
   </button>
   
@@ -67,7 +80,8 @@
 
     <span *ngIf="!readOnly" class="m-4 space-4">
       <a [routerLink]="['/agresolutions/new', agNoticeId]"
-        class="inline-block bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200">
+       class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+      >
         Rajouter une résolution
       </a>
     </span>
@@ -85,13 +99,15 @@
 
           <div *ngIf="!readOnly">
             <a [routerLink]="['/agresolutions', agResolution.id, 'edit']"
-              class="inline-block bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200">
+            class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm mr-5"
+            >
               Modifier la résolution
             </a>
             <button 
               (click)="deletion(agResolution.id)" 
               type="button"
-              class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center ml-4">
+              class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+              >
               Supprimer cette résolution
             </button>
           </div>

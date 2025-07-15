@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+
 import { Document } from '../../../model/document';
 import { DocumentService } from '../../../services/document/document-service';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
 
 
 @Component({
   selector: 'app-document-detail',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './document-detail.html',
   styleUrls: ['./document-detail.scss']
 })

@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+
 import { Person } from '../../../model/person';
 import { PersonService } from '../../../services/person/person-service';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
-import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-person-detail',

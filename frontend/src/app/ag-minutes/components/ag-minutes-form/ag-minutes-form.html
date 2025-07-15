@@ -1,7 +1,19 @@
-<h2 class="text-xl font-bold mb-2">
-  Formulaire pour compte rendu de la réunion d'AG
-</h2>
-<hr class="mb-4" />
+<div class="mb-7">
+  <div class="flex items-center justify-between">
+    <h2 class="font-bold">
+      Formulaire pour compte rendu de la réunion d'AG
+    </h2>
+    <div>
+      <a routerLink="/agminutes"
+      class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+      >
+        Retour à la liste des réunions d'AG
+      </a>
+    </div>
+  </div>
+</div>
+<hr class="mb-7">
+
 
 <div *ngIf="deletedMessage" class="bg-green-100 text-green-800 px-4 py-2 rounded-md mb-4">
   {{ deletedMessage }}
@@ -65,7 +77,8 @@
       <div>Création impossible : chaque convocation est déjà liée à un autre compte rendu.</div>
       <div>Vous souhaitez créer une convocation? C'est par
         <a [routerLink]="['/agnotices/new']"
-          class="text-blue-600 font-medium hover:underline hover:text-orange-400 transition-colors duration-200">ici</a>
+          class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+        >ici</a>
         .
       </div>
     </div>
@@ -128,8 +141,9 @@
   <button
   (click)="submitForm()"
   [disabled]="!formValidation.valid"
-    class="whitespace-nowrap flex-1 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200 m-4">
-    Enregistrer les modifications
+    class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+    >
+    {{ isEditMode ? 'Mettre à jour' : 'Créer' }} le compte rendu
   </button>
   <div *ngIf="!formValidation.valid" class="text-sm text-yellow-600 ml-4 mt-2">
     {{ formValidation.message }}
@@ -140,7 +154,7 @@
 </div>
   
 <ng-container *ngIf="!agMinutesForm.dirty && !presenceChange">
-  <div *ngIf="isEditMode">
+  <div *ngIf="isEditMode" class="mt-7">
     <strong class="text-md font-semibold">Résolutions associées</strong>
     <ul *ngIf="agResolutions" class="mt-4 space-y-4">
       <ng-container *ngIf="agResolutions.length > 0; else noResolutions">
@@ -230,7 +244,7 @@
           
           <button type="button" (click)="registerVote(agResolution.id, agResolution.id_unit_group, agResolution.required_majority)"
             *ngIf="selectedPersonsIdOnly && agResolution.required_majority !== 'no_vote' &&!agResolution.status"
-            class="whitespace-nowrap flex-1 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-black hover:text-orange-300 transition-colors duration-200 m-4"
+            class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
             >
             Enregistrer le vote
           </button>

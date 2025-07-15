@@ -1,5 +1,19 @@
-<h2><strong>Détails d'un document</strong></h2>
-<hr>
+
+<div class="mb-7">
+  <div class="flex items-center justify-between">
+    <h2 class="font-bold">
+      Détails d'un document
+    </h2>
+    <div>
+      <a routerLink="/documents"
+      class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+      >
+        Retour à la liste des documents
+      </a>
+    </div>
+  </div>
+</div>
+<hr class="mb-7">
 
 <div *ngIf="updatedMessage" class="success-message">
   {{ updatedMessage }}
@@ -10,12 +24,20 @@
     <strong>{{ document.name }}</strong><br>
     <div>Catégorie: {{ document.category_name }}</div>
     <div>Description: {{ document.description }}</div>
-    <button (click)="openUrl(document.url)" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">Télécharger le document</button><br>
-    <button (click)="change(document.id)" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+    <button (click)="openUrl(document.url)" 
+    class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+    >
+      Télécharger le document
+    </button><br>
+    <button (click)="change(document.id)" 
+    class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+    >
       Changer ce document
     </button><br>
     
-    <button (click)="deletion(document.id)" class="whitespace-nowrap flex-1 text-black hover:text-orange-300 bg-zinc-100 px-3 py-2 rounded-md text-sm font-medium text-center">
+    <button (click)="deletion(document.id)" 
+    class="min-w-[14rem] text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+    >
       Supprimer ce document
     </button><br>
   </li>
