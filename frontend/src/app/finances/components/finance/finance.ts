@@ -38,21 +38,23 @@ export class Finance implements OnInit  {
   ngOnInit(): void {
     this.sessionService.user$.subscribe(user => {
       this.connectedUser = user;
-      this.chargeCallService.fetchByPerson(this.connectedUser!.id).subscribe((chargeCallsByPerson: ChargeCall[]) => {
-        this.chargeCallsByPerson = chargeCallsByPerson;
-        const totalCharged = this.chargeCallsByPerson.reduce((sum, call) => {
-          return sum + Number(call.total_charged ?? '0')
-        }, 0);
-        const totalPaid = this.chargeCallsByPerson.reduce((sum, call) => {
-          return sum + Number(call.total_paid ?? '0')
-        }, 0);
-        this.accountBalance = totalPaid - totalCharged;
-        
+      this.chargePaymentService.fetchAllPerPerson(this.connectedUser!.id).subscribe((chargePaymentsByPerson: ChargePayment[])=>{
+        this.chargePayments = chargePaymentsByPerson
+        for (const payment of chargePaymentsByPerson) {
+          this.accountBalance =+ payment.amount;
+        }
+        this.chargeCallService.fetchByPerson(this.connectedUser!.id).subscribe((chargeCallsByPerson: any[]) => {
+          this.chargeCallsByPerson = chargeCallsByPerson;
+          for (const charge of chargeCallsByPerson) {
+            this.accountBalance =- charge.total_amount;
+          }
+        });
+
       this.chargePaymentService.fetchAllPerPerson(this.connectedUser!.id).subscribe((chargePayments: ChargePayment[]) => {
         this.combined = [
           ...this.chargeCallsByPerson.map(call => ({
             type: "charge_call",
-            amount: call.total_charged,
+            amount: call.total_amount,
             date: call.charge_call_date,
             description: null
           })),

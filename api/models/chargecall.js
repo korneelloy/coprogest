@@ -115,10 +115,25 @@ module.exports = class ChargeCall extends BaseClass {
      * @returns {Promise<Object[]>}
      */
   static async getAllByPerson(personId) {
+   const [allChargeCalls] = await db.execute(`
+    SELECT 
+      charge_call.charge_call_date,
+      SUM(charge_line.amount) AS total_amount
+    FROM charge_call
+    JOIN charge_line ON charge_line.id_charge_call = charge_call.id
+    WHERE charge_call.id_person = ?
+    GROUP BY charge_call.charge_call_date
+    ORDER BY charge_call.charge_call_date DESC;`
+
+     , [personId]);
+     return allChargeCalls;
+   }
+  
+    /** 
     const [allChargeCalls] = await db.execute(`
      SELECT
-        cc.id AS id,
-        cc.charge_call_date,
+        charge_call.id,
+        charge_call.charge_call_date,
   
       -- Total charged per charge_call
       COALESCE(cl.total_charged, 0) AS total_charged,
@@ -139,7 +154,7 @@ module.exports = class ChargeCall extends BaseClass {
       (
         SELECT cl2.state
         FROM charge_line cl2
-        WHERE cl2.id_charge_call = cc.id
+        WHERE cl2.id_charge_call = charge_call.id
         ORDER BY cl2.id ASC
         LIMIT 1
       ) AS first_charge_line_state,
@@ -150,18 +165,18 @@ module.exports = class ChargeCall extends BaseClass {
         FROM (
           SELECT DISTINCT cl3.state
           FROM charge_line cl3
-          WHERE cl3.id_charge_call = cc.id
+          WHERE cl3.id_charge_call = charge_call.id
         ) AS distinct_states
       ) AS all_charge_line_states
 
-      FROM charge_call cc
+      FROM charge_call
 
       -- Total charged: sum of charge_lines belonging to this charge_call
       LEFT JOIN (
         SELECT id_charge_call, SUM(amount) AS total_charged
         FROM charge_line
         GROUP BY id_charge_call
-      ) cl ON cl.id_charge_call = cc.id
+      ) cl ON cl.id_charge_call = charge_call.id
 
       -- Total paid: sum of payments related to all lines in this charge_call
       LEFT JOIN (
@@ -176,20 +191,20 @@ module.exports = class ChargeCall extends BaseClass {
         JOIN charge_payment chp ON chp.id = cp.id_charge_payment
         WHERE cl.id_charge_call IS NOT NULL
         GROUP BY cl.id_charge_call
-      ) cp ON cp.id_charge_call = cc.id
+      ) cp ON cp.id_charge_call = charge_call.id
 
       -- Person
-      LEFT JOIN person p ON p.id = cc.id_person
+      LEFT JOIN person p ON p.id = charge_call.id_person
 
       
     WHERE id_person = ?
-    ORDER BY cc.charge_call_date DESC
+    ORDER BY charge_call.charge_call_date DESC
       
       `
       , [personId]);
     return allChargeCalls;
   }
-
+*/
   
 
   /**

@@ -7,7 +7,7 @@
           [ngClass]="accountBalance < 0 ? 'text-orange-500' : 'text-green-600'"
           class="text-2xl font-bold text-right"
         >
-          {{ accountBalance }} €
+        {{ accountBalance | number:'1.2-2' }} 
         </span>
       </div>
     </div>

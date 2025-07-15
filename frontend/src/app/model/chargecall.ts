@@ -11,5 +11,6 @@ export interface ChargeCall {
   person_first_name?: string,
   person_last_name?: string,
   first_charge_line_state?: string,
-  all_charge_line_states?: string[]
+  all_charge_line_states?: string[],
+  total_amount?: number
 }
