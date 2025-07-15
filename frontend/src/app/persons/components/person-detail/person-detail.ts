@@ -5,11 +5,11 @@ import { Person } from '../../../model/person';
 import { PersonService } from '../../../services/person/person-service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-person-detail',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './person-detail.html',
   styleUrls: ['./person-detail.scss']
 })

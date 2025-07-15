@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import { AgMinutes } from '../../../model/agminutes';
 import { AgMinutesService } from '../../../services/agminutes/ag-minutes-service';
@@ -18,7 +19,7 @@ import { AgMinutesPrintService } from '../../../services/printAgMinutes/ag-minut
 
 @Component({
   selector: 'app-ag-minutes-detail',
-  imports: [CommonModule, RequiredMajorityLabelPipe],
+  imports: [CommonModule, RequiredMajorityLabelPipe, RouterModule],
   templateUrl: './ag-minutes-detail.html',
   styleUrl: './ag-minutes-detail.scss'
 })

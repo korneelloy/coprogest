@@ -1,5 +1,24 @@
-<h2><strong>Liste des appels de charges</strong></h2>
-<hr class="mb-4">
+<div class="mb-7">
+  <div class="flex items-center justify-between">
+    <h2 class="font-bold">
+      Liste des appels de charges
+    </h2>
+    <div>
+      <a routerLink="/chargecalls/new"
+         class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm mr-4"
+      >
+        Enregistrer un nouvel appel de charge
+      </a>
+      
+      <a routerLink="/chargepayments/new"
+         class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+      >
+        Enregistrer un paiement
+      </a>
+    </div>
+  </div>
+</div>
+<hr class="mb-7">
 
 <div *ngIf="createdMessage" class="success-message">
   {{ createdMessage }}
@@ -48,24 +67,6 @@
     </button>
   </li>
 </ul>
-
-
-
-<div>
-  <a routerLink="/chargecalls/new"
-    class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm mt-7 mr-7 inline-block"
-  >
-    Enregistrer un nouvel appel de charge
-  </a>
-  
-  <a routerLink="/chargepayments/new"
-    class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm mt-7 inline-block"
-    >
-    Enregistrer un paiement
-  </a>
-</div>
-
-
 
 <ng-template #loading>
   <p>Loading documents...</p>

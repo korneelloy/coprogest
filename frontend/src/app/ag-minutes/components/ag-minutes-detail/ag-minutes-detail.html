@@ -1,7 +1,18 @@
-<h2 class="text-xl font-bold mb-2">
-  Détails d'un compte rendu de réunion
-</h2>
-<hr class="mb-4 border-gray-300" />
+<div class="mb-7">
+  <div class="flex items-center justify-between">
+    <h2 class="font-bold">
+      Détails d'un compte rendu de réunion
+    </h2>
+    <div>
+      <a routerLink="/agminutes"
+      class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+      >
+        Retour à la liste des comptes rendu
+      </a>
+    </div>
+  </div>
+</div>
+<hr class="mb-7">
 
 <div *ngIf="updatedMessage" class="text-green-600 font-medium mb-4">
   {{ updatedMessage }}

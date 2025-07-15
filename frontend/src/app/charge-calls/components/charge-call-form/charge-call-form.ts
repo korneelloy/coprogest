@@ -154,6 +154,7 @@ export class ChargeCallForm implements OnInit {
     forkJoin(perPersonRequests).subscribe({
       next: (results) => {
         console.log('Tous les appels de charge ont été créés avec succès.', results);
+        this.router.navigate(['/chargecalls'], { queryParams: { created: 'true' } });
       },
       error: (err) => {
         console.error('Erreur lors de la création des appels de charge', err);

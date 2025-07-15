@@ -1,5 +1,19 @@
-<h2 class="text-2xl font-bold text-gray-800 mb-4">Liste des comptes rendu de réunion d'AG</h2>
-<hr class="mb-6 border-gray-300">
+<div class="mb-7">
+  <div class="flex items-center justify-between">
+    <h2 class="font-bold">
+      Liste des comptes rendu de réunion d'AG
+    </h2>
+    <div>
+      <a routerLink="//agminutes/new"
+         class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+      >
+       Créer un nouveau compte rendu
+      </a>
+    </div>
+  </div>
+</div>
+<hr class="mb-7">
+
 
 <div *ngIf="createdMessage" class="bg-green-100 text-green-800 px-4 py-2 rounded-md mb-4">
   {{ createdMessage }}
@@ -35,13 +49,6 @@
     </button>
   </li>
 </ul>
-
-<div class="mt-8 flex justify-center">
-  <a routerLink="/agminutes/new"
-    class="text-black hover:text-orange-300 bg-zinc-100 px-4 py-2 rounded-md text-sm font-medium text-center">
-    Créer un nouveau compte rendu
-  </a>
-</div>
 
 <ng-template #loading>
   <p class="text-gray-500 text-center mt-6">Chargement de la liste ...</p>
