@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { forkJoin } from 'rxjs';
 
 import { SessionService } from '../../../services/session/session-service';
 import { Person } from '../../../model/person';
@@ -38,36 +39,40 @@ export class Finance implements OnInit  {
   ngOnInit(): void {
     this.sessionService.user$.subscribe(user => {
       this.connectedUser = user;
-      this.chargePaymentService.fetchAllPerPerson(this.connectedUser!.id).subscribe((chargePaymentsByPerson: ChargePayment[])=>{
-        this.chargePayments = chargePaymentsByPerson
-        for (const payment of chargePaymentsByPerson) {
-          this.accountBalance = this.accountBalance + Number(payment.amount);
+  
+      const userId = this.connectedUser!.id;
+      forkJoin({
+        payments: this.chargePaymentService.fetchAllPerPerson(userId),
+        calls: this.chargeCallService.fetchByPerson(userId)
+      }).subscribe(({ payments, calls }) => {
+        this.chargePayments = payments;
+        this.chargeCallsByPerson = calls;
+  
+        this.accountBalance = 0;
+        for (const payment of payments) {
+          this.accountBalance += Number(payment.amount);
         }
-        this.chargeCallService.fetchByPerson(this.connectedUser!.id).subscribe((chargeCallsByPerson: any[]) => {
-          this.chargeCallsByPerson = chargeCallsByPerson;
-          for (const charge of chargeCallsByPerson) {
-            this.accountBalance = this.accountBalance - Number(charge.total_amount);
-          }
-        });
-
-      this.chargePaymentService.fetchAllPerPerson(this.connectedUser!.id).subscribe((chargePayments: ChargePayment[]) => {
+        for (const call of calls) {
+          this.accountBalance -= Number(call.total_amount);
+        }
+  
         this.combined = [
-          ...this.chargeCallsByPerson.map(call => ({
+          ...calls.map(call => ({
             type: "charge_call",
             amount: call.total_amount,
             date: call.charge_call_date,
             description: null
           })),
-          ...chargePayments.map(payment => ({
+          ...payments.map(payment => ({
             type: "charge_payment",
             amount: payment.amount,
             date: payment.charge_payment_date,
             description: payment.description
           }))
         ];
-        this.combined.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());        
-        })
-      })
-    });   
+  
+        this.combined.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      });
+    });
   }
-}
+}  
