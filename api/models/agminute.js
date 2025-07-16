@@ -69,7 +69,16 @@ module.exports = class AgMinute extends BaseClass {
    * @returns {Promise<Object[]>}
    */
   static async fetchAll() {
-    const [allAgMinutes] = await db.execute(`SELECT * FROM ag_minutes ORDER BY minutes_date DESC`);
+    const [allAgMinutes] = await db.execute(`SELECT DISTINCT
+      ag_minutes.*,
+      ag_notice.title as ag_notice_title 
+      
+      FROM ag_minutes 
+      
+      LEFT JOIN ag_resolution ON ag_minutes.id = ag_resolution.id_ag_minutes
+      LEFT JOIN ag_notice ON ag_notice.id = ag_resolution.id_ag_notice
+
+      ORDER BY minutes_date DESC`);
     return allAgMinutes;
   }
 

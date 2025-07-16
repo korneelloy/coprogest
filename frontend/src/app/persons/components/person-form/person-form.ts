@@ -1,18 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PersonService } from '../../../services/person/person-service';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+
+import { PersonService } from '../../../services/person/person-service';
 import { Person } from '../../../model/person';
-import { RouterModule } from '@angular/router';
+
 import { Role } from '../../../model/role';
 import { RoleService } from '../../../services/role/role-service';
+
+import { RoleLabelPipe } from '../../../label/role/role-label-pipe';
+
 
 @Component({
   selector: 'app-person-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule, RoleLabelPipe],
   templateUrl: './person-form.html',
   styleUrls: ['./person-form.scss']
 })

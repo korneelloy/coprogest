@@ -31,20 +31,28 @@
 
     <div>
       <p class="font-medium text-gray-800 mb-2">Membres :</p>
+
       <ul class="space-y-2 pl-4 border-l-2 border-orange-200">
         <li 
           *ngFor="let unitUnitGroup of unitUnitGroups" 
-          class="text-sm text-gray-700"
+          class="flex text-sm text-gray-700"
         >
-          • <span class="font-semibold">{{ unitUnitGroup.unit_name }}</span> — 
-          <span *ngIf="unitGroup.special_shares">
-            Millièmes ajustées : {{ unitUnitGroup.adjusted_shares }}
+          <span class="font-semibold inline-block w-40">
+            • {{ unitUnitGroup.unit_name }}
           </span>
-          <span *ngIf="!unitGroup.special_shares">
-            Millièmes standards : {{ unitUnitGroup.unit_shares }}
+      
+          <span>
+            <ng-container *ngIf="unitGroup.special_shares">
+              Millièmes ajustées : {{ unitUnitGroup.adjusted_shares }}
+            </ng-container>
+            <ng-container *ngIf="!unitGroup.special_shares">
+              Millièmes standards : {{ unitUnitGroup.unit_shares }}
+            </ng-container>
           </span>
         </li>
       </ul>
+      
+      
     </div>
 
     <div class="flex gap-4 pt-4">

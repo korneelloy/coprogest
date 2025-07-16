@@ -20,6 +20,8 @@ export class SessionService {
   private userSubject = new BehaviorSubject<Person | null>(null);
   public user$: Observable<Person | null> = this.userSubject.asObservable();
 
+  private sessionLoadedSubject = new BehaviorSubject<boolean>(false);
+  sessionLoaded$ = this.sessionLoadedSubject.asObservable();
 
 
   constructor(
@@ -51,17 +53,15 @@ export class SessionService {
       tap(user => {
         this.currentUser = user;
         this.userSubject.next(user);
+        this.sessionLoadedSubject.next(true); 
       }),
       catchError(err => {
         this.currentUser = null;
         this.userSubject.next(null);
-        /*
-        if (err.status === 401) {
-          this.router.navigate(['/login']);
-        }
-          */
+        this.sessionLoadedSubject.next(true); 
         return of(null);
       })
+      
     );
   }
   

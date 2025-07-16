@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+
 import { Person } from '../../../model/person';
 import { PersonService } from '../../../services/person/person-service';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
-import { RouterModule } from '@angular/router';
+import { RoleLabelPipe } from '../../../label/role/role-label-pipe';
+
 
 @Component({
   selector: 'app-person-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RoleLabelPipe],
   templateUrl: './person-list.html',
   styleUrl: './person-list.scss'
 })

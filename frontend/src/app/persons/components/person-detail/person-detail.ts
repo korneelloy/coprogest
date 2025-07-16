@@ -6,9 +6,11 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Person } from '../../../model/person';
 import { PersonService } from '../../../services/person/person-service';
 
+import { RoleLabelPipe } from '../../../label/role/role-label-pipe';
+
 @Component({
   selector: 'app-person-detail',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RoleLabelPipe],
   templateUrl: './person-detail.html',
   styleUrls: ['./person-detail.scss']
 })

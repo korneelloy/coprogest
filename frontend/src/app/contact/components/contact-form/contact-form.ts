@@ -62,11 +62,7 @@ export class ContactFormComponent implements OnInit  {
 
   ngOnInit(): void {
     this.sessionService.loadUserFromServer().subscribe(user => {
-      if (!user) {
-        this.router.navigate(['/login']);
-      } else {
-        this.fromEmail = user.email;
-      }
+      this.fromEmail = user.email;
       this.personService.fetchAll().subscribe((persons: Person[]) => {
         for (const person of persons) {
           if (person.role_name === 'manager') {

@@ -113,6 +113,11 @@ export class LandingPageComponent implements OnInit {
   }
  */
 
+  sendMessage() {
+    console.log("to be implemented");
+    alert("to be implemented");
+  }
+
   showAdmin(event: Event){
     event.preventDefault;
     this.finPart = false;

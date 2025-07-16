@@ -5,4 +5,5 @@ export interface AgMinutes {
   created_at: Date;
   updated_at: Date;
   notice_id?: string;
+  ag_notice_title?: string;
 }

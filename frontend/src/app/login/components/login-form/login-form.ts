@@ -71,4 +71,16 @@ export class LoginForm implements OnInit{
     const input = document.querySelector('input[formControlName="password"]') as HTMLInputElement;
     input?.focus();
   }
+
+  /** TO DO */
+  actionForgottenPw() {
+    console.log("to be implemented");
+    alert("to be implemented");
+  }
+
+  /** TO DO */
+  actionMentionsLegales() {
+    console.log("to be implemented");
+    alert("to be implemented");
+  }
 }

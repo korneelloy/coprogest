@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+
 import { DocumentCategory } from '../../../model/documentcategory';
 import { DocumentCategoryService } from '../../../services/document-category/document-category-service';
-import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-document-category-detail',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
    templateUrl: './document-category-detail.html',
   styleUrl: './document-category-detail.scss'
 })

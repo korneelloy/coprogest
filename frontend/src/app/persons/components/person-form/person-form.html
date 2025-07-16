@@ -78,7 +78,7 @@
     <select id="role" formControlName="id_role" required class="w-full px-3 py-2 border rounded-md">
       <option value="" disabled>Choisissez un role</option>
       <option *ngFor="let role of roles" [value]="role.id">
-        {{ role.name }}
+        {{ role.name | roleLabel }}
       </option>
     </select>    
   </div>

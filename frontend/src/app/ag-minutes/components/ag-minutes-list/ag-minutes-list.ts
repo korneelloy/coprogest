@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { RouterModule } from '@angular/router';
@@ -16,9 +15,11 @@ import { AgMinutesService } from '../../../services/agminutes/ag-minutes-service
   styleUrl: './ag-minutes-list.scss'
 })
 export class AgMinutesList implements OnInit{
-  agMinutes$!: Observable<AgMinutes[]>;
   createdMessage: string | null = null;
   deletedMessage: string | null = null;
+
+  agMinutes: AgMinutes[] = [];
+
 
   constructor(
     private agMinutesService: AgMinutesService,
@@ -32,7 +33,11 @@ export class AgMinutesList implements OnInit{
         this.createdMessage = "Le compte rendu de la réunion d'AG a été créée avec succès.";
         setTimeout(() => this.createdMessage = null, 5000);
       }
-      this.agMinutes$ = this.agMinutesService.fetchAll();
+      setTimeout(() => {
+        this.agMinutesService.fetchAll().subscribe((agMinutes: AgMinutes[]) => {
+          this.agMinutes = agMinutes;   
+        });
+      }, 200); 
     });      
   }
 

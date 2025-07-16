@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+
 import { UnitGroup } from '../../../model/unitgroup';
 import { UnitGroupService } from '../../../services/unit-groups/unit-group-service';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
-import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-unit-group-list',

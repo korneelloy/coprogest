@@ -181,9 +181,11 @@ export class ChargePaymentForm implements OnInit {
   onSubmit(): void {
     if (this.chargePaymentForm.invalid) return;
   
-    const formData: ChargePayment = this.chargePaymentForm.value;
+    let formData: ChargePayment = this.chargePaymentForm.value;
 
     console.log(formData);
+
+    formData.amount = Number(formData.amount);
 
 
       this.chargePaymentService.create(formData).subscribe((createdChargePayment: ChargePayment) => {
@@ -217,7 +219,7 @@ export class ChargePaymentForm implements OnInit {
 
             }
                */
-            this.router.navigate(['/chargepayments', newPaymentId], { queryParams: { created: 'true' } });
+            this.router.navigate(['/chargepayments'], { queryParams: { created: 'true' } });
           });
 
         } else {
@@ -234,7 +236,7 @@ export class ChargePaymentForm implements OnInit {
           });
           
           forkJoin(creations).subscribe(() => {
-            this.router.navigate(['/chargepayments', newPaymentId], { queryParams: { created: 'true' } });
+            this.router.navigate(['/chargepayments'], { queryParams: { created: 'true' } });
           });
         }
 

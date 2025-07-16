@@ -34,7 +34,7 @@
   <div><span class="font-semibold">Code postal :</span> {{ person.postal_code }}</div>
   <div><span class="font-semibold">Ville :</span> {{ person.city }}</div>
   <div><span class="font-semibold">Téléphone :</span> {{ person.telephone }}</div>
-  <div><span class="font-semibold">Statut :</span> {{ person.role_name }}</div>
+  <div><span class="font-semibold">Statut :</span> {{ person.role_name! | roleLabel }}</div>
 
   <div class="sm:col-span-2">
     <button

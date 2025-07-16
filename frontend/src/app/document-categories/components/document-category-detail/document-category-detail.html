@@ -1,19 +1,31 @@
-<h2 class="text-xl font-bold mb-2">
-  <strong>Détails d'une catégorie</strong>
-</h2>
-<hr class="mb-4">
+<div class="mb-7">
+  <div class="flex items-center justify-between">
+    <h2 class="font-bold">
+      Détails d'une catégorie
+    </h2>
+    <div>
+      <a routerLink="/documentcategories"
+      class="text-gray-700 hover:text-orange-400 border border-gray-300 hover:border-orange-300 bg-white px-3 py-2 rounded text-sm"
+      >
+        Retour à la liste des catégories
+      </a>
+    </div>
+  </div>
+</div>
+<hr class="mb-7">
 
-<div *ngIf="updatedMessage" class="success-message text-green-600 font-medium mb-4">
+
+<div *ngIf="updatedMessage" class="success-message text-green-600 mb-4">
   {{ updatedMessage }}
 </div>
 
 <ul *ngIf="documentCategory$ | async as documentCategory; else loading" class="space-y-2">
   <li class="border border-gray-200 rounded-md p-4">
-    <strong class="block text-lg">{{ documentCategory.name }}</strong>
+    <span class="block text-lg">{{ documentCategory.name }}</span>
     <hr class="mt-2">
   </li>
 </ul>
 
 <ng-template #loading>
-  <p class="text-gray-500 italic">Loading document...</p>
+  <p class="text-gray-500 italic">Loading category...</p>
 </ng-template>

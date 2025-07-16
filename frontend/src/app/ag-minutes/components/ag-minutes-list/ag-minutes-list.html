@@ -24,13 +24,14 @@
 </div>
 
 <ul
-  *ngIf="agMinutes$ | async as agMinutes; else loading"
+  *ngIf="agMinutes else loading"
   class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
 >
   <li
     *ngFor="let agMinute of agMinutes"
     class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 space-y-3"
   >
+    <h3 class="text-base font-medium text-gray-800">{{ agMinute.ag_notice_title  }}</h3>
     <div class="text-sm text-gray-700">Date : {{ agMinute.minutes_date | date: 'short' }}</div>
     <div class="text-sm text-gray-700">Lieu : {{ agMinute.place }}</div>
 
