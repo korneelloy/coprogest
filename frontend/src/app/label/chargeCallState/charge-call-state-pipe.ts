@@ -14,8 +14,6 @@ export class ChargeCallStatePipe implements PipeTransform {
   };
 
   transform(value: string): string {
-    console.log('chargeCallState pipe input:', value);
-
     return this.labels[value] || 'Statut non défini.';
   }
 }

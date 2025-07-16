@@ -17,7 +17,8 @@ export interface ChargeLine {
   ag_minutes_date?: string,
   unit_name?: string,
   open_amount?: number,
-  total_partial_paid?: number
+  total_partial_paid?: number,
+  charge_call_date?: Date
 }
 
 

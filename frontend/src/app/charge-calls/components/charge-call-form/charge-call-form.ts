@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -11,8 +11,6 @@ import { ChargeCallService } from '../../../services/chargecall/charge-call-serv
 import { ChargeLine } from '../../../model/chargeLine';
 import { ChargeLineService } from '../../../services/chargeLine/charge-line-service';
 import { forkJoin, switchMap } from 'rxjs';
-
-import { formatDateForInput } from '../../../utils/formatDateForInput';
 
 
 @Component({
@@ -54,38 +52,6 @@ export class ChargeCallForm implements OnInit {
     })
   }
 
-    /** TO DO TAKE OUT? */
-    /** 
-    if (this.isEditMode) {
-      this.chargeCallService.fetchById(this.chargeCallId!).subscribe((data: ChargeCall) => {
-        this.chargeCall = data;
-      });
-      this.chargeCallForm.patchValue({
-        invoice_date: (new Date())
-      });
-    }
-   
-  
-
-
-  onSubmit(): void {
-    if (this.chargeCallForm.invalid) return;
-  
-    const formData = this.chargeCallForm.value;
-      
-    if (this.isEditMode) {
-      this.chargeCallService.update(this.chargeCallId!, formData).subscribe(() => {
-        this.router.navigate(['/units', this.chargeCallId], { queryParams: { updated: 'true' } });
-      });
-        
-    } else {
-      this.chargeCallService.create(formData).subscribe(() => {
-        this.router.navigate(['/units'], { queryParams: { created: 'true' } });
-      });
-    }
-  }
-   */
-
   toggleSelection(id: string): void {
     this.selectedChargeLineIds.has(id)
       ? this.selectedChargeLineIds.delete(id)
@@ -108,8 +74,6 @@ export class ChargeCallForm implements OnInit {
   createChargeCall(): void {
     /** get the date */
     const date =(document.getElementById('date') as HTMLInputElement).value;
-
-    console.log(date);
 
     /** get the selected lines and apply the filter to the information we got originally from the db */
     const selectedLines = this.chargeLinesNotCalledYet.filter(cl =>

@@ -30,7 +30,6 @@ import { UnitGroupService } from '../../../services/unit-groups/unit-group-servi
 
 import { Share } from '../../../model/share';
 
-import { ChargeLine } from '../../../model/chargeLine';
 import { ChargeLineService } from '../../../services/chargeLine/charge-line-service';
 
 import { RequiredMajorityLabelPipe } from '../../../label/requiredMajority/required-majority-label-pipe';
@@ -145,7 +144,6 @@ export class AgMinutesForm implements OnInit {
     if (!this.isEditMode){
       this.agResolutionService.fetchAllNoticesWithoutMinutes().subscribe((data: AgResolution[]) => {
         this.allNoticesWithoutMinutes = data;
-        console.log("allNoticesWithoutMinutes", this.allNoticesWithoutMinutes);
       });     
       
       /** set validator only for creation mode - basicaly 2 different forms in reality*/
@@ -515,8 +513,6 @@ export class AgMinutesForm implements OnInit {
   
       this.agResolutionService.fetchById(agResolutionId).subscribe((data: AgResolution[]) => {
         this.agResolutionWithDetails = data;
-        console.log("this.agResolutionWithDetails", this.agResolutionWithDetails);
-
         this.agResolutionPersonService.deleteAllByAgResolution(agResolutionId).pipe(
           switchMap(() => {
             const createObservables = newVotes.map(vote => this.agResolutionPersonService.create(vote));
@@ -637,31 +633,10 @@ export class AgMinutesForm implements OnInit {
                   }
                 }
               }
-              
-                  
-                
-              
-         
+                   
             const totalShares = this.getShares(idUnitGroup); 
             nbOfMembers = this.getNbOfUniquePersonsInGroup(idUnitGroup);
 
-
-            /** 
-            console.log("this.shares", this.shares);
-
-            console.log("votesInFavor", votesInFavor);
-            console.log("votesAgainst", votesAgainst);
-            console.log("votesAbstention", votesAbstention);
-            console.log("votesUnexpressed", votesUnexpressed);
-
-            console.log("totalShares", totalShares);
-            console.log("required_majority", required_majority);
-      
-            console.log('nbOfForVotes', nbOfForVotes);
-            console.log('this.persons', this.persons.length);
-            console.log('nbOfMembers', nbOfMembers);
-            */
-      
             const resultVote = this.checkVote(votesInFavor, votesAgainst, votesAbstention, totalShares, required_majority, nbOfForVotes, nbOfMembers, agResolutionId);
             
             if (resultVote === 'accepted') {
@@ -726,11 +701,6 @@ export class AgMinutesForm implements OnInit {
             this.voteError[agResolutionId] = "Erreur lors de l'enregistrement";
           }
         });
-        /** 
-        console.log("newVotes", newVotes);
-        console.log("this.unitGroupShares", this.unitGroupShares);
-        console.log("this.persons", this.persons);
-        */
       });
     } 
   }

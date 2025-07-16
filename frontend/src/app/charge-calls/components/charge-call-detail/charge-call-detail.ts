@@ -39,17 +39,17 @@ export class ChargeCallDetail implements OnInit {
     if (id) {
       this.chargeCallService.fetchById(id).subscribe((chargeCall: ChargeCall) => {
         this.chargeCall = chargeCall;
-        console.log("this.chargeCall", this.chargeCall);
         this.chargeLineService.fetchByChargeCallId(id).subscribe((chargeLines: ChargeLine[]) => {
           this.chargeLines = chargeLines;
-          console.log("this.chargeLines",  this.chargeLines)
         })
       })
     }
   }
 
+  /** TO DO  see list module also */
   generateWord(chargeCallId: string): void {
-    console.log("to be implemented")
+    console.log("to be implemented");
+    alert("to be implemented");
   }
 
   backToList(){

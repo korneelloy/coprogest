@@ -178,6 +178,7 @@ module.exports = class ChargeLine extends BaseClass {
         ag_resolution.title AS ag_resolution_title,
         ag_minutes.minutes_date AS ag_minutes_date,
         unit.name AS unit_name,
+        charge_call.charge_call_date AS charge_call_date,
   
         COALESCE(total_partial_payments.total_partial_paid, 0) AS total_partial_paid,
         charge_line.amount - COALESCE(total_partial_payments.total_partial_paid, 0) AS open_amount
@@ -188,6 +189,7 @@ module.exports = class ChargeLine extends BaseClass {
       LEFT JOIN person ON person.id = unit.id_person 
       LEFT JOIN ag_resolution ON ag_resolution.id = charge_line.id_ag_resolution
       LEFT JOIN ag_minutes ON ag_minutes.id = ag_resolution.id_ag_minutes
+      LEFT JOIN charge_call ON charge_call.id = charge_line.id_charge_call
   
       LEFT JOIN (
         SELECT 
@@ -204,7 +206,10 @@ module.exports = class ChargeLine extends BaseClass {
         FROM charge_line_charge_payment clcp
         WHERE clcp.id_charge_line = charge_line.id
         AND clcp.partial_payment IS NULL
-      );
+      )
+      ORDER BY 
+        charge_call_date IS NULL,  -- FALSE (0) for non-NULL, TRUE (1) for NULL
+        charge_call_date ASC;
     `);
   
     return allChargeLinesWithOpenAmounts;

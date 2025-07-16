@@ -108,7 +108,6 @@ export class AgResolutionForm implements OnInit {
 
     this.unitGroupService.fetchAllUnique().subscribe((datas: UnitGroup[]) => {
       this.unitGroups = datas;
-      console.log("this.unitGroups", this.unitGroups);
     });
 
     this.agResolutionForm.get('required_majority')!.valueChanges.subscribe(value => {

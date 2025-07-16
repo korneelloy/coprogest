@@ -73,7 +73,6 @@ export class AgNoticeForm implements OnInit {
       this.agResolutionService.fetchAllByAgNotice(this.agNoticeId!).subscribe((agResolutions: AgResolution[]) => {
         this.agResolutions = agResolutions;
         for (const resolution of agResolutions) {
-          console.log(resolution);
           if (resolution.id_ag_minutes) {
             this.readOnly = true;
             this.idAgMinutes = resolution.id_ag_minutes;

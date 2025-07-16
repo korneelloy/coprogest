@@ -1,20 +1,41 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChargeCall } from '../../../model/chargecall';
-import { ChargeCallService } from '../../../services/chargecall/charge-call-service';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
-import { RouterModule } from '@angular/router';
 
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+
+
+import { ChargePayment } from '../../../model/chargepayment';
+import { ChargePaymentService } from '../../../services/chargepayment/charge-payment-service';
+
+/** TO DO */
 
 @Component({
   selector: 'app-charge-payment-list',
+  standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './charge-payment-list.html',
   styleUrl: './charge-payment-list.scss'
 })
-export class ChargePaymentList {
+export class ChargePaymentList implements OnInit{
+  chargePayments: ChargePayment[]= [];
+  createdMessage: string | null = null;
+ 
+  constructor(
+    private chargePaymentService: ChargePaymentService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
 
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe(params => {
+      if (params.get('created') === 'true') {
+        this.createdMessage = "Le paiement a été correctement enregistré.";
+        setTimeout(() => this.createdMessage = null, 5000);
+      }
+
+      this.chargePaymentService.fetchAll().subscribe((chargePayments: ChargePayment[]) => {
+        this.chargePayments = chargePayments;
+      })
+    });      
+  }
 }
-
-/** TO DO */

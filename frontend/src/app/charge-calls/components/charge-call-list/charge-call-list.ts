@@ -41,7 +41,6 @@ export class ChargeCallList implements OnInit{
 
       this.chargeCallService.fetchAll().subscribe((chargeCalls: ChargeCall[]) => {
         this.chargeCalls = chargeCalls;
-        console.log(this.chargeCalls);
       })
     });      
   }
@@ -51,8 +50,10 @@ export class ChargeCallList implements OnInit{
   }
 
   generateWord(chargeCallId: string): void {
-    console.log("to be implemented")
-    /**TO DO */
+    console.log("to be implemented");
+    alert("to be implemented");
+
+    /**TO DO  see details module also*/
     /** 
     this.chargeCallPrintService.downloadConvocation(chargeCallId).subscribe({
       next: blob => {

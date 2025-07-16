@@ -14,4 +14,28 @@
 </div>
 <hr class="mb-7">
 
-<div>Site under construction</div>
+
+
+<div *ngIf="createdMessage" class="success-message">
+  {{ createdMessage }}
+</div>
+
+
+<ul
+  *ngIf="chargePayments else loading"
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+>
+  <li
+    *ngFor="let chargePayment of chargePayments"
+    class="p-4 bg-white border rounded shadow-sm space-y-3 listitems"
+  >
+    <div class="text-gray-800 text-sm">{{ chargePayment.charge_payment_date| date: 'dd/MM/yy' }}</div>
+    <div class="text-gray-800 text-sm">{{ chargePayment.amount }} euros</div>
+    <div class="text-sm text-gray-600"> {{ chargePayment.description }} </div>
+       
+  </li>
+</ul>
+
+<ng-template #loading>
+  <p>Loading payments...</p>
+</ng-template>

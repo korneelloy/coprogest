@@ -75,7 +75,7 @@ module.exports = class ChargePayment extends BaseClass {
    * @returns {Promise<Object[]>}
    */
   static async fetchAll() {
-    const [allChargePayments] = await db.execute(`SELECT * FROM charge_payment;`);
+    const [allChargePayments] = await db.execute(`SELECT * FROM charge_payment ORDER BY charge_payment_date DESC;`);
     return allChargePayments;
   }
 

@@ -28,31 +28,6 @@ export class App implements OnInit  {
   ) {}
 
   ngOnInit(): void {
-
-    /** 
-    const publicRoutes = ['/', '/landingpage', '/login'];
-    const currentUrl = this.router.url;
-
-    if (!publicRoutes.includes(currentUrl)) {
-      this.sessionService.loadUserFromServer().subscribe(user => {
-        if (!user) {
-          this.router.navigate(['/login']);
-        } else {
-          this.connectedUser = user;
-        }
-      });
-    }
-
-
-    const publicRoutes = ['/landingpage', '/login'];
-    const currentUrl = this.router.url;
-
-    if (!publicRoutes.includes(currentUrl)) {
-      this.dontShow = true;
-    } else {
-      this.dontShow = false;
-    }    */
-
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {

@@ -108,11 +108,6 @@ module.exports = class ChargeLineChargePayment  {
    */
   async post() {
     try {
-      console.log("Posting chargeLineChargePayment with:", {
-        id_charge_line: this.id_charge_line,
-        id_charge_payment: this.id_charge_payment,
-        partial_payment: this.partial_payment,
-      });
       const [result] = await db.execute(
         `INSERT INTO charge_line_charge_payment 
           (id_charge_line, id_charge_payment, partial_payment) 

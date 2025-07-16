@@ -1,10 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const { JWT_SECRET } = require('../config/config');
-console.log('Loaded ENV:', {
-  JWT_SECRET: process.env.JWT_SECRET,
- 
-});
+
 
 function auth(req, res, next) {
   const token = req.cookies.token;

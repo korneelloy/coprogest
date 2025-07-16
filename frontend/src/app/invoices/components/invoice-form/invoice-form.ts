@@ -100,9 +100,6 @@ export class InvoiceForm implements OnInit {
           for (const oldInvoice of this.oldInvoices) {
             alreadyUsedBudget += Number(oldInvoice.amount);
           }
-          console.log("alreadyUsedBudget", typeof(alreadyUsedBudget));
-          console.log("formData.amount", typeof(formData.amount));
-          console.log("this.resolution!.budget_amount", typeof(this.resolution!.budget_amount));
           const resolution_budget_amount = Number(this.resolution!.budget_amount);
 
         if ((alreadyUsedBudget + formData.amount) <= resolution_budget_amount) {    

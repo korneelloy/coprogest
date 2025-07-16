@@ -444,7 +444,6 @@ set id_budget_category(value) {
    * @returns {Promise<Object>}
    */
   async post() {
-    console.log(this);
     try {
       const [result] = await db.execute(
         `INSERT INTO ag_resolution (

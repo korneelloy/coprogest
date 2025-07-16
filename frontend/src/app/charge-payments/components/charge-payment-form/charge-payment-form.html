@@ -84,31 +84,38 @@
           />
     
         <!-- Info content on the right -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm text-gray-800 w-full">
+        <div class="flex flex-col gap-y-2 text-sm text-gray-800 w-full">
           <div class="text-lg font-semibold text-orange-400">
             Solde impayé: {{ chargeLine.open_amount }} €
           </div>
+        
           <div>
-            <span class="font-medium text-gray-600">Lot:</span>
+            <span class="font-medium text-gray-600">Appel de charge du : </span>
+            <ng-container *ngIf="chargeLine.charge_call_date; else noCall">
+              {{ chargeLine.charge_call_date | date: 'dd/MM/yy' }}
+            </ng-container>
+            <ng-template #noCall>
+              <span class="italic">Cette ligne ne fait pas encore partie d'un appel de charge</span>
+            </ng-template>
+          </div>
+        
+          <div>
+            <span class="font-medium text-gray-600">Lot : </span>
             {{ chargeLine.unit_name }}
           </div>
+        
           <div>
-            <span class="font-medium text-gray-600">Résolution:</span>
+            <span class="font-medium text-gray-600">Résolution : </span>
             {{ chargeLine.ag_resolution_title }}
           </div>
+        
           <div>
-            <span class="font-medium text-gray-600">Date AG:</span>
+            <span class="font-medium text-gray-600">Résolution voté dans l'AG du : </span>
             {{ chargeLine.ag_minutes_date | date: 'dd/MM/yy' }}
-          </div>
-          <div>
-            <span class="font-medium text-gray-600">Statut appel de charge:</span>
-            {{ chargeLine.state! | chargeCallState }}
           </div>
         </div>
       </div>
     </div>
-    
-
     <div>
       <button
         type="submit"

@@ -82,7 +82,7 @@ export class ChargePaymentForm implements OnInit {
     /** get all the chargelines */
     this.chargeLineService.fetchAllWithOpenAmounts().subscribe((chargeLines: ChargeLine[]) => {
       this.chargeLines = chargeLines;
-      console.log("chargeLines", this.chargeLines)
+      console.log("this.chargeLines", this.chargeLines);
     });
 
     this.chargePaymentId = this.route.snapshot.paramMap.get('id');
@@ -116,7 +116,6 @@ export class ChargePaymentForm implements OnInit {
     }
     const todayStr = new Date().toISOString().split('T')[0]; 
     this.chargePaymentForm.patchValue({ charge_payment_date: todayStr });
-    console.log("this.totalAmountToBeDivided", this.totalAmountToBeDivided);
 
     /**TO DO What if person deosn't hve any open charge lines, how to create a negatif charge line? */
     /** if (this.filteredLines.length > 0) { */
@@ -145,9 +144,7 @@ export class ChargePaymentForm implements OnInit {
       this.totalAmountToBeDivided = Number(el.value);
     } else {
       this.totalAmountToBeDivided = 0; 
-    }
-    console.log("this.totalAmountToBeDivided", this.totalAmountToBeDivided);
-    
+    }    
   }
 
 
@@ -173,9 +170,6 @@ export class ChargePaymentForm implements OnInit {
       const amount = Number(matchedLine ? matchedLine.amount : 0);
       this.totalAmountToBeDivided += amount;
     }
-    console.log("this.selectedChargeLinesIdsOnly", this.selectedChargeLinesIdsOnly);
-    console.log(" this.totalAmountToBeDivided",  this.totalAmountToBeDivided);
-    console.log("this.filteredLines", this.filteredLines);
     const lastLine = this.filteredLines.find(line => line.id === chargeLineId);
     if (lastLine) {
       this.lastIdUnit = lastLine.id_unit;
