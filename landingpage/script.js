@@ -1,5 +1,3 @@
-const { default: Redis } = require("ioredis");
-
 function sendMessage() {
   console.log("to be implemented");
   alert("to be implemented");

@@ -78,7 +78,7 @@ export class LandingPageComponent implements OnInit {
   }
   /** TO DO 
   sendMessage() {
-    this.isSending = true; 
+    this.isSending = "true"; 
     const name = (document.getElementById("name") as HTMLInputElement).value;;
     const email = (document.getElementById("email") as HTMLInputElement).value;;
     const message = (document.getElementById("message") as HTMLTextAreaElement).value;;
@@ -111,7 +111,7 @@ export class LandingPageComponent implements OnInit {
     }});
    
   }
- */
+
 
   sendMessage() {
     console.log("to be implemented");
@@ -125,7 +125,7 @@ export class LandingPageComponent implements OnInit {
     if (this.adminPart) {
       this.adminPart = false;
     } else {
-      this.adminPart = true;
+      this.adminPart = "true";
     }
   }
 
@@ -135,7 +135,7 @@ export class LandingPageComponent implements OnInit {
     if (this.finPart) {
       this.finPart = false; 
     } else {
-      this.finPart = true;
+      this.finPart = "true";
     }
     this.comPart = false;
     this.adminPart = false;
@@ -147,8 +147,54 @@ export class LandingPageComponent implements OnInit {
     if (this.comPart) {
       this.comPart = false;
     } else {
-      this.comPart = true;
+      this.comPart = "true";
     }
     this.adminPart = false;
+  }
+ */
+  
+  sendMessage() {
+    console.log("to be implemented");
+    alert("to be implemented");
+  }
+  
+  showAdmin() {
+    const adminPart = document.getElementById("adminPart");
+    const finPart = document.getElementById("finPart");
+    const comPart = document.getElementById("comPart");
+  
+    adminPart?.setAttribute("hidden", "true");
+    finPart?.setAttribute("hidden", "true");
+    comPart?.setAttribute("hidden", "true");
+  
+    adminPart?.removeAttribute("hidden");
+    adminPart?.scrollIntoView({ behavior: "smooth" });
+  }
+  
+  showFin() {
+    const adminPart = document.getElementById("adminPart");
+    const finPart = document.getElementById("finPart");
+    const comPart = document.getElementById("comPart");
+  
+    adminPart?.setAttribute("hidden", "true");
+    finPart?.setAttribute("hidden", "true");
+    comPart?.setAttribute("hidden", "true");
+  
+    finPart?.removeAttribute("hidden");
+    finPart?.scrollIntoView({ behavior: "smooth" });
+  }
+  
+  
+  showCom() {
+    const adminPart = document.getElementById("adminPart");
+    const finPart = document.getElementById("finPart");
+    const comPart = document.getElementById("comPart");
+  
+    adminPart?.setAttribute("hidden", "true");
+    finPart?.setAttribute("hidden", "true");
+    comPart?.setAttribute("hidden", "true");
+  
+    comPart?.removeAttribute("hidden");
+    comPart?.scrollIntoView({ behavior: "smooth" });
   }
 }
