@@ -155,7 +155,7 @@ export class LandingPageComponent implements OnInit {
   
   sendMessage() {
     console.log("to be implemented");
-    alert("to be implemented");
+    alert("Désolé, je ne n'ai pas eu le temps d'implémenter cette fonctionnalité, mais si le projet vous a plu, n'hésitez pas à me contacter par email : korneel.loy@gmail.com");
   }
   
   showAdmin() {
